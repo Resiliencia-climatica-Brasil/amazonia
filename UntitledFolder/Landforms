@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/wwf_amazon");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /**
  * This script generates and exports to Google Drive a raster of landform varieties at a scale of ~ 90 m for a biome.  
 */
@@ -26,13 +29,17 @@ First, we import a shapefile of brazilian biomes from IBGE (2018) and filter a b
 // It is required to use bioma bounds instead the whole polygons because the feature complexity 
 // inhibits the image exportation.
 
+var bioma = ee.FeatureCollection("projects/ee-resilience/Landforms_Assets/wwf_amazon");
+var bioma = ee.FeatureCollection ;
+/*
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
-                       .filter(ee.Filter.eq("Bioma", "Amazônia"))
+                       .filter(ee.Filter.eq("Bioma", "cerrado"))
                        .map(function(feature){
                          return feature.bounds()
                         })
                        .geometry();
+*/
 
 /*
 Then, we import a Digital Elevation Model from Merit-DEM (...) at a scale of ~ 90 meters. 
@@ -324,7 +331,7 @@ Map.addLayer(landform_types.sldStyle(sld_intervals), {});
 //Map.addLayer(landform_combination)
 //Map.addLayer(TPI)
 //Map.addLayer(slope)
-//Map.addLayer(bioma)
+Map.addLayer(bioma);
 //Map.addLayer(moisture_classes)
 //Map.addLayer(moisture_index)
 
