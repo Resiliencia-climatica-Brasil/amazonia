@@ -1,6 +1,3 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/wwf_amazon");
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /**
  * This script generates and exports to Google Drive a raster of landform varieties at a scale of ~ 90 m for a biome.  
 */
@@ -29,12 +26,12 @@ First, we import a shapefile of brazilian biomes from IBGE (2018) and filter a b
 // It is required to use bioma bounds instead the whole polygons because the feature complexity 
 // inhibits the image exportation.
 
-var bioma = ee.FeatureCollection("projects/ee-resilience/Landforms_Assets/wwf_amazon");
-var bioma = ee.FeatureCollection ;
+var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/Amazon_shape");
+
 /*
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
-                       .filter(ee.Filter.eq("Bioma", "cerrado"))
+                       .filter(ee.Filter.eq("Bioma", "Amazônia"))
                        .map(function(feature){
                          return feature.bounds()
                         })
@@ -324,7 +321,7 @@ var sld_intervals =
 //Map.setCenter(-46.96556, -13.96459, 13); //hilltops
 //Map.setCenter(-50.98912, -12.4299, 13); //wetlands
 
-Map.setCenter(-46.87646, -13.89561, 13); //flat areas to evaluate
+//Map.setCenter(-46.87646, -13.89561, 13); //flat areas to evaluate
 
 Map.addLayer(landform_types.sldStyle(sld_intervals), {});
 //Map.addLayer(landform_types)
@@ -410,12 +407,11 @@ for (var i = 0; i < 15; i++) {
 Map.add(legend);
 
 
-/*
+
 Export.image.toDrive({
   image: landform_richness,
-  description: 'landform_richness',
+  description: 'landform_richness_Amazon',
   scale: 92.76624,
-  region: bioma,
-  maxPixels: 631694567
+  region: bioma
 });
-*/
+
