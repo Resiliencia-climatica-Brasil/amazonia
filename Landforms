@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var table = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/lm_bioma_250");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /**
  * This script generates and exports to Google Drive a raster of landform varieties at a scale of ~ 90 m for a biome.  
 */
@@ -26,8 +29,10 @@ First, we import a shapefile of brazilian biomes from IBGE (2018) and filter a b
 // It is required to use bioma bounds instead the whole polygons because the feature complexity 
 // inhibits the image exportation.
 
+
+var table = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/lm_bioma_250");
+
 /*
-var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
                        .filter(ee.Filter.eq("Bioma", "Cerrado"))
                        .map(function(feature){
