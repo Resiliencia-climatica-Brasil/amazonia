@@ -30,7 +30,7 @@ First, we import a shapefile of brazilian biomes from IBGE (2018) and filter a b
 // It is required to use bioma bounds instead the whole polygons because the feature complexity 
 // inhibits the image exportation.
 
-
+/*
 var table = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/lm_bioma_250")
                        .select("Bioma")
                        .filter(ee.Filter.eq("Bioma", "Amazônia"))
@@ -38,6 +38,7 @@ var table = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets
                          return feature.bounds()
                         })
                        .geometry();
+*/
 
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/wwf_cerrado");
 /*
