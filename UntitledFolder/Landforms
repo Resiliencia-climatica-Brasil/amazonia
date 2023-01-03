@@ -423,6 +423,7 @@ Export.image.toDrive({
   image: landform_richness,
   description: 'landform_richness_Amazon',
   scale: 92.76624,
+  maxPixels: 965923237,
   region: bioma
 });
 
