@@ -1,2 +1,19 @@
+var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                       .select("Bioma")
+                       .filter(ee.Filter.eq("Bioma", "Amazônia"))
+                       .map(function(feature){
+                         return feature.bounds()
+                        })
+                       .geometry();
+
 var DEM = ee.Image("MERIT/DEM/v1_0_3");
-Map.addLayer(DEM);
+/*
+Export.image.toDrive({
+  image: DEM,
+  description: 'Amazonia_DEM',
+  scale: 92.76624,
+  region: bioma,
+  maxPixels: 965923236 
+});
+*/
+Map.addLayer(bioma);
