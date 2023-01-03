@@ -26,8 +26,11 @@ First, we import a shapefile of brazilian biomes from IBGE (2018) and filter a b
 // It is required to use bioma bounds instead the whole polygons because the feature complexity 
 // inhibits the image exportation.
 
-var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/Amazon_shape");
-
+var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/Amazon_shape")
+                       .map(function(feature){
+                         return feature.bounds()
+                        })
+                       .geometry();
 /*
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
@@ -329,9 +332,9 @@ var sld_intervals =
 
 //Map.setCenter(-46.87646, -13.89561, 13); //flat areas to evaluate
 
-//Map.addLayer(landform_types.sldStyle(sld_intervals), {});
+Map.addLayer(landform_types.sldStyle(sld_intervals), {});
 
-Map.addLayer(landform_types.clipToCollection(bioma), landform_types.sldStyle(sld_intervals), 'Landform Richenss for Amazon');
+//Map.addLayer(landform_types.clipToCollection(bioma), landform_types.sldStyle(sld_intervals), 'Landform Richenss for Amazon');
 //Map.addLayer(landform_types)
 //Map.addLayer(landform_combination)
 //Map.addLayer(TPI)
