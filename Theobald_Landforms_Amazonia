@@ -119,5 +119,5 @@ Export.image.toDrive({
   description: 'Theobald_landform_richness_Amazonia',
   scale: 92.76624,
   region: bioma,
-  maxPixels: 965923236 
+  maxPixels: 965933619 
 });
