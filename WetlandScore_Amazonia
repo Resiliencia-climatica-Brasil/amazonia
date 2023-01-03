@@ -1,4 +1,4 @@
-var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Caatinga");
+var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/Amazon_shape");
 
 var wetlands = ee.Image("projects/ee-lucasljardim9/assets/Cifor_wetlands")
                .clip(bioma)
