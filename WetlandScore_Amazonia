@@ -53,7 +53,7 @@ Export.image.toDrive({
   description: 'wetlands_patchness_Amazon',
   scale: 92.76624,
   region: bioma,
-  maxPixels: 631694567
+  maxPixels: 975933619 
 });
 
 // Wetlands density
@@ -63,7 +63,7 @@ Export.image.toDrive({
   description: 'wetlands_density_Amazon',
   scale: 92.76624,
   region: bioma,
-  maxPixels: 631694567
+  maxPixels: 975933619 
 });
 
 Export.image.toDrive({
@@ -71,7 +71,7 @@ Export.image.toDrive({
   description: 'wetlands_density_1000_Amazon',
   scale: 92.76624,
   region: bioma,
-  maxPixels: 631694567
+  maxPixels: 975933619 
 });
 
 //var freq = wetlands_count.reduceRegion({reducer: ee.Reducer.frequencyHistogram(), geometry: bioma, maxPixels: 232845367});
