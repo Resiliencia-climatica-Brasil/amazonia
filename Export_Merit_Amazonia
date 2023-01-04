@@ -17,7 +17,7 @@ Export.image.toDrive({
   description: 'Amazonia_DEM',
   scale: 92.76624,
   region: bioma,
-  maxPixels: 965923236 
+  maxPixels: 975923236 
 });
 */
 
@@ -26,5 +26,5 @@ Export.image.toDrive({
   description: 'Amazonia_Hidro',
   scale: 92.76624,
   region: bioma,
-  maxPixels: 965923236 
+  maxPixels: 975923236 
 });
