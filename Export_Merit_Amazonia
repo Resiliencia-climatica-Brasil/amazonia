@@ -7,6 +7,9 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .geometry();
 
 var DEM = ee.Image("MERIT/DEM/v1_0_3");
+
+
+
 /*
 Export.image.toDrive({
   image: DEM,
@@ -16,4 +19,4 @@ Export.image.toDrive({
   maxPixels: 965923236 
 });
 */
-Map.addLayer(bioma);
+
