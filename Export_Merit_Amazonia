@@ -8,8 +8,9 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
 
 var DEM = ee.Image("MERIT/DEM/v1_0_3");
 
-
-
+var flow_accumulation = ee.Image("MERIT/Hydro/v1_0_1")
+    .select("upg")
+    
 /*
 Export.image.toDrive({
   image: DEM,
@@ -20,3 +21,10 @@ Export.image.toDrive({
 });
 */
 
+Export.image.toDrive({
+  image: flow_accumulation,
+  description: 'Amazonia_Hidro',
+  scale: 92.76624,
+  region: bioma,
+  maxPixels: 965923236 
+});
