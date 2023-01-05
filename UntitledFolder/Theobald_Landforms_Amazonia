@@ -23,7 +23,7 @@ var sld_intervals =
 '</RasterSymbolizer>';
 
 
-Map.setCenter(-46.87646, -13.89561, 13);
+Map.setCenter(-59.971332,-3.076426, 11);
 
 Map.addLayer(landform.sldStyle(sld_intervals), {});
 
