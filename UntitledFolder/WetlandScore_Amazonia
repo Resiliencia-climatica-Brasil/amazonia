@@ -1,5 +1,9 @@
-var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/Amazon_shape");
-
+var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/Amazon_shape")
+                       .map(function(feature){
+                         return feature.bounds()
+                        })
+                       .geometry();
+                       
 var wetlands = ee.Image("projects/ee-lucasljardim9/assets/Cifor_wetlands")
                .clip(bioma)
                .reproject({crs: "EPSG:4326",
