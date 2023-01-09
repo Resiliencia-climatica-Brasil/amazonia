@@ -50,3 +50,10 @@ Map.addLayer(land_position);
 
 //*/
 
+Export.image.toDrive({
+  image: land_position,
+  description: 'LPI_Amazon',
+  scale: 92.76624,
+  maxPixels: 975923237,
+  region: bioma
+});
