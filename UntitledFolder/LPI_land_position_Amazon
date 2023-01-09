@@ -39,8 +39,8 @@ var chart = ui.Chart.feature.byFeature(sample_points, 'LPI', ['MTPI'])
   
 
 
-
+/*
 Map.setCenter(-50, -15, 7);
 Map.addLayer(MTPI);
-
+*/
 
