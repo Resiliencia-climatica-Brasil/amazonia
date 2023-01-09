@@ -1,5 +1,9 @@
 var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/Amazon_shape")
-
+                       .map(function(feature){
+                         return feature.bounds()
+                        })
+                       .geometry();
+                       
 var dataset = ee.Image("MERIT/DEM/v1_0_3").clip(bioma);
 
 // Split neighbor cells within a kernel of 1 pixel in bands
@@ -26,9 +30,9 @@ var land_position = ee.Image([LPI, MTPI])
 var sample_points = land_position
                      .sample({region:bioma, numPixels:500});
                      
-var correlation = sample_points.reduceColumns(ee.Reducer.pearsonsCorrelation(), ["LPI", "MTPI"]);
+//var correlation = sample_points.reduceColumns(ee.Reducer.pearsonsCorrelation(), ["LPI", "MTPI"]);
 
-print(correlation);
+//print(correlation);
   
 //Scatterplot
 
