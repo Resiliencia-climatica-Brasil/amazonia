@@ -64,8 +64,7 @@ var soil_diversity = ee.ImageCollection.fromImages(soil_list)
                      .toBands()
                      .reduce("sum")
                      .toDouble()
-
-Map.addLayer(soil_diversity)
+                     ;
 
 
 
@@ -75,5 +74,5 @@ Export.image.toDrive({
   scale: 92.76624,
   region: bioma,
   maxPixels: 975933619
-  })
+  });
 
