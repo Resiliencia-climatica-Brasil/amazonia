@@ -30,9 +30,9 @@ var land_position = ee.Image([LPI, MTPI])
 var sample_points = land_position
                      .sample({region:bioma, numPixels:500});
                      
-//var correlation = sample_points.reduceColumns(ee.Reducer.pearsonsCorrelation(), ["LPI", "MTPI"]);
+var correlation = sample_points.reduceColumns(ee.Reducer.pearsonsCorrelation(), ["LPI", "MTPI"]);
 
-//print(correlation);
+print(correlation);
   
 //Scatterplot
 
