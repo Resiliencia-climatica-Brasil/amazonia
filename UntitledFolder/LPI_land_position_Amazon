@@ -1,6 +1,6 @@
-var cerrado = ee.FeatureCollection("users/lucasljardim9/wwf_cerrado");
+var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/Amazon_shape")
 
-var dataset = ee.Image("MERIT/DEM/v1_0_3").clip(cerrado);
+var dataset = ee.Image("MERIT/DEM/v1_0_3").clip(bioma);
 
 // Split neighbor cells within a kernel of 1 pixel in bands
 
@@ -18,13 +18,13 @@ var LPI3 = neigh3.subtract(dataset).reduce(ee.Reducer.mean());
 
 var LPI = LPI1.add(LPI2).add(LPI3).divide(3);
 
-var MTPI = ee.Image("CSP/ERGo/1_0/Global/ALOS_mTPI").clip(cerrado);
+var MTPI = ee.Image("CSP/ERGo/1_0/Global/ALOS_mTPI").clip(bioma);
 
 var land_position = ee.Image([LPI, MTPI])
      .rename(["LPI", "MTPI"]);
      
 var sample_points = land_position
-                     .sample({region:cerrado, numPixels:500});
+                     .sample({region:bioma, numPixels:500});
                      
 var correlation = sample_points.reduceColumns(ee.Reducer.pearsonsCorrelation(), ["LPI", "MTPI"]);
 
@@ -38,10 +38,9 @@ var chart = ui.Chart.feature.byFeature(sample_points, 'LPI', ['MTPI'])
   print(chart);
   
 
-/*
+
 
 Map.setCenter(-50, -15, 7);
 Map.addLayer(MTPI);
 
 
-*/
