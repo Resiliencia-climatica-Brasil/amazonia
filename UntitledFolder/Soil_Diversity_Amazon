@@ -65,7 +65,9 @@ var soil_diversity = ee.ImageCollection.fromImages(soil_list)
                      .reduce("sum")
                      .toDouble()
 
-map.addlayer
+Map.addLayer(soil_diversity)
+
+
 /*                     
 Export.image.toDrive({
   image: soil_diversity,
