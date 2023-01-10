@@ -49,7 +49,7 @@ var soil_codes = ["AR","CXa","CXbd","CXbe","CXva","CXvd","CXve","Dn","EKg",
                   "LVAd","LVAw","LVd","LVdf","LVe","MTo","NVd","NVdf","NVe","NVef",
                   "OXs","PAa","PACd","PAd","PAe","PAva","PVAa","PVAd","PVAe","PVAva",
                   "PVd","PVe","RLd","RLe","RLm","RQg","RQo","RRd","RYbd","RYbe","RYve",
-                  "SNo","SXa","SXd","SXe","TCo","TCp","TXo
+                  "SNo","SXa","SXd","SXe","TCo","TCp","TXo"
                   ];
 
 var soil_list = soil_codes.map(soil_presence);
