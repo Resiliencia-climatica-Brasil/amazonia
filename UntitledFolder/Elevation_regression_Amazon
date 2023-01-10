@@ -34,7 +34,7 @@ var elevation = ee.Image.cat(dataset, elevation_range)
 var regression = elevation.reduceRegion({
      reducer: ee.Reducer.linearFit(),
      geometry: bioma,
-     maxPixels: 463690740
+     maxPixels: 992871485
     });
 
 var pred = elevation.select('elevation').multiply(ee.Number(regression.get('scale')));
