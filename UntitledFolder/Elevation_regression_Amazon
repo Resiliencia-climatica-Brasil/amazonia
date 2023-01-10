@@ -45,7 +45,7 @@ var residuals = elevation.select('elevation_range').subtract(predict).rename(['r
 
 Map.setCenter(-40, -8, 7);
 
-Map.addLayer(residuals;
+Map.addLayer(residuals);
 
 
 /*
