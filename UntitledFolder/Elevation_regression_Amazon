@@ -1,4 +1,6 @@
-var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Caatinga");
+var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                       .select("Bioma")
+                       .filter(ee.Filter.eq("Bioma", "Amazônia"));
 
 var dataset = ee.Image("MERIT/DEM/v1_0_3").clip(bioma);
 
@@ -55,7 +57,7 @@ Export.image.toDrive({
   maxPixels: 631694547 });
 */
 
-/*
+
 var sample = ee.FeatureCollection.randomPoints({
                region: bioma,
                points: 5000
@@ -70,4 +72,3 @@ var chart = ui.Chart.feature.byFeature(plot_image, 'elevation', ['residuals'])
   
   print(chart);
 
-*/
