@@ -54,7 +54,7 @@ Export.image.toDrive({
   description: 'elevation_range_residual',
   scale: 92.76624,
   region: bioma,
-  maxPixels: 631694547 });
+  maxPixels: 992871485 });
 */
 
 
