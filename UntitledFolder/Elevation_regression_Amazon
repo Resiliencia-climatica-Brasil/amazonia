@@ -35,6 +35,7 @@ var elevation_range = elevation_max.subtract(elevation_min).abs();
 var elevation = ee.Image.cat(dataset, elevation_range)
                  .rename(['elevation', 'elevation_range']);
                  
+
 var regression = elevation.reduceRegion({
      reducer: ee.Reducer.linearFit(),
      geometry: bioma,
@@ -50,8 +51,9 @@ var residuals = elevation.select('elevation_range').subtract(predict).rename(['r
 
 Map.setCenter(-59, -3, 7);
 
-Map.addLayer(residuals);
-Map.addLayer(bioma);
+//Map.addLayer(residuals);
+//Map.addLayer(bioma);
+
 
 /*
 Export.image.toDrive({
