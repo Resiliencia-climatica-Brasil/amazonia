@@ -1,0 +1,28 @@
+//Get the names of the input bands
+var bands = ["TPI","slope","aspect","moisture_index"];
+
+for (var i=0; i<bands.length;i++) {
+  for (var j=i+1; j<bands.length;j++) {
+    var sample = image.sample({'region':bioma, 
+                            'scale': 1000, 
+                            'projection': 'EPSG:4326',
+                            'numPixels':100});
+    var correl = ee.Reducer.pearsonsCorrelation();
+    var reduced = sample.reduceColumns(correl, [bands[i], bands[j]]);
+    var results = {'band1':bands[i],'band2': bands[j], 'R': reduced.get('correlation'), 'p-value': reduced.get('p-value')};
+    //print(results);
+    myArray.push(results);
+    //var list_of_results = list_of_results.add(results);
+  }
+}
+
+var band_correlation_results = ee.FeatureCollection(myArray
+  .map(function (dict, i) {
+    return ee.Feature(null, dict);
+  })
+);
+
+print(band_correlation_results, 'band_correlation_results');
+
+
+Export.table.toDrive(band_correlation_results);
