@@ -418,7 +418,7 @@ for (var i = 0; i < 15; i++) {
 Map.add(legend);
 
 
-
+/*
 Export.image.toDrive({
   image: landform_richness,
   description: 'landform_richness_Amazon',
@@ -426,4 +426,36 @@ Export.image.toDrive({
   maxPixels: 965923237,
   region: bioma
 });
+*/
 
+Export.image.toDrive({
+  image: moisture_index,
+  description: 'moisture_index',
+  scale: 92.76624,
+  maxPixels: 975923237,
+  region: bioma
+});
+
+Export.image.toDrive({
+  image: TPI,
+  description: 'TPI',
+  scale: 92.76624,
+  maxPixels: 975923237,
+  region: bioma
+});
+
+Export.image.toDrive({
+  image:  slope,
+  description: 'slope',
+  scale: 92.76624,
+  maxPixels: 975923237,
+  region: bioma
+});
+
+Export.image.toDrive({
+  image: aspect,
+  description: 'aspect',
+  scale: 92.76624,
+  maxPixels: 975923237,
+  region: bioma
+});
