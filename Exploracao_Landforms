@@ -6,3 +6,12 @@
 //começamos importando todos os rasters que fizemos com os codigos desenvolvidos por Lucas
 
 
+var landform_type = ee.Image("projects/ee-resilience/assets/Landforms_Assets/landform_types_Amazon");
+
+var aspect_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/aspect_Amazon");
+
+var tpi_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/TPI_Amazon");
+
+var slope_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/slope_Amazon");
+
+
