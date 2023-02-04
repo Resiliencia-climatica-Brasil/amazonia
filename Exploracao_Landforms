@@ -17,7 +17,7 @@ var slope_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/slope_Am
 
 // creating the color pallete for use on maps
 
-var typesVisParam = [
+var typesVisPaleta = [
 "#ffc408",
 "#ffa101",
 "#ef595a",
@@ -59,8 +59,8 @@ ui.root.add(splitPanel);
 
 // Add the layers to the maps
 
-leftMap.addLayer( landform_type , typesVisParam, 'Landform Types');
-/*Map.addLayer( aspect_am  ,imageVisParam, '')
+leftMap.addLayer( landform_type , {min:1, max: 44, palette:typesVisPaleta}, 'Landform Types');
+/*Map.addLayer( aspect_am  ,imageVisParam, ''
 Map.addLayer( tpi_am  , imageVisParam, '')
 Map.addLayer( slope_am  , imageVisParam, '')
 */
