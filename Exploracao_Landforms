@@ -1,18 +1,21 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var table = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/AM_lim");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 
 //---- Script para exploração dos resultados de Landform Classes para Amazonia ----
 // Por Luciano Querido - 02/02/2023
 
 
 //começamos importando todos os rasters que fizemos com os codigos desenvolvidos por Lucas
+var limite_am = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/AM_lim");
 
+var landform_type = ee.Image("projects/ee-resilience/assets/Landforms_Assets/landform_types_Amazon").clip(limite_am);
 
-var landform_type = ee.Image("projects/ee-resilience/assets/Landforms_Assets/landform_types_Amazon");
+var aspect_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/aspect_Amazon").clip(limite_am);
 
-var aspect_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/aspect_Amazon");
+var tpi_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/TPI_Amazon").clip(limite_am);
 
-var tpi_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/TPI_Amazon");
-
-var slope_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/slope_Amazon");
+var slope_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/slope_Amazon").clip(limite_am);
 
 
 // creating the color pallete for use on maps
