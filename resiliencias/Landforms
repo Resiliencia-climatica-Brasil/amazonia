@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var table = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/AM_lim");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 /**
  * This script generates and exports to Google Drive a raster of landform varieties at a scale of ~ 90 m for a biome.  
 */
@@ -26,7 +29,7 @@ First, we import a shapefile of brazilian biomes from IBGE (2018) and filter a b
 // It is required to use bioma bounds instead the whole polygons because the feature complexity 
 // inhibits the image exportation.
 
-var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Landforms_Assets/Amazon_shape")
+var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/AM_lim")
                        .map(function(feature){
                          return feature.bounds()
                         })
@@ -170,7 +173,8 @@ var slope_classes = slope
       .where(slope.gt(35).and(slope.lte(90)), 5);
      
 // It seems Earth engine does not calculate -1 values for flat areas as ArcGis does
-// Aspect values were classified as north (1) and south (2) faces. Values between 90 and 270 are warm areas in south hemisphere. The other values are cool areas.  
+// Aspect values were classified as north (1) and south (2) faces. Values between 90 
+// and 270 are warm areas in south hemisphere. The other values are cool areas.  
 var aspect_classes = aspect
       .where(aspect.lte(0), 0)
       .where(aspect.gt(0).and(aspect.lte(90)), 2) // warm
@@ -340,7 +344,7 @@ Map.addLayer(landform_types.sldStyle(sld_intervals), {});
 //Map.addLayer(TPI)
 //Map.addLayer(slope)
 //Map.addLayer(bioma);
-//Map.addLayer(moisture_classes)
+//Map.addLayer(moisture_classes)a
 //Map.addLayer(moisture_index)
 
 var legend = ui.Panel({
@@ -463,3 +467,40 @@ Export.image.toDrive({
   region: bioma
 });
 */
+
+
+
+
+Export.image.toDrive({
+  image: moisture_classes,
+  description: 'moisture_index',
+  scale: 92.76624,
+  maxPixels: 975923237,
+  region: bioma
+});
+
+Export.image.toDrive({
+  image: TPI_classes,
+  description: 'TPI',
+  scale: 92.76624,
+  maxPixels: 975923237,
+  region: bioma
+});
+
+
+Export.image.toDrive({
+  image:  slope_classes,
+  description: 'slope',
+  scale: 92.76624,
+  maxPixels: 975923237,
+  region: bioma
+});
+
+
+Export.image.toDrive({
+  image: aspect_classes,
+  description: 'aspect',
+  scale: 92.76624,
+  maxPixels: 975923237,
+  region: bioma
+});
