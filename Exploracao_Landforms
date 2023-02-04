@@ -20,27 +20,31 @@ var slope_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/slope_Am
 
 // creating the color pallete for use on maps
 
-var typesVisPaleta = [
-"#ffc408",
-"#ffa101",
-"#ef595a",
-"#ffbdbe",
-"#6e4100",
-"#af7b53",
-"#c8c284", 
-"#c8f6ad",
-"#83e763",
-"#ffffbe",
-"#a9a800",
-"#b671f2",
-"#010101",
-"#08a702",
-"#0a7000",
-];
 
+var sld_intervals =
+'<RasterSymbolizer>' +
+  '<ColorMap type="intervals" extended="false">' +
+    '<ColorMapEntry color="#ffc408" quantity="3" label="Cool Steep Slope"/>' +
+    '<ColorMapEntry color="#ffa101" quantity="4" label="Warm Steep Slope"/>' +
+    '<ColorMapEntry color="#ef595a" quantity="5" label="Cliff"/>' +
+    '<ColorMapEntry color="#ffbdbe" quantity="11" label="Summit/Ridgetop"/>' +
+    '<ColorMapEntry color="#6e4100" quantity="13" label="Slope Crest"/>' +
+    '<ColorMapEntry color="#af7b53" quantity="21" label="Flat Hilltop"/>' +
+    '<ColorMapEntry color="#c8c284" quantity="22" label="Gentle Slope Hilltop"/>' +
+    '<ColorMapEntry color="#c8f6ad" quantity="23" label="Cool Sideslope"/>' +
+    '<ColorMapEntry color="#83e763" quantity="24" label="Warm Sideslope"/>' +
+    '<ColorMapEntry color="#ffffbe" quantity="30" label="Dry Flats"/>' +
+    '<ColorMapEntry color="#a9a800" quantity="32" label="Valley/Toeslope"/>' +
+    '<ColorMapEntry color="#b671f2" quantity="39" label="Moist Flats"/>' +
+    '<ColorMapEntry color="#08a702" quantity="43" label="Cool Footslope/Cove"/>' +
+    '<ColorMapEntry color="#0a7000" quantity="44" label="Warm Footslope/Cove"/>' +
+  '</ColorMap>' +
+'</RasterSymbolizer>';
+
+print(sld_intervals);
 
 // Set a center and zoom level.
-var center = {lon: -57, lat: -2, zoom: 8};
+var center = {lon: -60.10, lat: -3.11, zoom: 12};
 
 // Create two maps.
 var leftMap = ui.Map(center);
@@ -62,7 +66,7 @@ ui.root.add(splitPanel);
 
 // Add the layers to the maps
 
-leftMap.addLayer( landform_type , {min:1, max: 44, palette:typesVisPaleta}, 'Landform Types');
+leftMap.addLayer( landform_type.sldStyle(sld_intervals),{}, 'Landform Types');
 /*Map.addLayer( aspect_am  ,imageVisParam, ''
 Map.addLayer( tpi_am  , imageVisParam, '')
 Map.addLayer( slope_am  , imageVisParam, '')
