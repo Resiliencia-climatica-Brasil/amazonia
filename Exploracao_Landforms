@@ -21,7 +21,7 @@ var slope_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/slope_Am
 // creating the color pallete for use on maps
 
 
-var sld_intervals =
+var sld_landform = // Escalas para Landforms
 '<RasterSymbolizer>' +
   '<ColorMap type="intervals" extended="false">' +
     '<ColorMapEntry color="#ffc408" quantity="3" label="Cool Steep Slope"/>' +
@@ -40,11 +40,50 @@ var sld_intervals =
     '<ColorMapEntry color="#0a7000" quantity="44" label="Warm Footslope/Cove"/>' +
   '</ColorMap>' +
 '</RasterSymbolizer>';
+var landforms =[
+                "3-Cool Steep Slope",
+                "4-Warm Steep Slope",
+                "5-Cliff",
+                "11-Summit/Ridgetop",
+                "13-Slope Crest",
+                "21-Flat Hilltop",
+                "22-Gentle Slope Hilltop",
+                "23-Cool Sideslope",
+                "24-Warm Sideslope",
+                "30-Dry Flats",
+                "32-Valley/Toeslope",
+                "39-Moist Flats",
+                "51-Flat at the bottom steep slope",
+                "43-Cool Footslope/Cove",
+                "44-Warm Footslope/Cove",
+];
 
-print(sld_intervals);
+var sld_aspect = // escalas para Soil Aspect
+'<RasterSymbolizer>' +
+  '<ColorMap type="ramp" extended="false">' +
+    '<ColorMapEntry color="#ffffff" quantity="0" label="0"/>' +
+    '<ColorMapEntry color="#ffa101" quantity="90" label="Warm"/>' +
+    '<ColorMapEntry color="#ef595a" quantity="270" label="Cold"/>' +
+    '<ColorMapEntry color="#ef595a" quantity="360" label="Warm"/>' +
+  '</ColorMap>' +
+'</RasterSymbolizer>';
+
+var sld_tpi = // escalas para TPI
+'<RasterSymbolizer>' +
+  '<ColorMap type="ramp" extended="false">' +
+    '<ColorMapEntry color="#ffffff" quantity="0" label="0"/>' +
+    '<ColorMapEntry color="#ffa101" quantity="90" label="Warm"/>' +
+    '<ColorMapEntry color="#ef595a" quantity="270" label="Cold"/>' +
+    '<ColorMapEntry color="#ef595a" quantity="360" label="Warm"/>' +
+  '</ColorMap>' +
+'</RasterSymbolizer>';
+
+
+print(landforms);
+
 
 // Set a center and zoom level.
-var center = {lon: -60.10, lat: -3.11, zoom: 12};
+var center = {lon: -60.10, lat: -3.11, zoom: 10};
 
 // Create two maps.
 var leftMap = ui.Map(center);
@@ -66,8 +105,7 @@ ui.root.add(splitPanel);
 
 // Add the layers to the maps
 
-leftMap.addLayer( landform_type.sldStyle(sld_intervals),{}, 'Landform Types');
-/*Map.addLayer( aspect_am  ,imageVisParam, ''
-Map.addLayer( tpi_am  , imageVisParam, '')
-Map.addLayer( slope_am  , imageVisParam, '')
-*/
+leftMap.addLayer( landform_type.sldStyle(sld_landform),{}, 'Landform Types');
+rightMap.addLayer( aspect_am.sldStyle(sld_aspect),{}, 'Soil Aspect');
+rightMap.addLayer( tpi_am/*.sldStyle(sld_tpi)*/, {}, 'TPI');
+rightMap.addLayer( slope_am  , {}, '');
