@@ -15,3 +15,36 @@ var tpi_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/TPI_Amazon
 var slope_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/slope_Amazon");
 
 
+// creating the color pallete for use on maps
+
+
+
+
+// Set a center and zoom level.
+var center = {lon: -57, lat: -2, zoom: 8};
+
+// Create two maps.
+var leftMap = ui.Map(center);
+var rightMap = ui.Map(center);
+
+// Create a split panel with the two maps.
+var splitPanel = ui.SplitPanel({
+  firstPanel: leftMap,
+  secondPanel: rightMap,
+  orientation: 'horizontal',
+  wipe: true
+});
+
+// Remove the default map from the root panel.
+ui.root.clear();
+
+// Add our split panel to the root panel.
+ui.root.add(splitPanel);
+
+// Add the layers to the maps
+
+leftMap.addLayer( landform_type  , {}, 'Landform Types');
+/*Map.addLayer( aspect_am  ,imageVisParam, '')
+Map.addLayer( tpi_am  , imageVisParam, '')
+Map.addLayer( slope_am  , imageVisParam, '')
+*/
