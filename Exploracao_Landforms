@@ -14,6 +14,8 @@ var tpi_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/TPI_classe
 
 var slope_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/slope_classes").clip(limite_am);
 
+var moisture_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/moisture_classes").clip(limite_am);
+
 
 // creating the color pallete for use on maps
 
@@ -70,11 +72,29 @@ var sld_tpi = // escalas para TPI
     '<ColorMapEntry color="#ff3300" quantity="1" label="Summits"/>' +   // Summits
     '<ColorMapEntry color="#ff9933" quantity="2" label="Hilltops"/>' +         // Hilltops and Sideslopes
     '<ColorMapEntry color="#ffff33" quantity="3" label="Valleys"/>' +      //Valleys and Toeslopes
-    '<ColorMapEntry color="#e2f4c7" quantity="4" label="Footslopes"/>'+       // Footslopes
+    '<ColorMapEntry color="#663300" quantity="4" label="Footslopes"/>'+       // Footslopes
     '<ColorMapEntry color="#ffffff" quantity="5" label="Flat"/>' +      // Flat at the bottom steep slope
   '</ColorMap>' +
 '</RasterSymbolizer>';
 
+var sld_slope = // escalas para slopes
+'<RasterSymbolizer>' +
+  '<ColorMap type="ramp" extended="false">' +
+    '<ColorMapEntry color="#ff3300" quantity="1" label="Summits"/>' +   
+    '<ColorMapEntry color="#ff9933" quantity="2" label="Hilltops"/>' +  
+    '<ColorMapEntry color="#ffff33" quantity="3" label="Valleys"/>' +   
+    '<ColorMapEntry color="#663300" quantity="4" label="Footslopes"/>'+ 
+    '<ColorMapEntry color="#ffffff" quantity="5" label="Flat"/>' +      
+  '</ColorMap>' +
+'</RasterSymbolizer>';
+
+var sld_moisture = // escalas para moiture index
+'<RasterSymbolizer>' +
+  '<ColorMap type="ramp" extended="false">' +
+    '<ColorMapEntry color="#0000FF" quantity="1" label="Agua"/>' +   // Summits
+    '<ColorMapEntry color="#000000" quantity="0" label="n_agua"/>' +         // Hilltops and Sideslopes
+  '</ColorMap>' +
+'</RasterSymbolizer>';
 
 print(landforms);
 
@@ -106,3 +126,4 @@ leftMap.addLayer( landform_type.sldStyle(sld_landform),{}, 'Landform Types');
 rightMap.addLayer( aspect_am.sldStyle(sld_aspect),{}, 'Soil Aspect');
 rightMap.addLayer( tpi_am.sldStyle(sld_tpi), {}, 'TPI');
 rightMap.addLayer( slope_am  , {}, 'Slope');
+rightMap.addLayer( moisture_am.sldStyle(sld_moisture)  , {}, 'Moisture Index');
