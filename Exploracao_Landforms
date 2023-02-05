@@ -67,11 +67,11 @@ var sld_aspect = // escalas para Soil Aspect
 var sld_tpi = // escalas para TPI
 '<RasterSymbolizer>' +
   '<ColorMap type="ramp" extended="false">' +
-    '<ColorMapEntry color="	#ff4e50" quantity="1" label="Summits"/>' +   // Summits
-    '<ColorMapEntry color="#fc913a" quantity="2" label="Hilltops"/>' +         // Hilltops and Sideslopes
-    '<ColorMapEntry color="#f9d62e" quantity="3" label="Valleys"/>' +      //Valleys and Toeslopes
-    '<ColorMapEntry color="#eae374" quantity="4" label="Footslopes"/>'+       // Footslopes
-    '<ColorMapEntry color="#e2f4c7" quantity="5" label="Flat"/>' +      // Flat at the bottom steep slope
+    '<ColorMapEntry color="#ff3300" quantity="1" label="Summits"/>' +   // Summits
+    '<ColorMapEntry color="#ff9933" quantity="2" label="Hilltops"/>' +         // Hilltops and Sideslopes
+    '<ColorMapEntry color="#ffff33" quantity="3" label="Valleys"/>' +      //Valleys and Toeslopes
+    '<ColorMapEntry color="#e2f4c7" quantity="4" label="Footslopes"/>'+       // Footslopes
+    '<ColorMapEntry color="#ffffff" quantity="5" label="Flat"/>' +      // Flat at the bottom steep slope
   '</ColorMap>' +
 '</RasterSymbolizer>';
 
