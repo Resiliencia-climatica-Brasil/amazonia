@@ -60,9 +60,9 @@ var landforms =[
 
 var sld_aspect = // escalas para Soil Aspect
 '<RasterSymbolizer>' +
-  '<ColorMap type="ramp" extended="false">' +
-    '<ColorMapEntry color="#FFFFFF" quantity="0" label="0"/>' +       // Branco
-    '<ColorMapEntry color="#FFFF00" quantity="90" label="Warm"/>' +   // Amarelo
+  '<ColorMap type="intervals" extended="false">' +
+    '<ColorMapEntry color="#0000FF" quantity="0" label="0"/>' +       // Azul
+    '<ColorMapEntry color="#00FF00" quantity="90" label="Warm"/>' +   // Verde
     '<ColorMapEntry color="#FF9900" quantity="270" label="Cold"/>' +  // Laranja
     '<ColorMapEntry color="#FF0000" quantity="360" label="Warm"/>' +  // Vermelho
   '</ColorMap>' +
