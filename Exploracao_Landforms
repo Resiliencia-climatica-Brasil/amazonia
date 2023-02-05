@@ -61,18 +61,18 @@ var landforms =[
 var sld_aspect = // escalas para Soil Aspect
 '<RasterSymbolizer>' +
   '<ColorMap type="ramp" extended="false">' +
-    '<ColorMapEntry color="#ffffff" quantity="0" label="0"/>' +
-    '<ColorMapEntry color="#ffa101" quantity="90" label="Warm"/>' +
-    '<ColorMapEntry color="#ef595a" quantity="270" label="Cold"/>' +
-    '<ColorMapEntry color="#ef595a" quantity="360" label="Warm"/>' +
+    '<ColorMapEntry color="#FFFFFF" quantity="0" label="0"/>' +       // Branco
+    '<ColorMapEntry color="#FFFF00" quantity="90" label="Warm"/>' +   // Amarelo
+    '<ColorMapEntry color="#FF9900" quantity="270" label="Cold"/>' +  // Laranja
+    '<ColorMapEntry color="#FF0000" quantity="360" label="Warm"/>' +  // Vermelho
   '</ColorMap>' +
 '</RasterSymbolizer>';
 
 var sld_tpi = // escalas para TPI
 '<RasterSymbolizer>' +
   '<ColorMap type="ramp" extended="false">' +
-    '<ColorMapEntry color="#ffffff" quantity="0" label="0"/>' +
-    '<ColorMapEntry color="#ffa101" quantity="90" label="Warm"/>' +
+    '<ColorMapEntry color="#ffffff" quantity="0" label="0"/>' +       
+    '<ColorMapEntry color="#ffa101" quantity="90" label="Warm"/>' +   
     '<ColorMapEntry color="#ef595a" quantity="270" label="Cold"/>' +
     '<ColorMapEntry color="#ef595a" quantity="360" label="Warm"/>' +
   '</ColorMap>' +
