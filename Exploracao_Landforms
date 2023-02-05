@@ -67,11 +67,11 @@ var sld_aspect = // escalas para Soil Aspect
 var sld_tpi = // escalas para TPI
 '<RasterSymbolizer>' +
   '<ColorMap type="ramp" extended="false">' +
-    '<ColorMapEntry color="#ffffff" quantity="1" label="Summits"/>' +   // Summits
-    '<ColorMapEntry color="#ffffff" quantity="2" label="0"/>' +         // Hilltops and Sideslopes
-    '<ColorMapEntry color="#ffa101" quantity="3" label="Warm"/>' +      //Valleys and Toeslopes
-    '<ColorMapEntry color="#ef595a" quantity="4" label="Cold"/>'+       // Footslopes
-    '<ColorMapEntry color="#ef595a" quantity="5" label="Warm"/>' +      // Flat at the bottom steep slope
+    '<ColorMapEntry color="	#ff4e50" quantity="1" label="Summits"/>' +   // Summits
+    '<ColorMapEntry color="#fc913a" quantity="2" label="Hilltops"/>' +         // Hilltops and Sideslopes
+    '<ColorMapEntry color="#f9d62e" quantity="3" label="Valleys"/>' +      //Valleys and Toeslopes
+    '<ColorMapEntry color="#eae374" quantity="4" label="Footslopes"/>'+       // Footslopes
+    '<ColorMapEntry color="#e2f4c7" quantity="5" label="Flat"/>' +      // Flat at the bottom steep slope
   '</ColorMap>' +
 '</RasterSymbolizer>';
 
@@ -104,5 +104,5 @@ ui.root.add(splitPanel);
 
 leftMap.addLayer( landform_type.sldStyle(sld_landform),{}, 'Landform Types');
 rightMap.addLayer( aspect_am.sldStyle(sld_aspect),{}, 'Soil Aspect');
-rightMap.addLayer( tpi_am/*.sldStyle(sld_tpi)*/, {}, 'TPI');
+rightMap.addLayer( tpi_am.sldStyle(sld_tpi), {}, 'TPI');
 rightMap.addLayer( slope_am  , {}, 'Slope');
