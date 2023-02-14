@@ -1,6 +1,8 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var image = ee.Image("projects/ee-resilience/assets/Landforms_Assets/landform_types_Amazon");
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
+// Images import
+
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
                        .filter(ee.Filter.eq("Bioma", "Amazônia"));
@@ -8,6 +10,14 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
 var landform = ee.Image("CSP/ERGo/1_0/Global/ALOS_landforms");
 
 var land_tnc = ee.Image("projects/ee-resilience/assets/Landforms_Assets/landform_types_Amazon");
+
+var moisture_am = ee.Image("projects/ee-resilience/assets/Landforms_Assets/moisture_classes")
+                          .clip(bioma);
+
+
+
+
+// Palete for the classifications
 var sld_intervals =
 '<RasterSymbolizer>' +
   '<ColorMap type="intervals" extended="false">' +
@@ -48,9 +58,20 @@ var sld_landform = // Escalas para Landforms
     '<ColorMapEntry color="#0a7000" quantity="44" label="Warm Footslope/Cove"/>' +
   '</ColorMap>' +
 '</RasterSymbolizer>';
+var sld_moisture = // escalas para moiture index
+'<RasterSymbolizer>' +
+  '<ColorMap type="ramp" extended="false">' +
+    '<ColorMapEntry color="#0000FF" quantity="1" label="Agua"/>' +   // Summits
+    '<ColorMapEntry color="#000000" quantity="0" label="n_agua" opacity="0"/>' +         // Hilltops and Sideslopes
+  '</ColorMap>' +
+'</RasterSymbolizer>';
 
-//creating a center for the maps on Manaus
-var center = {lon:-59.971332,lat:-3.076426, zoom:11};
+//creating a center for the maps
+//var center = {lon:-59.971332,lat:-3.076426, zoom:11}; // Manaus showning problems with wetlands classifications
+
+var center = {lon:-65.698428,lat:-2.214053, zoom:11};
+
+
 
 // Create two maps.
 var leftMap = ui.Map(center);
@@ -70,11 +91,6 @@ ui.root.clear();
 ui.root.add(splitPanel);
 
 
-//adding Theobald to the left part
-leftMap.addLayer(landform.sldStyle(sld_intervals).clip(bioma), {}, 'Theobald');
-
-//adding TNC classification on the right
-rightMap.addLayer(land_tnc.sldStyle(sld_landform).clip(bioma), {}, 'TNC');
 
 // legend for theobald
 var legend = ui.Panel({
@@ -149,7 +165,7 @@ for (var i = 0; i < 15; i++) {
   legend.add(makeRow(palette[i], land[i]));
   }  
  
-leftMap.add(legend);
+
 
 //legend for TNC
 var legend2 = ui.Panel({
@@ -224,7 +240,22 @@ for (var i = 0; i < 15; i++) {
   legend2.add(makeRow(palette[i], land[i]));
   }  
  
+
+//Ploting maps and legends 
+//adding Theobald to the left part
+leftMap.addLayer(landform.sldStyle(sld_intervals).clip(bioma), {}, 'Theobald');
+leftMap.add(legend);
+leftMap.addLayer()
+
+//adding TNC classification on the right
+rightMap.addLayer(land_tnc.sldStyle(sld_landform).clip(bioma), {}, 'TNC');
 rightMap.add(legend2);
+
+
+
+
+
+
 
 
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
