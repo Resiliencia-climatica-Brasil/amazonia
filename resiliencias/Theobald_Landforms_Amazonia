@@ -28,13 +28,29 @@ var sld_intervals =
     '<ColorMapEntry color="#dba800" quantity="42" label="Valley (narrow)"/>' +
   '</ColorMap>' +
 '</RasterSymbolizer>';
+//creating a center for the maps
+var center = {lon:-59.971332,lat:-3.076426, zoom:10};
 
+// Create two maps.
+var leftMap = ui.Map(center);
+var rightMap = ui.Map(center);
 
+// Create a split panel with the two maps.
+var splitPanel = ui.SplitPanel({
+  firstPanel: leftMap,
+  secondPanel: rightMap,
+  orientation: 'horizontal',
+  wipe: true
+});
+
+//centering the map on Manaus
 Map.setCenter(-59.971332,-3.076426, 11);
 
-Map.addLayer(landform.sldStyle(sld_intervals).clip(bioma), {}, 'Theobald');
+//adding Theobald to the left part
+leftMap.addLayer(landform.sldStyle(sld_intervals).clip(bioma), {}, 'Theobald');
 
-Map.addLayer(land_tnc.sldStyle(sld_intervals).clip(bioma), {}, 'TNC');
+//adding TNC classification on the right
+rightMap.addLayer(land_tnc.sldStyle(sld_intervals).clip(bioma), {}, 'TNC');
 
 var legend = ui.Panel({
              style: {
