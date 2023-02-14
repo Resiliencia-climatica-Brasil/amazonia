@@ -245,12 +245,13 @@ for (var i = 0; i < 15; i++) {
 //adding Theobald to the left part
 leftMap.addLayer(landform.sldStyle(sld_intervals).clip(bioma), {}, 'Theobald');
 leftMap.add(legend);
-leftMap.addLayer()
+leftMap.addLayer(moisture_am.sldStyle(sld_moisture), {}, 'WATER');
+
 
 //adding TNC classification on the right
 rightMap.addLayer(land_tnc.sldStyle(sld_landform).clip(bioma), {}, 'TNC');
 rightMap.add(legend2);
-
+rightMap.addLayer(moisture_am.sldStyle(sld_moisture), {}, 'WATER');
 
 
 
