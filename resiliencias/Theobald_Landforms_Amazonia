@@ -28,8 +28,8 @@ var sld_intervals =
     '<ColorMapEntry color="#dba800" quantity="42" label="Valley (narrow)"/>' +
   '</ColorMap>' +
 '</RasterSymbolizer>';
-//creating a center for the maps
-var center = {lon:-59.971332,lat:-3.076426, zoom:10};
+//creating a center for the maps on Manaus
+var center = {lon:-59.971332,lat:-3.076426, zoom:11};
 
 // Create two maps.
 var leftMap = ui.Map(center);
@@ -42,9 +42,12 @@ var splitPanel = ui.SplitPanel({
   orientation: 'horizontal',
   wipe: true
 });
+// Remove the default map from the root panel.
+ui.root.clear();
 
-//centering the map on Manaus
-Map.setCenter(-59.971332,-3.076426, 11);
+// Add our split panel to the root panel.
+ui.root.add(splitPanel);
+
 
 //adding Theobald to the left part
 leftMap.addLayer(landform.sldStyle(sld_intervals).clip(bioma), {}, 'Theobald');
@@ -124,7 +127,10 @@ for (var i = 0; i < 15; i++) {
   legend.add(makeRow(palette[i], land[i]));
   }  
  
-Map.add(legend);
+leftMap.add(legend);
+rightMap.add(legend);
+
+print(palette, land);
 
 
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
