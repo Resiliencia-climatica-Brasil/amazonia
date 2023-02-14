@@ -1,6 +1,13 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("projects/ee-resilience/assets/Landforms_Assets/landform_types_Amazon");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                       .select("Bioma")
+                       .filter(ee.Filter.eq("Bioma", "Amazônia"));
 
 var landform = ee.Image("CSP/ERGo/1_0/Global/ALOS_landforms");
 
+var land_tnc = ee.Image("projects/ee-resilience/assets/Landforms_Assets/landform_types_Amazon");
 var sld_intervals =
 '<RasterSymbolizer>' +
   '<ColorMap type="intervals" extended="false">' +
@@ -25,9 +32,9 @@ var sld_intervals =
 
 Map.setCenter(-59.971332,-3.076426, 11);
 
-Map.addLayer(landform.sldStyle(sld_intervals), {});
+Map.addLayer(landform.sldStyle(sld_intervals), {}, 'Theobald');
 
-Map.addLayer(landform)
+Map.addLayer(land_tnc.sldStyle(sld_intervals), {}, 'TNC');
 
 var legend = ui.Panel({
              style: {
@@ -112,8 +119,11 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         })
                        .geometry();
 
-var landform_richness = landform.neighborhoodToBands(ee.Kernel.circle(ee.Number(4))).reduce(ee.Reducer.countDistinct())
 
+var landform_richness = landform.neighborhoodToBands(ee.Kernel.circle(ee.Number(4)))
+                                .reduce(ee.Reducer.countDistinct());
+
+/*
 Export.image.toDrive({
   image: landform_richness,
   description: 'Theobald_landform_richness_Amazonia',
@@ -121,3 +131,4 @@ Export.image.toDrive({
   region: bioma,
   maxPixels: 965933619 
 });
+*/
