@@ -548,14 +548,15 @@ var clipped_vars = variables.clip(bioma);
 
 
 //sampling 10000 points from the rasters
-var points = clipped_vars.sample({region: bioma, 
-                       scale: 92.76624232772798, 
-                       numPixels:10
+var points = clipped_vars.sample({region: bioma,  // region based on the focused biome
+                       scale: 92.76624232772798, // scale
+                       numPixels:10000, // number of sampling points
+                       geometries: true // should we keep the location of the centroid
                        });
-print(points);
 
 
-/*
+
+
 //exporting the points to a table in GDS
 
 Export.table.toDrive({
@@ -563,4 +564,3 @@ Export.table.toDrive({
   description: "extract_data",
   folder: "GEE"
   });
-*/
