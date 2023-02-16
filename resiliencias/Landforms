@@ -541,6 +541,7 @@ var variables = ee.Image.cat(
         "flow_acc",
         "moisture_index",
         "moisture_classes"]);
+        
 //Clipping the variables by the biome limit
 
 var clipped_vars = variables.clip(bioma);  
@@ -549,9 +550,12 @@ var clipped_vars = variables.clip(bioma);
 //sampling 10000 points from the rasters
 var points = clipped_vars.sample({region: bioma, 
                        scale: 92.76624232772798, 
-                       numPixels:10000
+                       numPixels:10
                        });
+print(points);
 
+
+/*
 //exporting the points to a table in GDS
 
 Export.table.toDrive({
@@ -559,3 +563,4 @@ Export.table.toDrive({
   description: "extract_data",
   folder: "GEE"
   });
+*/
