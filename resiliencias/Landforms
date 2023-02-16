@@ -30,10 +30,11 @@ First, we import a shapefile of brazilian biomes from IBGE (2018) and filter a b
 // inhibits the image exportation.
 
 var bioma = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/AM_lim")
-                       .map(function(feature){
+                       /*.map(function(feature){
                          return feature.bounds()
                         })
-                       .geometry();
+                       .geometry();*/
+                       
 /*
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
@@ -60,6 +61,16 @@ taking into account the whole basin flow.
 
 var flow_accumulation = ee.Image("MERIT/Hydro/v1_0_1")
     .select("upg")
+
+
+// Water from MapBiomas
+var water = ee.Image("projects/ee-lucasljardim9/assets/brasil_coverage_2021")
+            .reproject('EPSG:4326', null, 92.76624);
+water = water
+        .where(water.eq(33), 1)
+        .where(water.neq(33), 0);
+
+
 
 /* 
 We calculate relief slopes and aspect based on the DEM. 
@@ -474,7 +485,7 @@ Export.image.toDrive({
   scale: 92.76624,
   maxPixels: 975923237,
   region: bioma
-});
+});va
 
 Export.image.toDrive({
   image: TPI_classes,
@@ -502,3 +513,49 @@ Export.image.toDrive({
   region: bioma
 });
 */
+
+
+// Collecting several points for classification and validation
+
+var variables = ee.Image.cat(
+  [
+    landform_types,
+    landform_richness,
+    DEM,
+    slope,
+    aspect,
+    water,
+    TPI,
+    flow_accumulation,
+    moisture_index,
+    moisture_classes
+    ]).rename(
+      [
+        "landform_types",
+        "landform_richness",
+        "DEM",
+        "slope",
+        "aspect",
+        "water",
+        "TPI",
+        "flow_acc",
+        "moisture_index",
+        "moisture_classes"]);
+//Clipping the variables by the biome limit
+
+var clipped_vars = variables.clip(bioma);  
+
+
+//sampling 10000 points from the rasters
+var points = clipped_vars.sample({region: bioma, 
+                       scale: 92.76624232772798, 
+                       numPixels:10000
+                       });
+
+//exporting the points to a table in GDS
+
+Export.table.toDrive({
+  collection: points,
+  description: "extract_data",
+  folder: "GEE"
+  });
