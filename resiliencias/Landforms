@@ -550,11 +550,14 @@ var clipped_vars = variables.clip(bioma);
 //sampling 10000 points from the rasters
 var points = clipped_vars.sample({region: bioma,  // region based on the focused biome
                        scale: 92.76624232772798, // scale
-                       numPixels:10000, // number of sampling points
-                       geometries: true // should we keep the location of the centroid
-                       });
+                       numPixels:100, // number of sampling points
+                       geometries: true, // should we keep the location of the centroid
+                       tileScale: 4
+  
+});
 
 
+Map.addLayer(points)
 
 
 //exporting the points to a table in GDS
