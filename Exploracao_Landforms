@@ -4,7 +4,20 @@
 
 
 //começamos importando todos os rasters que fizemos com os codigos desenvolvidos por Lucas
-var limite_am = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/AM_lim");
+//var limite_am = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/AM_lim");
+
+var limite_am = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                      .select("Bioma")
+                      .filter(ee.Filter.eq("Bioma", "Amazônia"))
+                      .map(function(feature){
+                             return feature.bounds()
+                             })
+                      .geometry()
+                      .dissolve({'maxError': 1})
+                      .bounds();
+
+
+
 
 var landform_type = ee.Image("projects/ee-resilience/assets/Landforms_Assets/landform_types_Amazon").clip(limite_am);
 
@@ -106,7 +119,9 @@ print(landforms);
 
 
 // Set a center and zoom level.
-var center = {lon: -44.84225521, lat:-6.162661256 , zoom: 15};
+
+var center = {lon: -44.84225521, lat:-6.162661256 , zoom:12};
+
 var point = /* color: #d63000 */ee.Geometry.Point([-44.84225521,	-6.162661256]);
 
 
