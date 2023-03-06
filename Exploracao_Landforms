@@ -83,11 +83,11 @@ var sld_aspect = // escalas para Soil Aspect
 var sld_tpi = // escalas para TPI
 '<RasterSymbolizer>' +
   '<ColorMap type="ramp" extended="false">' +
-    '<ColorMapEntry color="#ff3300" quantity="1" label="Summits"/>' +   // Summits
-    '<ColorMapEntry color="#ff9933" quantity="2" label="Hilltops"/>' +         // Hilltops and Sideslopes
-    '<ColorMapEntry color="#ffff33" quantity="3" label="Valleys"/>' +      //Valleys and Toeslopes
-    '<ColorMapEntry color="#663300" quantity="4" label="Footslopes"/>'+       // Footslopes
-    '<ColorMapEntry color="#ffffff" quantity="5" label="Flat"/>' +      // Flat at the bottom steep slope
+    '<ColorMapEntry color="#ffbdbe" quantity="1" label="Summits"/>' +   // Summits
+    '<ColorMapEntry color="#c8c284" quantity="2" label="Hilltops"/>' +         // Hilltops and Sideslopes
+    '<ColorMapEntry color="#a9a800" quantity="3" label="Valleys"/>' +      //Valleys and Toeslopes
+    '<ColorMapEntry color="#08a702" quantity="4" label="Footslopes"/>'+       // Footslopes
+    '<ColorMapEntry color="#ffffbe" quantity="5" label="Flat"/>' +      // Flat at the bottom steep slope
   '</ColorMap>' +
 '</RasterSymbolizer>';
 
@@ -120,7 +120,7 @@ print(landforms);
 
 // Set a center and zoom level.
 
-var center = {lon: -44.84225521, lat:-6.162661256 , zoom:12};
+var center = {lon: -44.84225521, lat:-6.162661256 , zoom:17};
 
 var point = /* color: #d63000 */ee.Geometry.Point([-44.84225521,	-6.162661256]);
 
@@ -149,8 +149,8 @@ leftMap.addLayer( landform_type, {}, 'Landform codes');
 leftMap.addLayer( landform_type.sldStyle(sld_landform),{}, 'Landform Types');
 leftMap.addLayer(point,{}, 'Center Point');
 
-rightMap.addLayer( aspect_am.sldStyle(sld_aspect),{}, 'Soil Aspect');
-rightMap.addLayer( tpi_am.sldStyle(sld_tpi), {}, 'TPI');
-rightMap.addLayer( slope_am.sldStyle(sld_slope)  , {}, 'Slope');
+rightMap.addLayer( aspect_am.sldStyle(sld_aspect),{opacity:0.50}, 'Soil Aspect');
+rightMap.addLayer( tpi_am.sldStyle(sld_tpi), {opacity:0.65}, 'TPI');
+rightMap.addLayer( slope_am.sldStyle(sld_slope)  , {opacity:0.65}, 'Slope');
 rightMap.addLayer( moisture_am.sldStyle(sld_moisture)  , {}, 'Moisture Index');
 rightMap.addLayer(point,{}, 'Center Point');
