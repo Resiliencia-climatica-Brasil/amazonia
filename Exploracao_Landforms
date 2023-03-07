@@ -114,15 +114,16 @@ print(landforms);
 
 // -52.11571406	2.066952181
 // -44.84225521	-6.162661256
+//-63.58448882	4.710676144
 
 
 
 
 // Set a center and zoom level.
 
-var center = {lon: -44.84225521, lat:-6.162661256 , zoom:17};
+var center = {lon: -63.58448882, lat:	4.710676144 , zoom:17};
 
-var point = /* color: #d63000 */ee.Geometry.Point([-44.84225521,	-6.162661256]);
+var point = /* color: #d63000 */ee.Geometry.Point([-63.58448882,	4.710676144]);
 
 
 
