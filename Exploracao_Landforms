@@ -259,7 +259,7 @@ print(landforms);
 
 // Set a center and zoom level.
 
-var center={lon: -47.7293523, lat: -3.902079988, zoom:15}
+var center={lon: -67.96923261, lat: 0.667764314, zoom:15}
 
 
 var point = /* color: #d63000 */ee.Geometry.MultiPoint([
