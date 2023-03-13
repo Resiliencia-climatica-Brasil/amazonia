@@ -1,12 +1,13 @@
 var calculate_variety = function(i){
-  var landform_variety = landforms
-                       .reduceNeighborhood({reducer: ee.Reducer.countDistinct(), 
+  var elevation_variety = elevation
+                       .reduceNeighborhood({reducer: ee.Reducer.stdDev(), 
                                             kernel: ee.Kernel.circle(i)});
-  return landform_variety;                                      
+  return elevation_variety;                                      
   
 }
 
-var landforms = ee.Image('projects/ee-resilience/assets/Landforms_Assets/Landform_Variety_7-11-15');
+var elevation = ee.Image('projects/ee-resilience/assets/elevation_range_residual');
+
 
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .map(function(feature){
@@ -24,11 +25,11 @@ var varieties = ee.ImageCollection(windows
 
 
 Export.image.toAsset({image: varieties.regexpRename('^(.*)', 'Win_$1'), //Function to change the name of bands by adding 'Win_Size_' prior to it
-                      description: "variety_maps_7-11-15", 
-                      assetId: "variety_maps_7-11-15", 
+                      description: "variety_elev_maps_7-11-15", 
+                      assetId: "variety_elev_maps_7-11-15", 
                       pyramidingPolicy:"median", 
                       region: bioma, 
-                      scale: landforms.projection().nominalScale(),
+                      scale: elevation.projection().nominalScale(),
                       maxPixels: 1e13})
 /*
 var points = varieties
