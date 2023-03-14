@@ -1,12 +1,21 @@
 var calculate_variety = function(i){
-  var elevation_variety = elevation
-                       .reduceNeighborhood({reducer: ee.Reducer.stdDev(), 
+  var variable_variety = variable
+                       .reduceNeighborhood({reducer: ee.Reducer.stdDev(), //.count or .stdDev
                                             kernel: ee.Kernel.circle(i)});
-  return elevation_variety;                                      
+  return variable_variety;                                      
   
 }
+//let's load all variable that we want to calculate the diversity one by one.
+// so you will need to remove the '//' simbol for each variable that you want to calculate
 
-var elevation = ee.Image('projects/ee-resilience/assets/elevation_range_residual');
+
+//var variable = ee.Image('projects/ee-resilience/assets/soil_diversity');
+
+var variable = ee.Image('projects/ee-resilience/assets/wetlands_density');
+
+//var variable = ee.Image('projects/ee-resilience/assets/');
+
+//var variable = ee.Image('projects/ee-resilience/assets/elevation_range_residual');
 
 
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
@@ -24,12 +33,12 @@ var varieties = ee.ImageCollection(windows
                 .toBands();
 
 
-Export.image.toAsset({image: varieties.regexpRename('^(.*)', 'Win_$1'), //Function to change the name of bands by adding 'Win_Size_' prior to it
+Export.image.toAsset({image: varieties.regexpRename('^(.*)', 'Win_soil_$1'), //Function to change the name of bands by adding 'Win_Size_' prior to it
                       description: "variety_elev_maps_7-11-15", 
                       assetId: "variety_elev_maps_7-11-15", 
                       pyramidingPolicy:"median", 
                       region: bioma, 
-                      scale: elevation.projection().nominalScale(),
+                      scale: variable.projection().nominalScale(),
                       maxPixels: 1e13})
 /*
 var points = varieties
