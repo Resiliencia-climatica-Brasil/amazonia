@@ -1,12 +1,14 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var imageVisParam = {"opacity":1,"bands":["0_sum_variance"],"gamma":1};
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // Script to test the improviment in the standard deviation when we increase the size of the window to calculate the variety
 // where we will use stdDev to see how increasing the size of windows for wetlands density and elevation will improve on the changes of variety calculated
 
 var calculate_variety = function(i){
   var variable_variety = variable
-                       .reduceNeighborhood({reducer: ee.Reducer.stdDev(), //.count or .stdDev
+                       .reduceNeighborhood({reducer: ee.Reducer.circularVariance(), //.count or .stdDev
                                             kernel: ee.Kernel.circle(i)});
   return variable_variety;                                      
-  
 }
 //let's load all variable that we want to calculate the diversity one by one.
 // so you will need to remove the '//' simbol for each variable that you want to calculate
@@ -15,6 +17,7 @@ var calculate_variety = function(i){
 //var variable = ee.Image('projects/ee-resilience/assets/soil_diversity');
 
 var variable = ee.Image('projects/ee-resilience/assets/wetlands_density');
+var variable = ee.Image('project/ee-resilience/assets/wet')
 
 //var variable = ee.Image('projects/ee-resilience/assets/elevation_range_residual');
 
@@ -41,6 +44,38 @@ Export.image.toAsset({image: varieties.regexpRename('^(.*)', 'Win_soil_$1'), //F
                       region: bioma, 
                       scale: variable.projection().nominalScale(),
                       maxPixels: 1e13})
+
+print(varieties)
+
+
+var paleta = [
+'011301',
+'011D01',
+'012E01',
+'023B01',
+'004C00',
+'056201',
+'207401',
+'3E8601',
+'529400',
+'66A000',
+'74A901',
+'99B718',
+'FCD163',
+'F1B555',
+'DF923D',
+'CE7E45',
+'FFFFFF'
+];
+
+
+
+
+//var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
+
+
+
+Map.addLayer(varieties, {"bands":"1_sum_circularVariance", palette:paleta})
 
 
 /*
