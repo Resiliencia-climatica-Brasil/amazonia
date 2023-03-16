@@ -1,3 +1,6 @@
+// Script to test the improviment in the standard deviation when we increase the size of the window to calculate the variety
+// where we will use stdDev to see how increasing the size of windows for wetlands density and elevation will improve on the changes of variety calculated
+
 var calculate_variety = function(i){
   var variable_variety = variable
                        .reduceNeighborhood({reducer: ee.Reducer.stdDev(), //.count or .stdDev
@@ -12,8 +15,6 @@ var calculate_variety = function(i){
 //var variable = ee.Image('projects/ee-resilience/assets/soil_diversity');
 
 var variable = ee.Image('projects/ee-resilience/assets/wetlands_density');
-
-//var variable = ee.Image('projects/ee-resilience/assets/');
 
 //var variable = ee.Image('projects/ee-resilience/assets/elevation_range_residual');
 
