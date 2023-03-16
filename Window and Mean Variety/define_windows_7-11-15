@@ -34,12 +34,14 @@ var varieties = ee.ImageCollection(windows
 
 
 Export.image.toAsset({image: varieties.regexpRename('^(.*)', 'Win_soil_$1'), //Function to change the name of bands by adding 'Win_Size_' prior to it
-                      description: "variety_elev_maps_7-11-15", 
-                      assetId: "variety_elev_maps_7-11-15", 
+                      description: "variety_elev_maps", 
+                      assetId: "variety_elev_maps", 
                       pyramidingPolicy:"median", 
                       region: bioma, 
                       scale: variable.projection().nominalScale(),
                       maxPixels: 1e13})
+
+
 /*
 var points = varieties
              .sample({region: bioma, 
