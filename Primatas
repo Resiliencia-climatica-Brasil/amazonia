@@ -71,6 +71,6 @@ Map.addLayer(l9, {"bands":'SAVI',"min":-0.1772,"max":0.6380, palette:paleta}, 'l
 Map.addLayer(l9, {"bands":["SR_B6","SR_B5","SR_B4"],"min":7999,"max":22304}, 'l9 654');
 Map.addLayer(limite, {}, 'limite');
 Map.addLayer(pontos, {}, 'pontos');
-
+Map.centerObject(limite)
 
 
