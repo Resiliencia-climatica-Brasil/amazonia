@@ -31,12 +31,13 @@ var windows = [2, 5, 7, 10, 15, 20];
 
 var varieties = ee.ImageCollection(windows
                 .map(calculate_variety))
-                .toBands();
+                .toBands()
+                .regexpRename('^(.*)', 'Win_wet1000_$1');
 
 
-Export.image.toAsset({image: varieties.regexpRename('^(.*)', 'Win_soil_$1'), //Function to change the name of bands by adding 'Win_Size_' prior to it
-                      description: "variety_elev_maps", 
-                      assetId: "variety_elev_maps", 
+Export.image.toAsset({image: varieties, //Function to change the name of bands by adding 'Win_Size_' prior to it
+                      description: "variety_maps", 
+                      assetId: "variety_maps", 
                       pyramidingPolicy:"median", 
                       region: bioma, 
                       scale: variable.projection().nominalScale(),
@@ -72,7 +73,7 @@ var paleta = [
 
 
 
-Map.addLayer(varieties, {"bands":"1_sum_circularVariance", palette:paleta})
+Map.addLayer(varieties, {"bands":"Win_wet1000_0_sum_circularVariance", palette:paleta})
 
 
 /*
