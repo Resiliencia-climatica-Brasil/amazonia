@@ -3,7 +3,7 @@
 
 var calculate_variety = function(i){
   var variable_variety = variable
-                       .reduceNeighborhood({reducer: ee.Reducer.circularVariance(), //.count or .stdDev
+                       .reduceNeighborhood({reducer: ee.Reducer.variance(), //.count or .stdDev
                                             kernel: ee.Kernel.circle(i)});
   return variable_variety;                                      
 }
@@ -37,8 +37,8 @@ var varieties = ee.ImageCollection(windows
 
 
 Export.image.toAsset({image: varieties, //Function to change the name of bands by adding 'Win_Size_' prior to it
-                      description: "variety_maps_soil_diversity", 
-                      assetId: "variety_maps_soil_diversity", 
+                      description: "variety_maps_VAR_soil_diversity", 
+                      assetId: "variety_maps_VAR_soil_diversity", 
                       pyramidingPolicy:"median", 
                       region: bioma, 
                       scale: variable.projection().nominalScale(),
@@ -76,6 +76,9 @@ var paleta = [
 
 
 //Map.addLayer(varieties, {"bands":"Win_wet1000_0_sum_circularVariance", palette:paleta});
+
+
+
 
 
 /*
