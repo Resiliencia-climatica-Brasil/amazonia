@@ -6,9 +6,9 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .dissolve({'maxError': 1})
                         .bounds();
 
-var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_elevation_range_residual");
+//var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_elevation_range_residual");
 //var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_soil_diversity");
-//var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_wetlands_density_1000");
+var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_wetlands_density_1000");
 
 print(maps);
 
