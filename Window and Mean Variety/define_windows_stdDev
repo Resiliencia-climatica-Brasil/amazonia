@@ -11,10 +11,11 @@ var calculate_variety = function(i){
 // so you will need to remove the '//' simbol for each variable that you want to calculate
 
 
-//var variable = ee.Image('projects/ee-resilience/assets/soil_diversity');
+var variable = ee.Image('projects/ee-resilience/assets/soil_diversity');
 
 //var variable = ee.Image('projects/ee-resilience/assets/wetlands_density');
-var variable = ee.Image('projects/ee-resilience/assets/wetlands_density_1000');
+
+//var variable = ee.Image('projects/ee-resilience/assets/wetlands_density_1000');
 
 //var variable = ee.Image('projects/ee-resilience/assets/elevation_range_residual');
 
@@ -32,18 +33,19 @@ var windows = [2, 5, 7, 10, 15, 20];
 var varieties = ee.ImageCollection(windows
                 .map(calculate_variety))
                 .toBands()
-                .regexpRename('^(.*)', 'Win_wet1000_$1');
+                .regexpRename('^(.*)', 'Win_soil_diversity_$1');
 
 
 Export.image.toAsset({image: varieties, //Function to change the name of bands by adding 'Win_Size_' prior to it
-                      description: "variety_maps", 
-                      assetId: "variety_maps", 
+                      description: "variety_maps_soil_diversity", 
+                      assetId: "variety_maps_soil_diversity", 
                       pyramidingPolicy:"median", 
                       region: bioma, 
                       scale: variable.projection().nominalScale(),
-                      maxPixels: 1e13})
+                      maxPixels: 1e13});
 
-print(varieties)
+
+print(varieties);
 
 
 var paleta = [
@@ -73,7 +75,7 @@ var paleta = [
 
 
 
-Map.addLayer(varieties, {"bands":"Win_wet1000_0_sum_circularVariance", palette:paleta})
+//Map.addLayer(varieties, {"bands":"Win_wet1000_0_sum_circularVariance", palette:paleta});
 
 
 /*
