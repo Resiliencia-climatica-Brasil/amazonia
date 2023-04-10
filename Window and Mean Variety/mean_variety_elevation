@@ -6,24 +6,24 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .dissolve({'maxError': 1})
                         .bounds();
 
-//var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_elevation_range_residual");
+var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_elevation_range_residual");
 //var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_soil_diversity");
-var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_wetlands_density_1000");
+//var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_wetlands_density_1000");
 
 print(maps);
 
 var variety_average = function(i){
   var average = maps.select(i)
                 .subtract(maps.select(i - 1))
-                .reduceRegion({reducer: ee.Reducer.mean(), 
+                .reduceRegion({reducer: ee.Reducer.variance(), 
                               geometry: bioma, 
                               scale: maps.projection().nominalScale(), 
                               maxPixels: 1e13});
-
   return average;
 };
 
 var averages = [1, 2, 3, 4, 5].map(variety_average);
+
 
 print(averages);
 
@@ -70,4 +70,3 @@ var histograma5 = ui.Chart.image.histogram({image:maps.select(5)
                          
                          
                          
-
