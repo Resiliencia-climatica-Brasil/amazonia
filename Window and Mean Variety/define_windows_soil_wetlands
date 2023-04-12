@@ -50,7 +50,7 @@ var varieties = ee.ImageCollection(windows
                 .regexpRename('^(.*)', 'wetlands_$1')//Function to change the name of bands by adding 'Win_' prior to it
                 .clip(bioma)
                 ;
-
+/*
 //Exporting results to Asset
 
 Export.image.toAsset({image: varieties, 
@@ -82,7 +82,7 @@ for (var i = 0; i < windows.length; i++) {
               )
               ;
 }
-
+*/
 /////////////////// ---------------------------------------------------------//////////////
 /////////////////// ---------------------------------------------------------//////////////
 /////////////////// ---------------------------------------------------------//////////////
@@ -97,32 +97,23 @@ for (var i = 0; i < windows.length; i++) {
 
 // Import wetland raster from CIFOR database
 
-// Reprojecting
+// Load the soil diversity asset and reproject it
 
 var soil_diversity = ee.Image("projects/ee-lucasljardim9/assets/Cifor_wetlands")
                .reproject({crs: "EPSG:4326",
                            scale: 92.76624});
 
-// Transform wetland raster into a binary raster of wetland presence
 
-var wetlands_binary = wetlands.where(wetlands.gt(0), 1);
 
-var r = ee.Number(4046860).divide(ee.Number(Math.PI)).sqrt(); // radius in meters
 
-var radius_pixels = r.divide(ee.Number(90)).round();
-
-var neighbors = wetlands_binary.neighborhoodToBands(ee.Kernel.circle(ee.Number(radius_pixels)));
-
-var wetlands_count = neighbors.reduce(ee.Reducer.sum()).toDouble();
-
-//defining window sizes
-var windows = [2, 5, 7, 10, 15, 20];
+//defining window sizes (only if we are running it without running the previous coide)
+//  var windows = [2, 5, 7, 10, 15, 20];
 
 // creating the function that will calculate the mean of the amount of wetlands for each window sizes
 
-var wetlands_variety_count = function(i){
-  var count = wetlands_count
-                       .reduceNeighborhood({reducer: ee.Reducer.mean(), 
+var soil_variety_count = function(i){
+  var count = soil_diversity
+                       .reduceNeighborhood({reducer: ee.Reducer.countDistinctNonNull(), // I'm using NonNull because the asset has limits smaller than the bioma object that could generate NULL pixels
                                             kernel: ee.Kernel.circle(i)});
   return count;                                      
   };
@@ -139,20 +130,20 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .bounds();
 
 
-// calculating the wetlands count per window size
+// counting the diversity for each window size
 
 var varieties = ee.ImageCollection(windows
-                .map(wetlands_variety_count))
+                .map(soil_variety_count))
                 .toBands()
-                .regexpRename('^(.*)', 'wetlands_$1')//Function to change the name of bands by adding 'Win_' prior to it
+                .regexpRename('^(.*)', 'soil_$1')//Function to change the name of bands by adding 'Win_' prior to it
                 .clip(bioma)
                 ;
 
 //Exporting results to Asset
 
 Export.image.toAsset({image: varieties, 
-                      description: "variety_wetlands_count", 
-                      assetId: "projects/ee-resilience/assets/Windows_Variety/variety_maps_wetlands_count", 
+                      description: "soil_variety_count", 
+                      assetId: "projects/ee-resilience/assets/Windows_Variety/variety_maps_soil_diversity_count", 
                       pyramidingPolicy:"median", 
                       region: bioma, 
                       scale: wetlands.projection().nominalScale(),
@@ -160,7 +151,6 @@ Export.image.toAsset({image: varieties,
 
 
 //ploting each band created as a layer for visualization
-
 
 var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
 
@@ -172,7 +162,7 @@ var j=[0,1,2,3,4,5]; // creating a variable to select the bands for ploting
 for (var i = 0; i < windows.length; i++) {
   var layerName = 'Window size ' + windows[i];
   Map.addLayer(varieties
-                .select('wetlands_' + j[i]+'_sum_mean'),// Will select each layer based on the names
+                .select('soil_' + j[i]+'_b1_count'),// Will select each layer based on the names
               {palette:paleta, min:0, max:300},
               layerName
               ,false
