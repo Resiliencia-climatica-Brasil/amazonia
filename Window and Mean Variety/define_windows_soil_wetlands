@@ -25,7 +25,7 @@ var windows = [2, 5, 7, 10, 15, 20];
 
 var wetlands_variety_count = function(i){
   var count = wetlands_count
-                       .reduceNeighborhood({reducer: ee.Reducer.count(), 
+                       .reduceNeighborhood({reducer: ee.Reducer.mean(), 
                                             kernel: ee.Kernel.circle(i)});
   return count;                                      
   };
@@ -54,7 +54,7 @@ var varieties = ee.ImageCollection(windows
 
 Export.image.toAsset({image: varieties, 
                       description: "variety_wetlands_count", 
-                      assetId: "projects/ee-resilience/Windows_Variety/variety_wetlands_count", 
+                      assetId: "projects/ee-resilience/assets/Windows_Variety/variety_maps_wetlands_count", 
                       pyramidingPolicy:"median", 
                       region: bioma, 
                       scale: wetlands.projection().nominalScale(),
@@ -74,13 +74,25 @@ var j=[0,1,2,3,4,5] // creating a variable to select the bands for ploting
 for (var i = 0; i < windows.length; i++) {
   var layerName = 'Window size ' + windows[i];
   Map.addLayer(varieties
-                .select('wetlands_' + j[i]+'_sum_count'),// Will select each layer based on the names
-              {palette:paleta, min:0},
-              layerName,
-              false)
+                .select('wetlands_' + j[i]+'_sum_mean'),// Will select each layer based on the names
+              {palette:paleta, min:0, max:300},
+              layerName
+              ,false
+              )
               ;
 }
 
 
+var variety_average = function(i){
+  var average = varieties.select(i)
+                .subtract(varieties.select(i - 1))
+                .reduceRegion({reducer: ee.Reducer.mean(), 
+                              geometry: bioma, 
+                              scale: varieties.projection().nominalScale(), 
+                              maxPixels: 1e13});
+  return average;
+}
 
+var averages = [1, 2, 3, 4, 5].map(variety_average);
 
+print('Averages counts per window size',averages);
