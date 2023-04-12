@@ -60,7 +60,7 @@ Export.image.toAsset({image: varieties,
                       region: bioma, 
                       scale: wetlands.projection().nominalScale(),
                       maxPixels: 1e13});
-
+*/
 
 //ploting each band created as a layer for visualization
 
@@ -82,7 +82,7 @@ for (var i = 0; i < windows.length; i++) {
               )
               ;
 }
-*/
+
 /////////////////// ---------------------------------------------------------//////////////
 /////////////////// ---------------------------------------------------------//////////////
 /////////////////// ---------------------------------------------------------//////////////
