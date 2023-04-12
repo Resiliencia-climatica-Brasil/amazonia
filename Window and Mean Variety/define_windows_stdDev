@@ -32,7 +32,7 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
 Map.addLayer(bioma)
 
 var windows = [2, 5, 7, 10, 15, 20];
-var j = [0,1,2,3,4,5]
+
 var varieties = ee.ImageCollection(windows
                 .map(calculate_variety))
                 .toBands()
@@ -74,7 +74,9 @@ var paleta = [
 
 var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
 
-j=[0,1,2,3,4,5]
+var j=[0,1,2,3,4,5] // creating a variable to select the bands for ploting
+
+
 // Add each window size layer to the map.
 for (var i = 0; i < windows.length; i++) {
   var layerName = 'Window size ' + windows[i];
