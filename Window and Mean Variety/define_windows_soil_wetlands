@@ -1,0 +1,86 @@
+// Import wetland raster from CIFOR database
+
+// Reprojecting
+
+var wetlands = ee.Image("projects/ee-lucasljardim9/assets/Cifor_wetlands")
+               .reproject({crs: "EPSG:4326",
+                           scale: 92.76624});
+
+// Transform wetland raster into a binary raster of wetland presence
+
+var wetlands_binary = wetlands.where(wetlands.gt(0), 1);
+
+var r = ee.Number(4046860).divide(ee.Number(Math.PI)).sqrt(); // radius in meters
+
+var radius_pixels = r.divide(ee.Number(90)).round();
+
+var neighbors = wetlands_binary.neighborhoodToBands(ee.Kernel.circle(ee.Number(radius_pixels)));
+
+var wetlands_count = neighbors.reduce(ee.Reducer.sum()).toDouble();
+
+//defining window sizes
+var windows = [2, 5, 7, 10, 15, 20];
+
+// creating the function that will count the amount of wetlands in the window
+
+var wetlands_variety_count = function(i){
+  var count = wetlands_count
+                       .reduceNeighborhood({reducer: ee.Reducer.count(), 
+                                            kernel: ee.Kernel.circle(i)});
+  return count;                                      
+  };
+
+//loading biomas bounds
+
+var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                        .map(function(feature){
+                            return feature.bounds()
+                            })
+                        .geometry()
+                        .dissolve({'maxError': 1})
+                        .bounds();
+
+
+
+// calculating the wetlands count per window size
+
+var varieties = ee.ImageCollection(windows
+                .map(wetlands_variety_count))
+                .toBands()
+                .regexpRename('^(.*)', 'wetlands_$1')//Function to change the name of bands by adding 'Win_' prior to it
+                ;
+
+//Exporting results to Asset
+
+Export.image.toAsset({image: varieties, 
+                      description: "variety_wetlands_count", 
+                      assetId: "projects/ee-resilience/Windows_Variety/variety_wetlands_count", 
+                      pyramidingPolicy:"median", 
+                      region: bioma, 
+                      scale: wetlands.projection().nominalScale(),
+                      maxPixels: 1e13});
+
+
+//ploting each band created as a layer for visualization
+
+
+var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
+
+var j=[0,1,2,3,4,5] // creating a variable to select the bands for ploting
+
+
+// Add each window size layer to the map.
+
+for (var i = 0; i < windows.length; i++) {
+  var layerName = 'Window size ' + windows[i];
+  Map.addLayer(varieties
+                .select('wetlands_' + j[i]+'_sum_count'),// Will select each layer based on the names
+              {palette:paleta, min:0},
+              layerName,
+              false)
+              ;
+}
+
+
+
+
