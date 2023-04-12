@@ -29,18 +29,18 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        // .geometry()
                         //.dissolve({'maxError': 1})
                         //.bounds();
-Map.addLayer(bioma)
+Map.addLayer(bioma);
 
 var windows = [2, 5, 7, 10, 15, 20];
 
 var varieties = ee.ImageCollection(windows
                 .map(calculate_variety))
                 .toBands()
-                .regexpRename('^(.*)', 'Win_soil_diversity_$1')
+                .regexpRename('^(.*)', 'Win_soil_diversity_$1')//Function to change the name of bands by adding 'Win_' prior to it
                 ;
 
 
-Export.image.toAsset({image: varieties, //Function to change the name of bands by adding 'Win_Size_' prior to it
+Export.image.toAsset({image: varieties, 
                       description: "variety_maps_VAR_soil_diversity", 
                       assetId: "variety_maps_VAR_soil_diversity", 
                       pyramidingPolicy:"median", 
@@ -51,7 +51,7 @@ Export.image.toAsset({image: varieties, //Function to change the name of bands b
 
 print(varieties);
 
-/*
+
 var paleta = [
 '011301',
 '011D01',
@@ -70,9 +70,9 @@ var paleta = [
 'DF923D',
 'CE7E45',
 'FFFFFF'
-];*/
+];
 
-var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
+//var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
 
 var j=[0,1,2,3,4,5] // creating a variable to select the bands for ploting
 
