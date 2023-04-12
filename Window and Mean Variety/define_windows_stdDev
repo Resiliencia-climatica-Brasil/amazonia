@@ -4,7 +4,9 @@
 var calculate_variety = function(i){
   var variable_variety = variable
                        .reduceNeighborhood({reducer: ee.Reducer.variance(), //.count or .stdDev
-                                            kernel: ee.Kernel.circle(i)});
+                                            kernel: ee.Kernel.circle({radius:i,
+                                                                      units: 'pixels'
+                                            })});
   return variable_variety;                                      
 }
 //let's load all variable that we want to calculate the diversity one by one.
