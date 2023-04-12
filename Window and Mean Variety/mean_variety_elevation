@@ -15,17 +15,29 @@ print(maps);
 var variety_average = function(i){
   var average = maps.select(i)
                 .subtract(maps.select(i - 1))
-                .reduceRegion({reducer: ee.Reducer.variance(), 
+                .reduceRegion({reducer: ee.Reducer.mean(), 
                               geometry: bioma, 
                               scale: maps.projection().nominalScale(), 
                               maxPixels: 1e13});
   return average;
-};
+}
+var variety_variance = function(i){
+  var variance = maps.select(i)
+                .subtract(maps.select(i - 1))
+                .reduceRegion({reducer: ee.Reducer.variance(), 
+                              geometry: bioma, 
+                              scale: maps.projection().nominalScale(), 
+                              maxPixels: 1e13});
+  return variance;
+  };
+
 
 var averages = [1, 2, 3, 4, 5].map(variety_average);
+var variance = [1,2,3,4,5].map(variety_variance);
 
+print('Averages',averages);
+print('Variances',variance);
 
-print(averages);
 
 var histograma = ui.Chart.image.histogram({image:maps.select(1)
                                 .subtract(maps.select(0)), 
