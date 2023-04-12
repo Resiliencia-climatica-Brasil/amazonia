@@ -78,9 +78,15 @@ var j=[0,1,2,3,4,5] // creating a variable to select the bands for ploting
 
 
 // Add each window size layer to the map.
+
 for (var i = 0; i < windows.length; i++) {
   var layerName = 'Window size ' + windows[i];
-  Map.addLayer(varieties.select('Win_soil_diversity_' + j[i]+'_sum_variance'), {palette:paleta, min:0, max:1}, layerName, false);
+  Map.addLayer(varieties
+                .select('Win_soil_diversity_' + j[i]+'_sum_variance'),// Will select each layer based on the names
+              {palette:paleta, min:0, max:1},
+              layerName,
+              false)
+              ;
 }
 
 
