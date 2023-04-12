@@ -99,11 +99,10 @@ for (var i = 0; i < windows.length; i++) {
 
 // Load the soil diversity asset and reproject it
 
-var soil_diversity = ee.Image("projects/ee-lucasljardim9/assets/soil_diversity")
+var soil_diversity = ee.Image('projects/ee-resilience/assets/soil_diversity')
                .reproject({crs: "EPSG:4326",
                            scale: 92.76624});
 
-Map.addLayer(soil_diversity)
 
 
 //defining window sizes (only if we are running it without running the previous coide)
@@ -139,6 +138,7 @@ var varieties = ee.ImageCollection(windows
                 .clip(bioma)
                 ;
 
+
 //Exporting results to Asset
 
 Export.image.toAsset({image: varieties, 
@@ -162,8 +162,8 @@ var j=[0,1,2,3,4,5]; // creating a variable to select the bands for ploting
 for (var i = 0; i < windows.length; i++) {
   var layerName = 'Soil Window size ' + windows[i];
   Map.addLayer(varieties
-                .select('soil_' + j[i]+'_b1_count'),// Will select each layer based on the names
-              {palette:paleta, min:0, max:300},
+                .select('soil_' + j[i]+'_sum_count'),// Will select each layer based on the names
+              {palette:paleta, min:0, max:3},
               layerName
               ,false
               )
