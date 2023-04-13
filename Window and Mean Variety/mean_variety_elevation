@@ -7,8 +7,8 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                           .dissolve({'maxError': 1})
                           .bounds();
 
-var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_soil_diversity_count")
-//var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_wetlands_count")
+//var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_soil_diversity_count")
+var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_wetlands_count")
 
     .clip(bioma);
 
@@ -50,7 +50,7 @@ var histograma = ui.Chart.image.histogram({image:maps.select(1)
                          scale: maps.projection().nominalScale(), 
                          maxPixels: 1e13});
                          
-                         print(histograma)
+                         print('Janela 5 - 2', histograma)
                          
 var histograma2 = ui.Chart.image.histogram({image:maps.select(2)
                                 .subtract(maps.select(1)), 
@@ -58,7 +58,7 @@ var histograma2 = ui.Chart.image.histogram({image:maps.select(2)
                          scale: maps.projection().nominalScale(), 
                          maxPixels: 1e13});
                          
-                         print(histograma2)    
+                         print('Janela 7 - 5', histograma2)    
                          
 var histograma3 = ui.Chart.image.histogram({image:maps.select(3)
                                 .subtract(maps.select(2)), 
@@ -66,7 +66,7 @@ var histograma3 = ui.Chart.image.histogram({image:maps.select(3)
                          scale: maps.projection().nominalScale(), 
                          maxPixels: 1e13});
                          
-                         print(histograma3)
+                         print('Janela 10 - 7', histograma3)
                          
 var histograma4 = ui.Chart.image.histogram({image:maps.select(4)
                                 .subtract(maps.select(3)), 
@@ -74,7 +74,7 @@ var histograma4 = ui.Chart.image.histogram({image:maps.select(4)
                          scale: maps.projection().nominalScale(), 
                          maxPixels: 1e13});
                          
-                         print(histograma4) 
+                         print('Janela 15 - 10', histograma4) 
                          
 var histograma5 = ui.Chart.image.histogram({image:maps.select(5)
                                 .subtract(maps.select(4)), 
@@ -82,7 +82,7 @@ var histograma5 = ui.Chart.image.histogram({image:maps.select(5)
                          scale: maps.projection().nominalScale(), 
                          maxPixels: 1e13});
                          
-                         print(histograma5)    
+                         print('Janela 20 - 15', histograma5)    
                          
                          
                          
