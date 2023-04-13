@@ -38,10 +38,21 @@ var variety_average = function(i){
 
 
 var averages = [1, 2, 3, 4, 5].map(variety_average);
+var names = ['Janela 5 - 2',
+'Janela 7 - 5',
+'Janela 10 - 7',
+'Janela 15 - 10',
+'Janela 20 - 15']
+
+var entry = {
+    'name': names,
+    'averages': averages
+    };
+  
 
 
 print('Averages',averages);
-
+print('Averages Windows', entry)
 
 
 var histograma = ui.Chart.image.histogram({image:maps.select(1)
