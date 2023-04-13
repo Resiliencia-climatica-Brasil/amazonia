@@ -26,18 +26,9 @@ var variety_average = function(i){
   return average;
 }
 
-// var variety_variance = function(i){
-//   var variance = maps.select(i)
-//                 //.subtract(maps.select(i - 1))
-//                 .reduceRegion({reducer: ee.Reducer.variance(), 
-//                               geometry: bioma, 
-//                               scale: maps.projection().nominalScale(), 
-//                               maxPixels: 1e13});
-//   return variance;
-//   };
-
 
 var averages = [1, 2, 3, 4, 5].map(variety_average);
+
 var names = ['Janela 5 - 2',
 'Janela 7 - 5',
 'Janela 10 - 7',
