@@ -1,16 +1,17 @@
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
-                        .filter(ee.Filter.eq('Bioma', 'Amazônia'))
-                        // .map(function(feature){
-                        //     return feature.bounds()
-                        //     })
-                        // .geometry()
-                        // .dissolve({'maxError': 1})
-                        // .bounds();
+                      .filter(ee.Filter.eq('Bioma', 'Amazônia'))
+                         .map(function(feature){
+                             return feature.bounds()
+                             })
+                           .geometry()
+                          .dissolve({'maxError': 1})
+                          .bounds();
 
-var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_elevation_range_residual")
+var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_soil_diversity_count")
+//var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_wetlands_count")
+
     .clip(bioma);
-//var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_soil_diversity");
-//var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_VAR_wetlands_density_1000");
+
 
 print(maps);
 Map.addLayer(maps)
@@ -37,10 +38,10 @@ var variety_average = function(i){
 
 
 var averages = [1, 2, 3, 4, 5].map(variety_average);
-var variance = [1,2,3,4,5].map(variety_variance);
+
 
 print('Averages',averages);
-print('Variances',variance);
+
 
 
 var histograma = ui.Chart.image.histogram({image:maps.select(1)
