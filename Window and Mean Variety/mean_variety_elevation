@@ -1,5 +1,5 @@
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
-                      .filter(ee.Filter.eq('Bioma', 'Amazônia'))
+                      //.filter(ee.Filter.eq('Bioma', 'Caatinga'))
                          .map(function(feature){
                              return feature.bounds()
                              })
@@ -7,8 +7,8 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                           .dissolve({'maxError': 1})
                           .bounds();
 
-//var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_soil_diversity_count")
-var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_wetlands_count")
+var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_soil_diversity_count")
+//var maps = ee.Image("projects/ee-resilience/assets/Windows_Variety/variety_maps_wetlands_count")
 
     .clip(bioma);
 
@@ -50,11 +50,9 @@ var entry = {
     };
   
 
-
-print('Averages',averages);
 print('Averages Windows', entry)
 
-
+/*
 var histograma = ui.Chart.image.histogram({image:maps.select(1)
                                 .subtract(maps.select(0)), 
                          region: bioma, 
@@ -94,7 +92,5 @@ var histograma5 = ui.Chart.image.histogram({image:maps.select(5)
                          maxPixels: 1e13});
                          
                          print('Janela 20 - 15', histograma5)    
-                         
-                         
-                         
-                         
+
+*/
