@@ -1,5 +1,5 @@
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
-                      //.filter(ee.Filter.eq('Bioma', 'Caatinga'))
+                      .filter(ee.Filter.eq('Bioma', 'Mata Atlântica'))
                          .map(function(feature){
                              return feature.bounds()
                              })
