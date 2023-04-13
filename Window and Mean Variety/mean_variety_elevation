@@ -18,7 +18,7 @@ Map.addLayer(maps)
 
 var variety_average = function(i){
   var average = maps.select(i)
-                //.subtract(maps.select(i - 1))
+                .subtract(maps.select(i - 1))
                 .reduceRegion({reducer: ee.Reducer.mean(), 
                               geometry: bioma, 
                               scale: maps.projection().nominalScale(), 
