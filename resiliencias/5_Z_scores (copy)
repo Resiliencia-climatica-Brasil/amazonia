@@ -62,11 +62,22 @@ Map.addLayer(Z, {}, 'Z-Scores');
 
 Map.addLayer(win_images, {}, 'Original');
 
+var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                       .map(function(feature){
+                             return feature.bounds()
+                            })
+                      .geometry()
+                        .dissolve({'maxError': 1})
+                        .bounds();
+
+
+
 Export.image.toAsset({image: Z, 
                       description: "Z-Scores_elevation_range_residual", 
                       assetId: "Z-Scores_elevation_range_residual", 
-                      pyramidingPolicy:"mean", 
-                      scale: variable.projection().nominalScale(),
+                      pyramidingPolicy:"median",
+                      region:bioma,
+                      scale: win_images.projection().nominalScale(),
                       maxPixels: 1e13});
 
 
