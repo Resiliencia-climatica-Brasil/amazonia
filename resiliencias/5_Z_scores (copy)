@@ -1,49 +1,105 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var image = ee.Image("users/andreasancheztapia/landform_variety_clip");
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
+/**
+ * This script generates and exports rasters with the z score for each image generated in steps 1:4 in Gee
+ * 
+ * 
 
+- Steps to calculate Z-scores
+
+1- Calculate the mean and standard deviation for the extention of the images 
+
+2- Subtract the mean from value for each pixel and divide by the sd
+
+3- Export
+
+*/
+
+
+var win_images = ee.Image('projects/ee-lucasljardim9/assets/elevation_range_residual')
+//var win_images = ee.Image('projects/ee-lucasljardim9/assets/landform_variety')
+//var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_count')
+//var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_density')
+//var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_density_1000')
+
+
+
+/*
+//Calculating the mean 
 var mean = image.reduceRegion({
   reducer: ee.Reducer.mean(),
   //geometry: region.geometry(),
   scale: 92.76624,
   bestEffort: true
 })
+
 print(mean)
+
 var sd = image.reduceRegion({
   reducer: ee.Reducer.stdDev(),
   //geometry: region.geometry(),
   scale: 92.76624,
   bestEffort: true
 })
+
 print(sd)
+
 var image2 = image
 .addBands(mean)
 .addBands(sd)
 
 Map.addLayer(image2)
-
+*/
 
 var calculate_Z_scores = function(raster) {
+ // calculate the global mean
   var mean = raster.reduceRegion({
   reducer: ee.Reducer.mean(),
   //geometry: region.geometry(),
   scale: 92.76624,
   bestEffort: true
 })
+// calculate the global sd
 var sd = raster.reduceRegion({
   reducer: ee.Reducer.stdDev(),
   //geometry: region.geometry(),
   scale: 92.76624,
   bestEffort: true
 })
+//calculate z by subtracting mean and dividing by sd
+
   var z = raster.subtract(mean).divide(sd)
   return raster
   .addBands(z)
   .float()
+  return raster
 } 
 
-var Z = calculate_Z_scores(image)
+var Z = calculate_Z_scores(win_images)
+
 Map.addLayer(Z)
+
+Map.addLayer(win_images)
+
+ var mean = win_images.reduceRegion({
+  reducer: ee.Reducer.mean(),
+  //geometry: region.geometry(),
+  scale: 92.76624,
+  bestEffort: true
+});print(mean);
+
+// calculate the global sd
+var sd = win_images.reduceRegion({
+  reducer: ee.Reducer.stdDev(),
+  //geometry: region.geometry(),
+  scale: 92.76624,
+  bestEffort: true
+});print(sd);
+
+var z = win_images
+        .subtract(mean)
+        .divide(sd); print(z)
+
+
+
 //Map.addLayer(image, value: "z-score")
 //Map.addLayer(Z)
 //Map.centerObject(Z)
