@@ -1,0 +1,57 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("users/andreasancheztapia/landform_variety_clip");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
+
+var mean = image.reduceRegion({
+  reducer: ee.Reducer.mean(),
+  //geometry: region.geometry(),
+  scale: 92.76624,
+  bestEffort: true
+})
+print(mean)
+var sd = image.reduceRegion({
+  reducer: ee.Reducer.stdDev(),
+  //geometry: region.geometry(),
+  scale: 92.76624,
+  bestEffort: true
+})
+print(sd)
+var image2 = image
+.addBands(mean)
+.addBands(sd)
+
+Map.addLayer(image2)
+
+
+var calculate_Z_scores = function(raster) {
+  var mean = raster.reduceRegion({
+  reducer: ee.Reducer.mean(),
+  //geometry: region.geometry(),
+  scale: 92.76624,
+  bestEffort: true
+})
+var sd = raster.reduceRegion({
+  reducer: ee.Reducer.stdDev(),
+  //geometry: region.geometry(),
+  scale: 92.76624,
+  bestEffort: true
+})
+  var z = raster.subtract(mean).divide(sd)
+  return raster
+  .addBands(z)
+  .float()
+} 
+
+var Z = calculate_Z_scores(image)
+Map.addLayer(Z)
+//Map.addLayer(image, value: "z-score")
+//Map.addLayer(Z)
+//Map.centerObject(Z)
+/*
+// Reduce the collection with a median reducer.
+        var median = current_index.reduce(ee.Reducer.median());
+        // Reduce the collection with a stdDev reducer.
+        var stdDev = current_index.reduce(ee.Reducer.stdDev());
+        // return image with median and stdDev
+        
+        */
