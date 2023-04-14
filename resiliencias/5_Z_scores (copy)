@@ -50,6 +50,7 @@ Map.addLayer(image2)
 */
 
 var calculate_Z_scores = function(raster) {
+  
  // calculate the global mean
   var mean = raster.reduceRegion({
   reducer: ee.Reducer.mean(),
@@ -57,6 +58,7 @@ var calculate_Z_scores = function(raster) {
   scale: 92.76624,
   bestEffort: true
 })
+
 // calculate the global sd
 var sd = raster.reduceRegion({
   reducer: ee.Reducer.stdDev(),
@@ -64,9 +66,14 @@ var sd = raster.reduceRegion({
   scale: 92.76624,
   bestEffort: true
 })
+ // Extract the mean and standard deviation values from the dictionaries
+  var meanValue = ee.Image(mean.get('mean'));
+  var sdValue = ee.Image(sd.get('sd'));
+
+
 //calculate z by subtracting mean and dividing by sd
 
-  var z = raster.subtract(mean).divide(sd)
+  var z = raster.subtract(meanValue).divide(sdValue)
   return raster
   .addBands(z)
   .float()
