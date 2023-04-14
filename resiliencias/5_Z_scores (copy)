@@ -14,77 +14,53 @@
 */
 
 
-var win_images = ee.Image('projects/ee-lucasljardim9/assets/elevation_range_residual')
-//var win_images = ee.Image('projects/ee-lucasljardim9/assets/landform_variety')
-//var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_count')
-//var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_density')
-//var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_density_1000')
+var win_images = ee.Image('projects/ee-lucasljardim9/assets/elevation_range_residual');
+//var win_images = ee.Image('projects/ee-lucasljardim9/assets/landform_variety');
+//var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_count');
+//var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_density');
+//var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_density_1000');
 
 
+// Coding the function to apply the formula of Z-Scores for any raster image that we need
 
-/*
-//Calculating the mean 
-var mean = image.reduceRegion({
-  reducer: ee.Reducer.mean(),
-  //geometry: region.geometry(),
-  scale: 92.76624,
-  bestEffort: true
-})
+var calculate_Z_scores = function(image) {
+  // Calculate mean and standard deviation
+  var mean = image.reduceRegion({
+    reducer: ee.Reducer.mean(),
+    scale: 92.76624,
+    bestEffort: true
+  });print('Global Mean', mean);
 
-print(mean)
+  var sd = image.reduceRegion({
+    reducer: ee.Reducer.stdDev(),
+    scale: 92.76624,
+    bestEffort: true
+  }); print('Global sd', sd)
 
-var sd = image.reduceRegion({
-  reducer: ee.Reducer.stdDev(),
-  //geometry: region.geometry(),
-  scale: 92.76624,
-  bestEffort: true
-})
+  // Extract the mean and standard deviation values from the dictionaries into a raster
+var meanValue = ee.Image.constant(mean
+                                  .values()
+                                  .get(0));
+                                  print('mean Dictionary', meanValue);
+                                  
+  var sdValue = ee.Image.constant(sd
+                                  .values()
+                                  .get(0));
+                                  print('sd dictionary', sdValue);
 
-print(sd)
+  // Calculate z for the current image
+  var z = image.subtract(meanValue).divide(sdValue);
 
-var image2 = image
-.addBands(mean)
-.addBands(sd)
-
-Map.addLayer(image2)
-*/
-
-var calculate_Z_scores = function(raster) {
-  
- // calculate the global mean
-  var mean = raster.reduceRegion({
-  reducer: ee.Reducer.mean(),
-  //geometry: region.geometry(),
-  scale: 92.76624,
-  bestEffort: true
-})
-
-// calculate the global sd
-var sd = raster.reduceRegion({
-  reducer: ee.Reducer.stdDev(),
-  //geometry: region.geometry(),
-  scale: 92.76624,
-  bestEffort: true
-})
- // Extract the mean and standard deviation values from the dictionaries
-  var meanValue = ee.Image(mean.get('mean'));
-  var sdValue = ee.Image(sd.get('sd'));
+  // Return the z image
+  return z.rename('z');
+};
 
 
-//calculate z by subtracting mean and dividing by sd
+var Z = calculate_Z_scores(win_images);
 
-  var z = raster.subtract(meanValue).divide(sdValue)
-  return raster
-  .addBands(z)
-  .float()
-  return raster
-} 
+Map.addLayer(Z, {}, 'Z-Scores');
 
-var Z = calculate_Z_scores(win_images)
-
-Map.addLayer(Z)
-
-Map.addLayer(win_images)
+Map.addLayer(win_images, {}, 'Original');
 
 
 
