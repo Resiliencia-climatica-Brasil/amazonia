@@ -79,24 +79,6 @@ Map.addLayer(Z)
 
 Map.addLayer(win_images)
 
- var mean = win_images.reduceRegion({
-  reducer: ee.Reducer.mean(),
-  //geometry: region.geometry(),
-  scale: 92.76624,
-  bestEffort: true
-});print(mean);
-
-// calculate the global sd
-var sd = win_images.reduceRegion({
-  reducer: ee.Reducer.stdDev(),
-  //geometry: region.geometry(),
-  scale: 92.76624,
-  bestEffort: true
-});print(sd);
-
-var z = win_images
-        .subtract(mean)
-        .divide(sd); print(z)
 
 
 
