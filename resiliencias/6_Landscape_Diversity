@@ -1,0 +1,33 @@
+// Importing data ----------------------------------------------------------
+
+
+var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                       .map(function(feature){
+                             return feature.bounds()
+                             })
+                       // .geometry()
+                        //.dissolve({'maxError': 1})
+                        //.bounds();
+                        
+                        
+var landform_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_elevation_range_range_residual');
+
+var elevation_range_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_landform_variety');
+
+var wetland_score = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_wetlands_count');
+
+var soil_diversity =  ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_wetlands_density');
+
+
+
+// Step 1 ------------------------------------------------------------------
+// Take the average of landform and elevation range only if elevantion range is higher than landform
+
+landscape_diversity <- landform_Z
+
+test_1 <- elevation_range_Z > landscape_diversity 
+
+average_elevation <- ((2 * landform_Z) + elevation_range_Z) / 3
+
+landscape_diversity[test_1] <- average_elevation[test_1]
+
