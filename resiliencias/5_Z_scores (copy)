@@ -62,6 +62,12 @@ Map.addLayer(Z, {}, 'Z-Scores');
 
 Map.addLayer(win_images, {}, 'Original');
 
+Export.image.toAsset({image: Z, 
+                      description: "Z-Scores_elevation_range_residual", 
+                      assetId: "Z-Scores_elevation_range_residual", 
+                      pyramidingPolicy:"mean", 
+                      scale: variable.projection().nominalScale(),
+                      maxPixels: 1e13});
 
 
 
