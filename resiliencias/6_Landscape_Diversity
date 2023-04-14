@@ -5,11 +5,11 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .map(function(feature){
                              return feature.bounds()
                              })
-                       // .geometry()
-                        //.dissolve({'maxError': 1})
-                        //.bounds();
-                        
-                        
+                        .geometry()
+                        .dissolve({'maxError': 1})
+                        .bounds();
+
+
 var landform_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_elevation_range_range_residual');
 
 var elevation_range_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_landform_variety');
