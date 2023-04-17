@@ -114,6 +114,7 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(tes
 
 landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
 
+
 // Step 3 ------------------------------------------------------------------
 // Exporting to Asset
 
@@ -127,7 +128,7 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
 
 
 
-Export.image.toAsset({image: Z, 
+Export.image.toAsset({image: landscape_diversity, 
                       description: "Landscape Diversity", 
                       assetId: "landscape_diversity_test_1", 
                       pyramidingPolicy:"median",
