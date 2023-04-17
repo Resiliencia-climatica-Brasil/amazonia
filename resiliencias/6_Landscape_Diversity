@@ -127,32 +127,37 @@ Export.image.toAsset({image: landscape_diversity,
 // Visualization
 //Images
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
-var landforms = ee.Image('projects/ee-lucasljardim9/assets/landform_tipes');
-
+//var landform_type = ee.Image('projects/ee-lucasljardim9/assets/landform_types').clip(bioma);
+var landscape_diversity = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_1').clip(bioma);
+var landform_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_landform_variety').clip(bioma);
 
 // Palette
 var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
 
 
-var sld_landform = // Escalas para Landforms
-'<RasterSymbolizer>' +
-  '<ColorMap type="intervals" extended="false">' +
-    '<ColorMapEntry color="#ffc408" quantity="3" label="Cool Steep Slope"/>' +
-    '<ColorMapEntry color="#ffa101" quantity="4" label="Warm Steep Slope"/>' +
-    '<ColorMapEntry color="#ef595a" quantity="5" label="Cliff"/>' +
-    '<ColorMapEntry color="#ffbdbe" quantity="11" label="Summit/Ridgetop"/>' +
-    '<ColorMapEntry color="#6e4100" quantity="13" label="Slope Crest"/>' +
-    '<ColorMapEntry color="#af7b53" quantity="21" label="Flat Hilltop"/>' +
-    '<ColorMapEntry color="#c8c284" quantity="22" label="Gentle Slope Hilltop"/>' +
-    '<ColorMapEntry color="#c8f6ad" quantity="23" label="Cool Sideslope"/>' +
-    '<ColorMapEntry color="#83e763" quantity="24" label="Warm Sideslope"/>' +
-    '<ColorMapEntry color="#ffffbe" quantity="30" label="Dry Flats"/>' +
-    '<ColorMapEntry color="#a9a800" quantity="32" label="Valley/Toeslope"/>' +
-    '<ColorMapEntry color="#b671f2" quantity="39" label="Moist Flats"/>' +
-    '<ColorMapEntry color="#08a702" quantity="43" label="Cool Footslope/Cove"/>' +
-    '<ColorMapEntry color="#0a7000" quantity="44" label="Warm Footslope/Cove"/>' +
-  '</ColorMap>' +
-'</RasterSymbolizer>';
-
-
 //Ploting map
+// Create two maps.
+var center = {lon:-50, lat:-13.62, zoom:5}
+var leftMap = ui.Map(center);
+var rightMap = ui.Map(center);
+
+// Create a split panel with the two maps.
+var splitPanel = ui.SplitPanel({
+  firstPanel: leftMap,
+  secondPanel: rightMap,
+  orientation: 'horizontal',
+  wipe: true
+});
+
+// Remove the default map from the root panel.
+ui.root.clear();
+
+// Add our split panel to the root panel.
+ui.root.add(splitPanel);
+
+// Add the layers to the maps
+rightMap.addLayer(landform_Z, {min:-1, max:4, palette:paleta}, 'Landforms Z Score'   );
+
+
+leftMap.addLayer(landscape_diversity, {min:-1, max:4, palette:paleta}, 'Landscape Diversity');
+
