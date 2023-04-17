@@ -30,12 +30,10 @@ var soil_diversity =  ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_
 // Test if elevation range is greater than landscape diversity
 
 var landscape_diversity = landform_Z;
-Map.addLayer(landscape_diversity, imageVisParam, 'Landscape_Landforms')
 
 
 var test_1 = elevation_range_Z.gt(landscape_diversity);print(test_1)
 
-Map.addLayer(test_1, {min:0, max:1, palette:['red', 'blue']}, 'Pixels where elevation is GREATER THAN landforms');
 
 // Compute the average elevation
 var average_elevation = landform_Z.multiply(2).add(elevation_range_Z).divide(3);
@@ -50,7 +48,6 @@ var landscape_diversity = landscape_diversity.where(test_1, average_elevation);
 
 var test_2 = wetland_score.gt(landscape_diversity);
 
-Map.addLayer(test_2, {min:0, max:1, palette:['red', 'blue']}, 'Pixels where wetland_score is GREATER THAN landscape diversity');
 
 // Calculate average -------------------------------------------------------
 // Elevation range higher than landform ------------------------------------
@@ -63,7 +60,6 @@ var average_wetland_2 = landform_Z.multiply(2).add(wetland_score).divide(3);
 // Assigning new landform diversity values ---------------------------------
 
 
-Map.addLayer(landscape_diversity, imageVisParam, 'landscape_elev_Z');
 
 //IF values of landscape_diversity are < elevation Z Score AND Wetland Z score we will calculate the diversity as landforms*2 + elevation + wetland / 4  
 
@@ -126,4 +122,9 @@ Export.image.toAsset({image: landscape_diversity,
                       region:bioma,
                       scale: landform_Z.projection().nominalScale(),
                       maxPixels: 1e13});
+
+//Step 4 ------------------------------------------------------------------
+// Visualization
+var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+
 
