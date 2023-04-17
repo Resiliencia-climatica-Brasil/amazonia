@@ -124,7 +124,6 @@ Export.image.toAsset({image: landscape_diversity,
                       assetId: "landscape_diversity_test_1", 
                       pyramidingPolicy:"median",
                       region:bioma,
-                      folder:'Z-Scores/Diversity',
                       scale: landform_Z.projection().nominalScale(),
                       maxPixels: 1e13});
 
