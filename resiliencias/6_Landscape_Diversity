@@ -128,8 +128,8 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
 
 
 Export.image.toAsset({image: Z, 
-                      description: "Z-Scores_wetlands_density_1000", 
-                      assetId: "Z-Scores_wetlands_density_1000", 
+                      description: "Landscape Diversity", 
+                      assetId: "landscape_diversity_test_1", 
                       pyramidingPolicy:"median",
                       region:bioma,
                       folder:'Z-Scores/Diversity',
