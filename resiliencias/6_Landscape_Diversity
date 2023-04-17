@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var imageVisParam = {"opacity":1,"bands":["z"],"min":-2.5332866614479403,"max":6.585078248484633,"gamma":1};
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // Based on the script 08_landscape_diversity.R by Lucas Jardim
 
 // Importing data ----------------------------------------------------------
@@ -57,10 +60,17 @@ var average_wetland_2 = landform_Z.multiply(2).add(wetland_score).divide(3);
 
 // Assigning new landform diversity values ---------------------------------
 
+
+Map.addLayer(landscape_diversity, imageVisParam, 'landscape_elev_Z')
+
+//IF values of landscape_diversity are < elevation Z Score AND Wetland Z score we will calculate the average for wetland as  
 landscape_diversity = landscape_diversity.where(test_1.and(test_2), average_wetland_1);
+
+Map.addLayer(landscape_diversity, imageVisParam, 'landscape_wetAvg1')
 
 landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()), average_wetland_2);
 
+Map.addLayer(landscape_diversity, imageVisParam, 'landscape_wetAvg2' )
 // Step 3 ------------------------------------------------------------------
 // Take the average of soil diversity only if it is higher than Step 2
 
