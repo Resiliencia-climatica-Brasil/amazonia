@@ -127,7 +127,6 @@ Export.image.toAsset({image: landscape_diversity,
 // Visualization
 //Images
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
-//var landform_type = ee.Image('projects/ee-lucasljardim9/assets/landform_types').clip(bioma);
 var landscape_diversity = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_1').clip(bioma);
 var landform_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_landform_variety').clip(bioma);
 
