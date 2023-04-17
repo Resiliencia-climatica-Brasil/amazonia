@@ -118,15 +118,6 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).a
 // Step 3 ------------------------------------------------------------------
 // Exporting to Asset
 
-var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
-                       .map(function(feature){
-                             return feature.bounds()
-                            })
-                      .geometry()
-                        .dissolve({'maxError': 1})
-                        .bounds();
-
-
 
 Export.image.toAsset({image: landscape_diversity, 
                       description: "Landscape Diversity", 
@@ -134,6 +125,6 @@ Export.image.toAsset({image: landscape_diversity,
                       pyramidingPolicy:"median",
                       region:bioma,
                       folder:'Z-Scores/Diversity',
-                      scale: win_images.projection().nominalScale(),
+                      scale: landform_Z.projection().nominalScale(),
                       maxPixels: 1e13});
 
