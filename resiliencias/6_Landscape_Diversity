@@ -132,7 +132,7 @@ Export.image.toAsset({image: Z,
                       assetId: "Z-Scores_wetlands_density_1000", 
                       pyramidingPolicy:"median",
                       region:bioma,
-                      folder:'Z-Scores/Diversity'
+                      folder:'Z-Scores/Diversity',
                       scale: win_images.projection().nominalScale(),
                       maxPixels: 1e13});
 
