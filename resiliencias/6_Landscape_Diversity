@@ -125,6 +125,13 @@ Export.image.toAsset({image: landscape_diversity,
 
 //Step 4 ------------------------------------------------------------------
 // Visualization
-var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+//Images
+var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
+var landforms = ee.Image('projects/ee-lucasljardim9/assets/landform_tipes');
 
 
+// Palette
+var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
+
+
+//Ploting map
