@@ -114,5 +114,25 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(tes
 
 landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
 
+// Step 3 ------------------------------------------------------------------
+// Exporting to Asset
 
+var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                       .map(function(feature){
+                             return feature.bounds()
+                            })
+                      .geometry()
+                        .dissolve({'maxError': 1})
+                        .bounds();
+
+
+
+Export.image.toAsset({image: Z, 
+                      description: "Z-Scores_wetlands_density_1000", 
+                      assetId: "Z-Scores_wetlands_density_1000", 
+                      pyramidingPolicy:"median",
+                      region:bioma,
+                      folder:'Z-Scores/Diversity'
+                      scale: win_images.projection().nominalScale(),
+                      maxPixels: 1e13});
 
