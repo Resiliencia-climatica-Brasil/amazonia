@@ -19,7 +19,7 @@ var landform_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_eleva
 
 var elevation_range_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_landform_variety');
 
-var wetland_score = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_wetlands_count');
+var wetland_score = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_wetlands_density');
 
 var soil_diversity =  ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_wetlands_density');
 
@@ -120,7 +120,7 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).a
 
 
 Export.image.toAsset({image: landscape_diversity, 
-                      description: "Landscape Diversity", 
+                      description: "Landscape_Diversity", 
                       assetId: "landscape_diversity_test_1", 
                       pyramidingPolicy:"median",
                       region:bioma,
