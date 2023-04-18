@@ -26,9 +26,9 @@
 //var win_images = ee.Image('projects/ee-lucasljardim9/assets/elevation_range_residual');
 //var win_images = ee.Image('projects/ee-lucasljardim9/assets/landform_variety');
 //var win_images = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_density');
-var win_images = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_density_1000');
+//var win_images = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_density_1000');
 //var win_images = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_count');
-//var win_images = ee.Image('projects/ee-resilience/assets/New_window_size/assets/soil_diversity');
+var win_images = ee.Image('projects/ee-resilience/assets/New_window_size/assets/soil_diversity');
 
 
 // Coding the function to apply the formula of Z-Scores for any raster image that we need
@@ -83,8 +83,8 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
 
 
 Export.image.toAsset({image: Z, 
-                      description: "Z-Scores_wetlands_density_1000", 
-                      assetId: "Z-Scores_wetlands_density_1000", 
+                      description: "Z-Scores_wetlands_count", 
+                      assetId: "Z-Scores_wetlands_count", 
                       pyramidingPolicy:"median",
                       region:bioma,
                       scale: win_images.projection().nominalScale(),
