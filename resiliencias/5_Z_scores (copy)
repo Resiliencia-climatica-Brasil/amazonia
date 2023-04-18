@@ -21,6 +21,16 @@
 //var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_density_1000');
 var win_images = ee.Image('projects/ee-lucasljardim9/assets/');
 
+//NOVAS JANELAS ATUALIZADAS
+
+//var win_images = ee.Image('projects/ee-lucasljardim9/assets/elevation_range_residual');
+//var win_images = ee.Image('projects/ee-lucasljardim9/assets/landform_variety');
+//var win_images = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_density');
+var win_images = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_density_1000');
+//var win_images = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_count');
+//var win_images = ee.Image('projects/ee-resilience/assets/New_window_size/assets/soil_diversity');
+
+
 // Coding the function to apply the formula of Z-Scores for any raster image that we need
 
 var calculate_Z_scores = function(image) {
