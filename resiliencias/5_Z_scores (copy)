@@ -148,5 +148,6 @@ Export.image.toAsset({image: Z_wetlands_score,
                       region:bioma,
                       scale: bioma.projection().nominalScale(),
                       maxPixels: 1e13});
-                      
-                      
+
+
+
