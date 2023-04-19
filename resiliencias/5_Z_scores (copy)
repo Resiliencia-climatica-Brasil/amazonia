@@ -73,13 +73,10 @@ var meanValue = ee.Image.constant(mean
   return z.rename('z');
 };
 
-
+// Landforms, Elevation Range and Soil Diversity Z scores --------------------------
 
 var Z_elevation = calculate_Z_scores (img_elevation);
 var Z_landform = calculate_Z_scores (img_landform);
-var Z_wetlands_density = calculate_Z_scores (img_wetlands_density);
-var Z_wetlands_density1000 = calculate_Z_scores (img_wetlands_density1000);
-var Z_wetlands_count  = calculate_Z_scores (img_wetlands_count );
 var Z_soil_diversity = calculate_Z_scores (img_soil_diversity);
 
 
@@ -93,10 +90,35 @@ Export.image.toAsset({image: Z_elevation,
                       maxPixels: 1e13});
 
 
-Export.image.toAsset({image: Z, 
-                    description: "Z-Scores_wetlands_count", 
-                     assetId: "Z-Scores_wetlands_count", 
+Export.image.toAsset({image: Z_landform, 
+                    description: "Z_landform", 
+                     assetId: "Z-Scores_landforms", 
                      pyramidingPolicy:"median",
                      region:bioma,
                      scale: win_images.projection().nominalScale(),
                      maxPixels: 1e13});
+
+
+
+Export.image.toAsset({image: Z_soil_diversity, 
+                      description: "Z_soil_diversity", 
+                      assetId: "Z-Scores_soil_diversity", 
+                      pyramidingPolicy:"median",
+                      region:bioma,
+                      scale: win_images.projection().nominalScale(),
+                      maxPixels: 1e13});
+
+// Wetlands Diversity -------------------------------------------------------------
+
+// For wetlands we first need to calculate the Z Score for wetlands density in 100 acres
+
+var Z_wetlands_density = calculate_Z_scores (img_wetlands_density);
+
+// Z score for wetlands density in 1000 acres
+
+var Z_wetlands_density1000 = calculate_Z_scores (img_wetlands_density1000);
+
+// Z Score for the wetlands patchness
+var Z_wetlands_count  = calculate_Z_scores (img_wetlands_count );
+
+// Lastly the total Z score for Wetlands will be calculate as 
