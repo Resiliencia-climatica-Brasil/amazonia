@@ -86,7 +86,7 @@ Export.image.toAsset({image: Z_elevation,
                       assetId: "Z-Scores_elevation_range", 
                       pyramidingPolicy:"median",
                       region:bioma,
-                      scale: win_images.projection().nominalScale(),
+                      scale: bioma.projection().nominalScale(),
                       maxPixels: 1e13});
 
 
@@ -95,7 +95,7 @@ Export.image.toAsset({image: Z_landform,
                      assetId: "Z-Scores_landforms", 
                      pyramidingPolicy:"median",
                      region:bioma,
-                     scale: win_images.projection().nominalScale(),
+                     scale: bioma.projection().nominalScale(),
                      maxPixels: 1e13});
 
 
@@ -105,7 +105,7 @@ Export.image.toAsset({image: Z_soil_diversity,
                       assetId: "Z-Scores_soil_diversity", 
                       pyramidingPolicy:"median",
                       region:bioma,
-                      scale: win_images.projection().nominalScale(),
+                      scale: bioma.projection().nominalScale(),
                       maxPixels: 1e13});
 
 // Wetlands Diversity -------------------------------------------------------------
@@ -140,3 +140,10 @@ var wet_average = wetlands_density
 var Z_wetlands_score = Z_wetlands_count.where(wet_test, wet_average);
 
 
+Export.image.toAsset({image: Z_wetlands_score, 
+                      description: "Z_wetlands_score", 
+                      assetId: "Z-Scores_wetlands", 
+                      pyramidingPolicy:"median",
+                      region:bioma,
+                      scale: bioma.projection().nominalScale(),
+                      maxPixels: 1e13});
