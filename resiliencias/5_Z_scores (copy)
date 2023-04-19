@@ -121,4 +121,22 @@ var Z_wetlands_density1000 = calculate_Z_scores (img_wetlands_density1000);
 // Z Score for the wetlands patchness
 var Z_wetlands_count  = calculate_Z_scores (img_wetlands_count );
 
-// Lastly the total Z score for Wetlands will be calculate as 
+// Now we can calculate the wetland density as the average of the density for 100 and 1000 acres
+
+var wetlands_density = Z_wetlands_density
+                        .multiply(2)
+                        .add(Z_wetlands_density1000)
+                        .divide(3);
+
+//The final Wetland Z score is the average of wetland density and wetland patchness, but ONLY when patchness is higher than density
+
+var wet_test = wetlands_density.lt(Z_wetlands_count);
+
+var wet_average = wetlands_density
+                  .multiply(3)
+                  .add(Z_wetlands_count)
+                  .divide(4);
+
+var Z_wetlands_score = Z_wetlands_count.where(wet_test, wet_average);
+
+
