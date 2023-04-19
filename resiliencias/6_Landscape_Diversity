@@ -15,13 +15,13 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .bounds();
 
 
-var landform_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_elevation_range_residual');
+var landform_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_elevation_range');
 
-var elevation_range_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_landform_variety');
+var elevation_range_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_landforms');
 
-var wetland_score = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_wetlands_density');
+var wetland_score = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_wetlands');
 
-var soil_diversity =  ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_wetlands_density');
+var soil_diversity =  ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_soil_diversity');
 
 
 // Step 1 ------------------------------------------------------------------
@@ -117,7 +117,7 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).a
 
 Export.image.toAsset({image: landscape_diversity, 
                       description: "Landscape_Diversity", 
-                      assetId: "landscape_diversity_test_1", 
+                      assetId: "landscape_diversity_test_2", 
                       pyramidingPolicy:"median",
                       region:bioma,
                       scale: landform_Z.projection().nominalScale(),
@@ -127,8 +127,8 @@ Export.image.toAsset({image: landscape_diversity,
 // Visualization
 //Images
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
-var landscape_diversity = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_1').clip(bioma);
-var landform_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_landform_variety').clip(bioma);
+var landscape_test1 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_1').clip(bioma);
+var landscape_test2 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_2').clip(bioma);
 
 // Palette
 var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
@@ -136,7 +136,7 @@ var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
 
 //Ploting map
 // Create two maps.
-var center = {lon:-50, lat:-13.62, zoom:5}
+var center = {lon:-50, lat:-13.62, zoom:5};
 var leftMap = ui.Map(center);
 var rightMap = ui.Map(center);
 
@@ -155,8 +155,9 @@ ui.root.clear();
 ui.root.add(splitPanel);
 
 // Add the layers to the maps
-rightMap.addLayer(landform_Z, {min:-1, max:4, palette:paleta}, 'Landforms Z Score'   );
+//rightMap.addLayer(landform_Z, {min:-1, max:4, palette:paleta}, 'Landforms Z Score'   );
 
+rightMap.addLayer(landscape_test2, {min:-3, max: 6.7, palette:paleta}, 'Landscape Diversity teste 2');
 
-leftMap.addLayer(landscape_diversity, {min:-1, max:4, palette:paleta}, 'Landscape Diversity');
+leftMap.addLayer(landscape_test1, {min:-1, max:4, palette:paleta}, 'Landscape Diversity teste 1');
 
