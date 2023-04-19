@@ -124,6 +124,7 @@ Export.image.toAsset({image: landscape_diversity,
                       maxPixels: 1e13});
 
 //Step 4 ------------------------------------------------------------------
+
 // Visualization
 //Images
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
@@ -136,7 +137,7 @@ var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
 
 //Ploting map
 // Create two maps.
-var center = {lon:-50, lat:-13.62, zoom:5};
+var center = {lon:-50, lat:-13.62, zoom:10};
 var leftMap = ui.Map(center);
 var rightMap = ui.Map(center);
 
