@@ -36,7 +36,7 @@ var img_landform = ee.Image('projects/ee-lucasljardim9/assets/landform_variety')
 var img_wetlands_density = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_density');
 var img_wetlands_density1000 = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_density_1000');
 var img_wetlands_count = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_count');
-var img_soil_diversity = ee.Image('projects/ee-resilience/assets/New_window_size/assets/soil_diversity');
+var img_soil_diversity = ee.Image('projects/ee-resilience/assets/New_window_size/soil_diversity');
 
 
 // Coding the function to apply the formula of Z-Scores for any raster image that we need
@@ -139,6 +139,7 @@ var wet_average = wetlands_density
 
 var Z_wetlands_score = Z_wetlands_count.where(wet_test, wet_average);
 
+// Exporting Wetlands Z Score
 
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score", 
@@ -147,3 +148,5 @@ Export.image.toAsset({image: Z_wetlands_score,
                       region:bioma,
                       scale: bioma.projection().nominalScale(),
                       maxPixels: 1e13});
+                      
+                      
