@@ -1,6 +1,3 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var imageVisParam = {"opacity":1,"bands":["z"],"min":-2.5332866614479403,"max":6.585078248484633,"gamma":1};
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // Based on the script 08_landscape_diversity.R by Lucas Jardim
 
 // Importing data ----------------------------------------------------------
@@ -63,11 +60,11 @@ var average_wetland_2 = landform_Z.multiply(2).add(wetland_score).divide(3);
 
 //IF values of landscape_diversity are < elevation Z Score AND Wetland Z score we will calculate the diversity as landforms*2 + elevation + wetland / 4  
 
-landscape_diversity = landscape_diversity.where(test_1.and(test_2), average_wetland_1); Map.addLayer(landscape_diversity, imageVisParam, 'landscape_wetAvg1');
+landscape_diversity = landscape_diversity.where(test_1.and(test_2), average_wetland_1); 
 
 //IF the values of diversity are < elevation but > wetland; then the diversity will be calculated by landforms*2 + wetlands / 3 
 
-landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()), average_wetland_2); Map.addLayer(landscape_diversity, imageVisParam, 'landscape_wetAvg2' );
+landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()), average_wetland_2); 
 
 
 // Step 3 ------------------------------------------------------------------
@@ -137,7 +134,7 @@ var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
 
 //Ploting map
 // Create two maps.
-var center = {lon:-50, lat:-13.62, zoom:10};
+var center = {lon:-54, lat:-2, zoom:7};
 var leftMap = ui.Map(center);
 var rightMap = ui.Map(center);
 
@@ -158,7 +155,7 @@ ui.root.add(splitPanel);
 // Add the layers to the maps
 //rightMap.addLayer(landform_Z, {min:-1, max:4, palette:paleta}, 'Landforms Z Score'   );
 
-rightMap.addLayer(landscape_test2, {min:-3, max: 6.7, palette:paleta}, 'Landscape Diversity teste 2');
+rightMap.addLayer(landscape_test2, {min:-0.7, max: 3, palette:paleta}, 'Landscape Diversity teste 2');
 
-leftMap.addLayer(landscape_test1, {min:-1, max:4, palette:paleta}, 'Landscape Diversity teste 1');
+leftMap.addLayer(landscape_test1, {min:-0.7, max:3, palette:paleta}, 'Landscape Diversity teste 1');
 
