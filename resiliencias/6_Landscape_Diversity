@@ -134,7 +134,7 @@ var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
 
 //Ploting map
 // Create two maps.
-var center = {lon:-54, lat:-2, zoom:7};
+var center = {lon:-44, lat:-20, zoom:8};
 var leftMap = ui.Map(center);
 var rightMap = ui.Map(center);
 
@@ -153,9 +153,13 @@ ui.root.clear();
 ui.root.add(splitPanel);
 
 // Add the layers to the maps
-//rightMap.addLayer(landform_Z, {min:-1, max:4, palette:paleta}, 'Landforms Z Score'   );
+rightMap.addLayer(landform_Z, {min:-1, max:4, palette:paleta}, 'Landforms Z Score'   );
 
 rightMap.addLayer(landscape_test2, {min:-0.7, max: 3, palette:paleta}, 'Landscape Diversity teste 2');
 
-leftMap.addLayer(landscape_test1, {min:-0.7, max:3, palette:paleta}, 'Landscape Diversity teste 1');
 
+
+leftMap.addLayer(landscape_test1, {min:-0.7, max:3, palette:paleta}, 'Landscape Diversity teste 1');
+leftMap.addLayer(test_1.selfMask(),  {min:0, max:1, palette:['red', 'red']}, 'elevation > Land.Div.')
+leftMap.addLayer(test_2.selfMask(),  {min:0, max:1, palette:['red', 'green']}, 'wetlands > Land.Div.')
+leftMap.addLayer(test_3.selfMask(),  {min:0, max:1, palette:['red', 'blue']}, 'soil > Land.Div.')
