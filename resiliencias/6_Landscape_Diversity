@@ -64,7 +64,7 @@ landscape_diversity = landscape_diversity.where(test_1.and(test_2), average_wetl
 
 //IF the values of diversity are < elevation but > wetland; then the diversity will be calculated by landforms*2 + wetlands / 3 
 
-landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()), average_wetland_2); 
+landscape_diversity = landscape_diversity.where(test_1.not().and(test_2), average_wetland_2); 
 
 
 // Step 3 ------------------------------------------------------------------
