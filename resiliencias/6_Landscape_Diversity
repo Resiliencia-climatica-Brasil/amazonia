@@ -154,13 +154,13 @@ ui.root.clear();
 ui.root.add(splitPanel);
 
 // Add the layers to the maps
-rightMap.addLayer(landform_Z, {min:-1, max:6, palette:paleta}, 'Landforms Z Score'   );
+rightMap.addLayer(landform_Z.clip(bioma), {min:-1, max:6, palette:paleta}, 'Landforms Z Score'   );
 
-rightMap.addLayer(landscape_test2, {min:-1, max: 6, palette:paleta}, 'Landscape Diversity teste 2');
+rightMap.addLayer(landscape_test2.clip(bioma), {min:-1, max: 6, palette:paleta}, 'Landscape Diversity teste 2');
 
 
 
 //leftMap.addLayer(landscape_test1, {/*min:-0.7, max:6,*/ palette:paleta}, 'Landscape Diversity teste 1');
-leftMap.addLayer(test_1.selfMask(),  {min:0, max:1, palette:['red', 'red']}, 'elevation > Land.Div.')
-leftMap.addLayer(test_2.selfMask(),  {min:0, max:1, palette:['red', 'green']}, 'wetlands > Land.Div.')
-leftMap.addLayer(test_3.selfMask(),  {min:0, max:1, palette:['red', 'blue']}, 'soil > Land.Div.')
+leftMap.addLayer(test_1.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'red']}, 'elevation > Land.Div.')
+leftMap.addLayer(test_2.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'green']}, 'wetlands > Land.Div.')
+leftMap.addLayer(test_3.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'blue']}, 'soil > Land.Div.')
