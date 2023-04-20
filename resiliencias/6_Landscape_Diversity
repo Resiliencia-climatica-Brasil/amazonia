@@ -29,7 +29,7 @@ var soil_diversity =  ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_
 var landscape_diversity = landform_Z;
 
 
-var test_1 = elevation_range_Z.gt(landscape_diversity);print(test_1)
+var test_1 = elevation_range_Z.gt(landscape_diversity);
 
 
 // Compute the average elevation
