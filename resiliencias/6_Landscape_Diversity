@@ -127,6 +127,8 @@ Export.image.toAsset({image: landscape_diversity,
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
 var landscape_test1 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_1').clip(bioma);
 var landscape_test2 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_2').clip(bioma);
+var landscape_test3 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_3').clip(bioma);
+
 
 // Palette
 //var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
@@ -157,8 +159,8 @@ ui.root.add(splitPanel);
 rightMap.addLayer(landform_Z.clip(bioma), {min:-1, max:6, palette:paleta}, 'Landforms Z Score');
 
 rightMap.addLayer(landscape_test2.clip(bioma), {min:-1, max: 6, palette:paleta}, 'Landscape Diversity teste 2');
-leftMap.addLayer(landscape_diversity.clip(bioma), {min:-1, max: 6, palette:paleta}, 'Landscape Diversity teste 3');
-
+//leftMap.addLayer(landscape_diversity.clip(bioma), {min:-1, max: 6, palette:paleta}, 'Landscape Diversity teste 3');
+leftMap.addLayer(landscape_test3.clip(bioma), {min:-1, max:6, palette: paleta}, 'Landscaep Diversity teste 3')
 
 
 //leftMap.addLayer(landscape_test1, {/*min:-0.7, max:6,*/ palette:paleta}, 'Landscape Diversity teste 1');
