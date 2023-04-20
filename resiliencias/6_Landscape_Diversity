@@ -114,7 +114,7 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).a
 
 Export.image.toAsset({image: landscape_diversity, 
                       description: "Landscape_Diversity", 
-                      assetId: "landscape_diversity_test_2", 
+                      assetId: "landscape_diversity_test_3", 
                       pyramidingPolicy:"median",
                       region:bioma,
                       scale: landform_Z.projection().nominalScale(),
@@ -157,6 +157,7 @@ ui.root.add(splitPanel);
 rightMap.addLayer(landform_Z.clip(bioma), {min:-1, max:6, palette:paleta}, 'Landforms Z Score');
 
 rightMap.addLayer(landscape_test2.clip(bioma), {min:-1, max: 6, palette:paleta}, 'Landscape Diversity teste 2');
+leftMap.addLayer(landscape_diversity.clip(bioma), {min:-1, max: 6, palette:paleta}, 'Landscape Diversity teste 3');
 
 
 
