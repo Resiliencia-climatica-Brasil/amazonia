@@ -129,8 +129,9 @@ var landscape_test1 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape
 var landscape_test2 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_2').clip(bioma);
 
 // Palette
-var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
+//var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
 
+var paleta = ['011301','011D01','012E01','023B01','004C00','056201','207401','3E8601','529400','66A000','74A901','99B718','FCD163','F1B555','DF923D','CE7E45','FFFFFF'];
 
 //Ploting map
 // Create two maps.
