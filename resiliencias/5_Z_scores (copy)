@@ -13,13 +13,21 @@
 
 */
 
-var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
-                       .map(function(feature){
-                             return feature.bounds()
-                            })
-                      .geometry()
-                        .dissolve({'maxError': 1})
-                        .bounds();
+var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
+
+var export_BBox = Biome
+                  .map(function(feature){
+                         return feature.bounds()
+                      })
+                  .geometry()
+                  .dissolve({'maxError': 1})
+                  .bounds();
+                  
+var biome_names = ["Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pantanal"];
+
+var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel");
+
+var scale = connectedness.projection().nominalScale();
 
 
 //var win_images = ee.Image('projects/ee-lucasljardim9/assets/elevation_range_residual');
@@ -40,7 +48,7 @@ var img_soil_diversity = ee.Image('projects/ee-resilience/assets/New_window_size
 
 
 // Coding the function to apply the formula of Z-Scores for any raster image that we need
-
+/*
 var calculate_Z_scores = function(image) {
   // Calculate mean and standard deviation
   var mean = image.reduceRegion({
@@ -72,6 +80,49 @@ var meanValue = ee.Image.constant(mean
   // Return the z image
   return z.rename('z');
 };
+*/
+
+var mean_biome = function(i){
+  
+  var statistics_connectedness = connectedness
+                                 .reduceRegion({reducer: ee.Reducer.mean(), 
+                                                geometry: Biome.filter(ee.Filter.eq("Bioma", i)), 
+                                                scale: scale,
+                                                maxPixels:1e13});
+                                              
+  return statistics_connectedness.get("b1");                            
+}
+
+var std_biome = function(i){
+  
+  var statistics_connectedness = connectedness
+                                 .reduceRegion({reducer: ee.Reducer.stdDev(), 
+                                                geometry: Biome.filter(ee.Filter.eq("Bioma", i)), 
+                                                scale: scale,
+                                                maxPixels:1e13});
+                                                
+  var sd = statistics_connectedness.get("b1");                                          
+                                              
+  return  ee.Number(sd).multiply(ee.Number(sd));                           
+}
+
+calculate_Z_scores = function(i){
+  
+  var mean_biome = ee.Number(ee.List(biome_names.map(mean_biome))
+                                 .reduce(ee.Reducer.mean()));
+
+  var std_biome = ee.Number(ee.List(biome_names.map(std_biome))
+                                .reduce(ee.Reducer.mean()))
+                                .sqrt();
+                             
+  var Z = i
+          .subtract(mean_biome)
+          .divide(std_biome);
+                        
+  return Z
+  
+}
+
 
 // Landforms, Elevation Range and Soil Diversity Z scores --------------------------
 
