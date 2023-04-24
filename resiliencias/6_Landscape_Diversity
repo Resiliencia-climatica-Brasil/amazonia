@@ -127,6 +127,11 @@ Export.image.toAsset({image: landscape_diversity,
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
 
 
+
+
+
+
+
 // Palette
 //var paleta = ['011301','023B01','207401','66A000','FCD163','CE7E45'];
 
@@ -134,7 +139,7 @@ var paleta = ['011301','011D01','012E01','023B01','004C00','056201','207401','3E
 
 //Ploting map
 // Create two maps.
-var center = {lon:-60, lat:-1.8, zoom:8};
+var center = {lon:-61, lat:2, zoom:8};
 var leftMap = ui.Map(center);
 var rightMap = ui.Map(center);
 
@@ -155,7 +160,6 @@ ui.root.add(splitPanel);
 // Add the layers to the maps
 
 rightMap.addLayer(landscape_diversity.clip(bioma), {min:-1, max: 3, palette:paleta}, 'Landscape Diversity');
-
 
 //leftMap.addLayer(landscape_test1, {/*min:-0.7, max:6,*/ palette:paleta}, 'Landscape Diversity teste 1');
 leftMap.addLayer(landform_Z.clip(bioma), {palette: paleta, min:-2, max:2}, 'Landform Z');
