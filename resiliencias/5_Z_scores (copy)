@@ -25,12 +25,6 @@ var export_BBox = Biome
                   
 var biome_names = ["Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pantanal"];
 
-//var win_images = ee.Image('projects/ee-lucasljardim9/assets/elevation_range_residual');
-//var win_images = ee.Image('projects/ee-lucasljardim9/assets/landform_variety');
-//var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_count');
-//var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_density');
-//var win_images = ee.Image('projects/ee-lucasljardim9/assets/wetlands_density_1000');
-//var win_images = ee.Image('projects/ee-lucasljardim9/assets/');
 
 //NOVAS JANELAS ATUALIZADAS
 
