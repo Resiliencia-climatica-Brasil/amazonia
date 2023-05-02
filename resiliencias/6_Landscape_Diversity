@@ -122,14 +122,12 @@ Export.image.toAsset({image: landscape_diversity,
 
 //Step 4 ------------------------------------------------------------------
 
+
+
+
 // Visualization
 //Images
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
-
-
-
-
-
 
 
 // Palette
@@ -161,7 +159,6 @@ ui.root.add(splitPanel);
 
 rightMap.addLayer(landscape_diversity.clip(bioma), {min:-1, max: 3, palette:paleta}, 'Landscape Diversity');
 
-//leftMap.addLayer(landscape_test1, {/*min:-0.7, max:6,*/ palette:paleta}, 'Landscape Diversity teste 1');
 leftMap.addLayer(landform_Z.clip(bioma), {palette: paleta, min:-2, max:2}, 'Landform Z');
 leftMap.addLayer(test_1.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'red']}, 'elevation > Landform Z');
 leftMap.addLayer(test_2.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'green']}, 'wetlands > Landform Z');
