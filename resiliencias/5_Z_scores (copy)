@@ -23,7 +23,9 @@ var export_BBox = Biome
                   .dissolve({'maxError': 1})
                   .bounds();
                   
-var biome_names = ["Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pantanal"];
+                  //"Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", 
+                  
+var biome_names = ["Pampa", "Pantanal"];
 
 
 //NOVAS JANELAS ATUALIZADAS
@@ -88,33 +90,54 @@ var mean_biome = function(i, image){
   return ee.Number(statistics.get("b1"));                            
 }
 
-var var_biome = function(i, image){
+var sq_sum_biome = function(i, image){
   
-  var statistics = image.rename("b1")
-                   .reduceRegion({reducer: ee.Reducer.stdDev(), 
-                                  geometry: Biome.filter(ee.Filter.eq("Bioma", i)), 
-                                  scale: scale,
-                                  maxPixels:1e13});
-                                                
-  var sd = statistics.get("b1");                                          
-                                              
-  return  ee.Number(sd).multiply(ee.Number(sd));                           
+  var mean = image.reduceRegion({reducer:ee.Reducer.mean(), 
+                                 geometry:Biome.filter(ee.Filter.eq("Bioma", i)), 
+                                 maxPixels:1e13});
+  
+  var img_mean = ee.Image.constant(mean.get("b1"))
+  
+  var sq_dev = image.select("b1")
+               .subtract(img_mean.select("constant"))
+               .pow(2)
+               .reduceRegion({reducer:ee.Reducer.sum(),
+                              geometry:Biome.filter(ee.Filter.eq("Bioma", i)),
+                              maxPixels:1e13});
+                              
+  return sq_dev;
 }
 
+var cell_number = function(i, image){
+  
+  var cells = image.reduceRegion({reducer:ee.Reducer.count(), 
+                                  geometry:Biome,
+                                  maxPixels:1e13});
+                                                              
+  var n = ee.Number(cells.get("b1"));
+  
+  return n;
+}
 
 var calculate_Z_scores = function(image){
   
+  image = image.rename("b1");
+  
   var mean = ee.Number(ee.List(biome_names.map(function(i){return mean_biome(i, image)}))
-                     .reduce(ee.Reducer.mean())
-                     );
-                    
-  var std = ee.Number(ee.List(biome_names.map(function(i){return var_biome(i, image)}))
-                    .reduce(ee.Reducer.mean())
-                    )
-          .sqrt();
-          
+                       .reduce(ee.Reducer.mean())
+                       );
+  
+  var list_sq_sum = ee.List(biome_names.map(function(i){return sq_sum_biome(i, image).get("b1")}));  
+  
+  var total_sq_sum = ee.Number(list_sq_sum.reduce(ee.Reducer.sum()));
+  
+  var n = ee.List(biome_names.map(function(i){return cell_number(i, image)}))
+          .reduce(ee.Reducer.sum());  
+  
+  var std = total_sq_sum.divide(n).sqrt();
+  
   var Z = image.subtract(mean)
-                      .divide(std)    
+          .divide(std);   
                       
   return Z                      
 }
