@@ -13,17 +13,7 @@
 
 */
 
-var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
-
-var export_BBox = Biome
-                  .map(function(feature){
-                         return feature.bounds()
-                      })
-                  .geometry()
-                  .dissolve({'maxError': 1})
-                  .bounds();
-                  
-var biome_names = ["Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pantanal"];
+var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/BR_Pais_2022");
 
 
 //NOVAS JANELAS ATUALIZADAS
@@ -43,31 +33,31 @@ var img_soil_diversity = ee.Image('projects/ee-resilience/assets/New_window_size
 var scale = img_elevation.projection().nominalScale();
 
 // Coding the function to apply the formula of Z-Scores for any raster image that we need
-/*
+
 var calculate_Z_scores = function(image) {
   // Calculate mean and standard deviation
   var mean = image.reduceRegion({
     reducer: ee.Reducer.mean(),
-    scale: 92.76624,
+    scale: scale,
     bestEffort: true
-  });print('Global Mean', mean);
+  });//print('Global Mean', mean);
 
   var sd = image.reduceRegion({
     reducer: ee.Reducer.stdDev(),
-    scale: 92.76624,
+    scale: scale,
     bestEffort: true
-  }); print('Global sd', sd)
+  });// print('Global sd', sd)
 
   // Extract the mean and standard deviation values from the dictionaries into a raster
 var meanValue = ee.Image.constant(mean
                                   .values()
                                   .get(0));
-                                  print('mean Dictionary', meanValue);
+                                  //print('mean Dictionary', meanValue);
                                   
   var sdValue = ee.Image.constant(sd
                                   .values()
                                   .get(0));
-                                  print('sd dictionary', sdValue);
+                                  //print('sd dictionary', sdValue);
 
   // Calculate z for the current image
   var z = image.subtract(meanValue).divide(sdValue);
@@ -75,70 +65,6 @@ var meanValue = ee.Image.constant(mean
   // Return the z image
   return z.rename('z');
 };
-*/
-
-var mean_biome = function(i, image){
-  
-  var statistics = image.rename("b1")
-                   .reduceRegion({reducer: ee.Reducer.mean(), 
-                                  geometry: Biome.filter(ee.Filter.eq("Bioma", i)), 
-                                  scale: scale,
-                                  maxPixels:1e13});
-                                              
-  return ee.Number(statistics.get("b1"));                            
-}
-
-var sq_sum_biome = function(i, image){
-  
-  var mean = image.reduceRegion({reducer:ee.Reducer.mean(), 
-                                 geometry:Biome.filter(ee.Filter.eq("Bioma", i)), 
-                                 maxPixels:1e13});
-  
-  var img_mean = ee.Image.constant(mean.get("b1"))
-  
-  var sq_dev = image.select("b1")
-               .subtract(img_mean.select("constant"))
-               .pow(2)
-               .reduceRegion({reducer:ee.Reducer.sum(),
-                              geometry:Biome.filter(ee.Filter.eq("Bioma", i)),
-                              maxPixels:1e13});
-                              
-  return sq_dev;
-}
-
-var cell_number = function(i, image){
-  
-  var cells = image.reduceRegion({reducer:ee.Reducer.count(), 
-                                  geometry:Biome,
-                                  maxPixels:1e13});
-                                                              
-  var n = ee.Number(cells.get("b1"));
-  
-  return n;
-}
-
-var calculate_Z_scores = function(image){
-  
-  image = image.rename("b1");
-  
-  var mean = ee.Number(ee.List(biome_names.map(function(i){return mean_biome(i, image)}))
-                       .reduce(ee.Reducer.mean())
-                       );
-  
-  var list_sq_sum = ee.List(biome_names.map(function(i){return sq_sum_biome(i, image).get("b1")}));  
-  
-  var total_sq_sum = ee.Number(list_sq_sum.reduce(ee.Reducer.sum()));
-  
-  var n = ee.List(biome_names.map(function(i){return cell_number(i, image)}))
-          .reduce(ee.Reducer.sum());  
-  
-  var std = total_sq_sum.divide(n).sqrt();
-  
-  var Z = image.subtract(mean)
-          .divide(std);   
-                      
-  return Z                      
-}
 
 // Landforms, Elevation Range and Soil Diversity Z scores --------------------------
 
@@ -186,7 +112,7 @@ Export.image.toAsset({image: Z_elevation,
                       description: "Z_elevation", 
                       assetId: "Z-Scores_elevation_range", 
                       pyramidingPolicy:"median",
-                      region:export_BBox,
+                      region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
 
@@ -195,7 +121,7 @@ Export.image.toAsset({image: Z_landform,
                     description: "Z_landform", 
                      assetId: "Z-Scores_landforms", 
                      pyramidingPolicy:"median",
-                     region:export_BBox,
+                     region:Biome,
                      scale: scale,
                      maxPixels: 1e13});
 
@@ -204,7 +130,7 @@ Export.image.toAsset({image: Z_soil_diversity,
                       description: "Z_soil_diversity", 
                       assetId: "Z-Scores_soil_diversity", 
                       pyramidingPolicy:"median",
-                      region:export_BBox,
+                      region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
 
@@ -212,6 +138,6 @@ Export.image.toAsset({image: Z_wetlands_score,
                       description: "Z_wetlands_score", 
                       assetId: "Z-Scores_wetlands", 
                       pyramidingPolicy:"median",
-                      region:export_BBox,
+                      region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
