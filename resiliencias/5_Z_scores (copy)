@@ -23,9 +23,7 @@ var export_BBox = Biome
                   .dissolve({'maxError': 1})
                   .bounds();
                   
-                  //"Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", 
-                  
-var biome_names = ["Pampa", "Pantanal"];
+var biome_names = ["Amazônia", "Caatinga", "Cerrado", "Mata Atlântica", "Pampa", "Pantanal"];
 
 
 //NOVAS JANELAS ATUALIZADAS
