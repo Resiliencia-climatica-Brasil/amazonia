@@ -13,23 +13,25 @@
 
 */
 
-var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/BR_Pais_2022");
+var brasil_raster = ee.Image("projects/ee-lucasljardim9/assets/brasil_raster");
 
 
 //NOVAS JANELAS ATUALIZADAS
 
-var img_elevation = ee.Image('projects/ee-lucasljardim9/assets/elevation_range_residual');
+var img_elevation = ee.Image('projects/ee-lucasljardim9/assets/elevation_range_residual')
+                    .updateMask(brasil_raster);
 
 var img_landform = ee.Image('projects/ee-lucasljardim9/assets/landform_variety');
-
+                   .updateMask(brasil_raster)
 var img_wetlands_density = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_density');
-
+                           .updateMask(brasil_raster)
 var img_wetlands_density1000 = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_density_1000');
-
+                               .updateMask(brasil_raster)
 var img_wetlands_count = ee.Image('projects/ee-resilience/assets/New_window_size/wetlands_count');
-
+                         .updateMask(brasil_raster)
 var img_soil_diversity = ee.Image('projects/ee-resilience/assets/New_window_size/soil_diversity');
-
+                         .updateMask(brasil_raster)
+                         
 var scale = img_elevation.projection().nominalScale();
 
 // Coding the function to apply the formula of Z-Scores for any raster image that we need
