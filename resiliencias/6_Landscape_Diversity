@@ -12,13 +12,13 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .bounds();
 
 
-var landform_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_landforms');
+var landform_Z = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_landforms');
 
-var elevation_range_Z = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_elevation_range');
+var elevation_range_Z = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_elevation_range');
 
-var wetland_score = ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_wetlands');
+var wetland_score = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_wetlands');
 
-var soil_diversity =  ee.Image('projects/ee-resilience/assets/Z-Scores/Z-Scores_soil_diversity');
+var soil_diversity =  ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_soil_diversity');
 
 
 // Step 1 ------------------------------------------------------------------
@@ -114,20 +114,20 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).a
 
 Export.image.toAsset({image: landscape_diversity, 
                       description: "Landscape_Diversity", 
-                      assetId: "landscape_diversity_test_3", 
+                      assetId: "landscape_diversity", 
                       pyramidingPolicy:"median",
                       region:bioma,
                       scale: landform_Z.projection().nominalScale(),
                       maxPixels: 1e13});
 
 //Step 4 ------------------------------------------------------------------
-
-
-
-
+/*
 // Visualization
 //Images
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
+var landscape_test1 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_1').clip(bioma);
+var landscape_test2 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_2').clip(bioma);
+var landscape_test3 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_3').clip(bioma);
 
 
 // Palette
@@ -137,7 +137,7 @@ var paleta = ['011301','011D01','012E01','023B01','004C00','056201','207401','3E
 
 //Ploting map
 // Create two maps.
-var center = {lon:-61, lat:2, zoom:8};
+var center = {lon:-60, lat:-1.8, zoom:8};
 var leftMap = ui.Map(center);
 var rightMap = ui.Map(center);
 
@@ -156,13 +156,17 @@ ui.root.clear();
 ui.root.add(splitPanel);
 
 // Add the layers to the maps
+rightMap.addLayer(landform_Z.clip(bioma), {min:-1, max:6, palette:paleta}, 'Landforms Z Score');
 
-rightMap.addLayer(landscape_diversity.clip(bioma), {min:-1, max: 3, palette:paleta}, 'Landscape Diversity');
+rightMap.addLayer(landscape_test2.clip(bioma), {min:-1, max: 6, palette:paleta}, 'Landscape Diversity teste 2');
+//leftMap.addLayer(landscape_diversity.clip(bioma), {min:-1, max: 6, palette:paleta}, 'Landscape Diversity teste 3');
+leftMap.addLayer(landscape_test3.clip(bioma), {min:-1, max:6, palette: paleta}, 'Landscaep Diversity teste 3')
+*/
 
-leftMap.addLayer(landform_Z.clip(bioma), {palette: paleta, min:-2, max:2}, 'Landform Z');
-leftMap.addLayer(test_1.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'red']}, 'elevation > Landform Z');
-leftMap.addLayer(test_2.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'green']}, 'wetlands > Landform Z');
-leftMap.addLayer(test_3.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'blue']}, 'soil > Landform Z');
 
+//leftMap.addLayer(landscape_test1, {/*min:-0.7, max:6,*/ palette:paleta}, 'Landscape Diversity teste 1');
+//leftMap.addLayer(test_1.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'red']}, 'elevation > Land.Div.');
+//leftMap.addLayer(test_2.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'green']}, 'wetlands > Land.Div.');
+//leftMap.addLayer(test_3.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'blue']}, 'soil > Land.Div.');
 
 
