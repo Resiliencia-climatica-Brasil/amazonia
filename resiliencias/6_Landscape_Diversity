@@ -12,13 +12,13 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .bounds();
 
 
-var landform_Z = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_landforms');
+var landform_Z = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_landforms').updateMask(brasil_raster);
 
-var elevation_range_Z = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_elevation_range');
+var elevation_range_Z = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_elevation_range').updateMask(brasil_raster);
 
-var wetland_score = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_wetlands');
+var wetland_score = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_wetlands').updateMask(brasil_raster);
 
-var soil_diversity =  ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_soil_diversity');
+var soil_diversity =  ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_soil_diversity').updateMask(brasil_raster);
 
 
 // Step 1 ------------------------------------------------------------------
