@@ -1,7 +1,7 @@
 // Based on the script 08_landscape_diversity.R by Lucas Jardim
 
 // Importing data ----------------------------------------------------------
-
+var brasil_raster = ee.Image("projects/ee-lucasljardim9/assets/brasil_raster");
 
 var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .map(function(feature){
