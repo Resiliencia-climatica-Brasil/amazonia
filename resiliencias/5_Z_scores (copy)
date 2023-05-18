@@ -49,18 +49,19 @@ var scale = img_elevation.projection().nominalScale();
 // Coding the function to apply the formula of Z-Scores for any raster image that we need
 
 var calculate_Z_scores = function(image) {
+ 
   // Calculate mean and standard deviation
   var mean = image.reduceRegion({
     reducer: ee.Reducer.mean(),
     scale: scale,
     bestEffort: true
-  });//print('Global Mean', mean);
+  });
 
   var sd = image.reduceRegion({
     reducer: ee.Reducer.stdDev(),
     scale: scale,
     bestEffort: true
-  });// print('Global sd', sd)
+  });
 
   // Extract the mean and standard deviation values from the dictionaries into a raster
 var meanValue = ee.Image.constant(mean
@@ -68,7 +69,7 @@ var meanValue = ee.Image.constant(mean
                                   .get(0));
                                   //print('mean Dictionary', meanValue);
                                   
-  var sdValue = ee.Image.constant(sd
+var sdValue = ee.Image.constant(sd
                                   .values()
                                   .get(0));
                                   //print('sd dictionary', sdValue);
@@ -76,8 +77,14 @@ var meanValue = ee.Image.constant(mean
   // Calculate z for the current image
   var z = image.subtract(meanValue).divide(sdValue);
 
+// Lets limit the range of Z to be between 3.5 and -3.5sd
+var minValue = -3.5;
+var maxValue = 3.5;
+  
+var limited_z = z.min(maxValue).max(minValue);
+
   // Return the z image
-  return z.rename('z');
+  return limited_z.rename('z');
 };
 
 // Landforms, Elevation Range and Soil Diversity Z scores --------------------------
@@ -110,7 +117,7 @@ var wetlands_density = Z_wetlands_density
 
 //The final Wetland Z score is the average of wetland density and wetland patchness, but ONLY when patchness is higher than density
 
-var wet_test = wetlands_density.lt(Z_wetlands_count);
+var wet_test = wetlands_density.lte(Z_wetlands_count);
 
 var wet_average = wetlands_density
                   .multiply(3)
@@ -124,7 +131,7 @@ var Z_wetlands_score = Z_wetlands_count.where(wet_test, wet_average);
 
 Export.image.toAsset({image: Z_elevation, 
                       description: "Z_elevation", 
-                      assetId: "Z-Scores_elevation_range", 
+                      assetId: "EXPORT/Z-Scores_elevation_range", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -133,7 +140,7 @@ Export.image.toAsset({image: Z_elevation,
 
 Export.image.toAsset({image: Z_landform, 
                     description: "Z_landform", 
-                     assetId: "Z-Scores_landforms", 
+                     assetId: "EXPORT/Z-Scores_landforms", 
                      pyramidingPolicy:"median",
                      region:Biome,
                      scale: scale,
@@ -142,15 +149,16 @@ Export.image.toAsset({image: Z_landform,
 
 Export.image.toAsset({image: Z_soil_diversity, 
                       description: "Z_soil_diversity", 
-                      assetId: "Z-Scores_soil_diversity", 
+                      assetId: "EXPORT/Z-Scores_soil_diversity", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
 
+
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score", 
-                      assetId: "Z-Scores_wetlands", 
+                      assetId: "EXPORT/Z-Scores_wetlands", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
