@@ -57,39 +57,4 @@ var histogram = ui.Chart.image.histogram(({
   print(histogram)
 
 */  
-var features = ee.FeatureCollection([table]).map(function(feature) {
-  var value1 = ee.List([Z_elev_orig.reduceRegion({
-    reducer: ee.Reducer.toList(),
-    geometry: feature.geometry(),
-    scale: scale, bestEffort :true,maxPixels:1e13
-    }).get('z')]).map(function(value1) {
-    return ee.Number(value1); // Convert the integer value to a string
-  });
-  
-  var value2 = ee.List([Z_elev_3.reduceRegion({
-    reducer: ee.Reducer.toList(),
-    geometry: feature.geometry(),
-    scale: scale, bestEffort :true
-  }).get('z')]).map(function(value2) {
-    return ee.Number(value2); // Convert the integer value to a string
-  });
-  
-  return ee.Feature(null, {
-    'Values_orig': value1,
-    'Values_3': value2
-  });
-});
 
-
-
-// Create a scatter plot chart
-var chart = ui.Chart.feature.byFeature(features, 'Values_orig', 'Values_3')
-  .setChartType('ScatterChart')
-  .setOptions({
-    title: 'Relationship between Pixel Values',
-    hAxis: {title: 'Values_orig'},
-    vAxis: {title: 'Values_3'}
-  });
-
-// Display the chart
-print(chart);
