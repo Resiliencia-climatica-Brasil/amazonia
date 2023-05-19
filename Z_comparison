@@ -57,4 +57,35 @@ var histogram = ui.Chart.image.histogram(({
   print(histogram)
 
 */  
+var pixels = 1e7
+
+
+// Sample the same pixels from both raster images
+var sampledPixels = Z_elev_orig.sample({
+  region: table,
+  scale: scale,
+  numPixels: pixels, // Adjust the number of pixels to sample as needed
+  seed: 1234 // Set a seed for reproducibility
+});
+
+
+
+// Get the Z score values of the sampled pixels as lists
+var zScoreListX = sampledPixels.aggregate_array('band_name_of_Z_score_X'); // Replace 'band_name_of_Z_score_X' with the actual band name of the Z score raster for X
+var zScoreListY = sampledPixels.aggregate_array('band_name_of_Z_score_Y'); // Replace 'band_name_of_Z_score_Y' with the actual band name of the Z score raster for Y
+
+// Create a scatter plot chart
+var chart = ui.Chart.array.values({
+  array: zScoreListX,
+  axis: 0,
+  xLabels: zScoreListY
+}).setChartType('ScatterChart')
+  .setOptions({
+    title: 'Scatterplot of Z scores for X and Y',
+    hAxis: {title: 'Z scores for X'},
+    vAxis: {title: 'Z scores for Y'}
+});
+
+// Display the chart
+print(chart);
 
