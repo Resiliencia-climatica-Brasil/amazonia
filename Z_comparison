@@ -25,20 +25,21 @@ var Z_land_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_landform
 var Z_soil_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_soil_diversity_quartiles").updateMask(brasil_raster);
 var Z_wet_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_wetlands_quartiles").updateMask(brasil_raster);
 
+var Z_elev_95 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_elevation_range_95quartiles").updateMask(brasil_raster);
+var Z_land_95 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_landforms_95quartiles").updateMask(brasil_raster);
+var Z_soil_95 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_soil_diversity_95quartiles").updateMask(brasil_raster);
+var Z_wet_95 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_wetlands_95quartiles").updateMask(brasil_raster);
+
+
 var scale = Z_elev_orig.projection().nominalScale();
 
-
-Map.addLayer(Z_elev_orig.subtract(Z_elev_3), {}, 'Z elev orig - Z 3.5');
-Map.addLayer(Z_land_orig.subtract(Z_land_3), {}, 'Z land orig - Z 3.5');
-Map.addLayer(Z_soil_orig.subtract(Z_soil_3), {}, 'Z soil orig - Z 3.5');
-Map.addLayer(Z_wet_orig.subtract(Z_wet_3), {}, 'Z wet orig - Z 3.5');
 
 var histogram = ui.Chart.image.histogram(({
   image: Z_elev_orig,
   scale: scale,
   maxPixels: 1e13}))
   .setOptions({
-    title: 'Histogram of Pixel Values Z_elev' ,
+    title: 'Histogram of Pixel Values Original' ,
     hAxis: {title: 'Pixel Value'},
     vAxis: {title: 'Count'},
     legend: 'none'
@@ -47,11 +48,11 @@ var histogram = ui.Chart.image.histogram(({
   print(histogram)
   
   var histogram = ui.Chart.image.histogram(({
-  image: Z_elev_orig.subtract(Z_elev_3),
+  image: Z_elev_3,
   scale: scale,
   maxPixels: 1e13}))
   .setOptions({
-    title: 'Histogram of Pixel Values Z_elev-3.5' ,
+    title: 'Histogram of Pixel Values 3.5' ,
     hAxis: {title: 'Pixel Value'},
     vAxis: {title: 'Count'},
     legend: 'none'
@@ -59,41 +60,28 @@ var histogram = ui.Chart.image.histogram(({
   
   print(histogram)
 
-/*
-
-var pixels = 2e5;
-
-
-var sampledPixels = Z_elev_orig.sample({
-  region: table,
+var histogram = ui.Chart.image.histogram(({
+  image: Z_elev_75,
   scale: scale,
-  numPixels: pixels, 
-  seed: 1234 
-});
-
-var sampledPixels2 = Z_elev_3.sample({
-  region: table,
-  scale: scale,
-  numPixels: pixels, 
-  seed: 1234 
-});
-
-// Get the Z score values of the sampled pixels as lists
-var zScoreListX = sampledPixels.aggregate_array('z'); 
-var zScoreListY = sampledPixels2.aggregate_array('z'); 
-
-// Create a scatter plot chart
-var chart = ui.Chart.array.values({
-  array: zScoreListX,
-  axis: 0,
-  xLabels: zScoreListY
-}).setChartType('ScatterChart')
+  maxPixels: 1e13}))
   .setOptions({
-    title: 'Scatterplot of Z scores for Limited and Original',
-    hAxis: {title: 'Z scores for Limited (-3.5 to 3.5)'},
-    vAxis: {title: 'Z scores for Original'}
-});
+    title: 'Histogram of Pixel Values Quartiles 75%' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  });
+  
+  print(histogram)
 
-// Display the chart
-print(chart);
-*/
+var histogram = ui.Chart.image.histogram(({
+  image: Z_elev_95,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Quartiles 95%' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  });
+  
+  print(histogram)
