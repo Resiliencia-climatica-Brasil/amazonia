@@ -71,8 +71,8 @@ var sampledPixels = Z_elev_orig.sample({
 
 
 // Get the Z score values of the sampled pixels as lists
-var zScoreListX = sampledPixels.aggregate_array('band_name_of_Z_score_X'); // Replace 'band_name_of_Z_score_X' with the actual band name of the Z score raster for X
-var zScoreListY = sampledPixels.aggregate_array('band_name_of_Z_score_Y'); // Replace 'band_name_of_Z_score_Y' with the actual band name of the Z score raster for Y
+var zScoreListX = sampledPixels.aggregate_array('z'); // Replace 'band_name_of_Z_score_X' with the actual band name of the Z score raster for X
+var zScoreListY = sampledPixels.aggregate_array('z'); // Replace 'band_name_of_Z_score_Y' with the actual band name of the Z score raster for Y
 
 // Create a scatter plot chart
 var chart = ui.Chart.array.values({
