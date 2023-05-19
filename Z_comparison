@@ -20,9 +20,14 @@ var Z_land_3 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_landforms
 var Z_soil_3 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_soil_diversity").updateMask(brasil_raster);
 var Z_wet_3 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_wetlands").updateMask(brasil_raster);
 
+var Z_elev_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_elevation_range_quartiles").updateMask(brasil_raster);
+var Z_land_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_landforms_quartiles").updateMask(brasil_raster);
+var Z_soil_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_soil_diversity_quartiles").updateMask(brasil_raster);
+var Z_wet_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_wetlands_quartiles").updateMask(brasil_raster);
+
 var scale = Z_elev_orig.projection().nominalScale();
 
-/*
+
 Map.addLayer(Z_elev_orig.subtract(Z_elev_3), {}, 'Z elev orig - Z 3.5');
 Map.addLayer(Z_land_orig.subtract(Z_land_3), {}, 'Z land orig - Z 3.5');
 Map.addLayer(Z_soil_orig.subtract(Z_soil_3), {}, 'Z soil orig - Z 3.5');
@@ -54,29 +59,28 @@ var histogram = ui.Chart.image.histogram(({
   
   print(histogram)
 
-*/  
+/*
 
 var pixels = 2e5;
 
 
-// Sample the same pixels from both raster images
 var sampledPixels = Z_elev_orig.sample({
   region: table,
   scale: scale,
-  numPixels: pixels, // Adjust the number of pixels to sample as needed
-  seed: 1234 // Set a seed for reproducibility
+  numPixels: pixels, 
+  seed: 1234 
 });
 
 var sampledPixels2 = Z_elev_3.sample({
   region: table,
   scale: scale,
-  numPixels: pixels, // Adjust the number of pixels to sample as needed
-  seed: 1234 // Set a seed for reproducibility
+  numPixels: pixels, 
+  seed: 1234 
 });
 
 // Get the Z score values of the sampled pixels as lists
-var zScoreListX = sampledPixels.aggregate_array('z'); // Replace 'band_name_of_Z_score_X' with the actual band name of the Z score raster for X
-var zScoreListY = sampledPixels2.aggregate_array('z'); // Replace 'band_name_of_Z_score_Y' with the actual band name of the Z score raster for Y
+var zScoreListX = sampledPixels.aggregate_array('z'); 
+var zScoreListY = sampledPixels2.aggregate_array('z'); 
 
 // Create a scatter plot chart
 var chart = ui.Chart.array.values({
@@ -92,3 +96,4 @@ var chart = ui.Chart.array.values({
 
 // Display the chart
 print(chart);
+*/
