@@ -86,9 +86,9 @@ var z = image
     bestEffort: true
   });
 
-var q1 = quartiles.getNumber('z_p25'); // Adjust 'b1' if you have multiple bands
+var q1 = quartiles.getNumber('z_p25'); 
 
-var q3 = quartiles.getNumber('z_p75'); // Adjust 'b1' if you have multiple bands
+var q3 = quartiles.getNumber('z_p75'); 
   
   // Limit the range of Z-scores by quartiles
 var limited_z = z.where(z.lt(q1), q1)
