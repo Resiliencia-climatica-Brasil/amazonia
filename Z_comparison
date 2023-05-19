@@ -1,0 +1,95 @@
+var table = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                      .select("Bioma")
+                      .filter(ee.Filter.eq("Bioma", "Amazônia"))
+                        .map(function(feature){
+                             return feature.bounds()
+                             })
+                        .geometry()
+                        .dissolve({'maxError': 1})
+                        .bounds();
+
+Map.addLayer(table)
+
+var brasil_raster = ee.Image("projects/ee-lucasljardim9/assets/brasil_raster");
+
+var Z_elev_orig    = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_elevation_range').updateMask(brasil_raster);
+var Z_land_orig   = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_landforms').updateMask(brasil_raster);
+var Z_soil_orig   = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_soil_diversity').updateMask(brasil_raster);
+var Z_wet_orig   = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_wetlands').updateMask(brasil_raster);
+
+var Z_elev_3 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_elevation_range").updateMask(brasil_raster);
+var Z_land_3 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_landforms").updateMask(brasil_raster);
+var Z_soil_3 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_soil_diversity").updateMask(brasil_raster);
+var Z_wet_3 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_wetlands").updateMask(brasil_raster);
+
+var scale = Z_elev_orig.projection().nominalScale();
+
+
+Map.addLayer(Z_elev_orig.subtract(Z_elev_3), {}, 'Z elev orig - Z 3.5');
+Map.addLayer(Z_land_orig.subtract(Z_land_3), {}, 'Z land orig - Z 3.5');
+Map.addLayer(Z_soil_orig.subtract(Z_soil_3), {}, 'Z soil orig - Z 3.5');
+Map.addLayer(Z_wet_orig.subtract(Z_wet_3), {}, 'Z wet orig - Z 3.5');
+
+var histogram = ui.Chart.image.histogram(({
+  image: Z_elev_orig,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Z_elev' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  });
+  
+  print(histogram)
+  
+  var histogram = ui.Chart.image.histogram(({
+  image: Z_elev_orig.subtract(Z_elev_3),
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Z_elev-3.5' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  });
+  
+  print(histogram)
+
+  
+var features = ee.FeatureCollection([table]).map(function(feature) {
+  var value1 = ee.List([Z_elev_orig.reduceRegion({
+    reducer: ee.Reducer.toList(),
+    geometry: feature.geometry(),
+    scale: scale, bestEffort :true,maxPixels:1e13
+    }).get('z')]).map(function(value1) {
+    return ee.Number(value1); // Convert the integer value to a string
+  });
+  
+  var value2 = ee.List([Z_elev_3.reduceRegion({
+    reducer: ee.Reducer.toList(),
+    geometry: feature.geometry(),
+    scale: scale, bestEffort :true
+  }).get('z')]).map(function(value2) {
+    return ee.Number(value2); // Convert the integer value to a string
+  });
+  
+  return ee.Feature(null, {
+    'Values_orig': value1,
+    'Values_3': value2
+  });
+});
+
+
+
+// Create a scatter plot chart
+var chart = ui.Chart.feature.byFeature(features, 'Values_orig', 'Values_3')
+  .setChartType('ScatterChart')
+  .setOptions({
+    title: 'Relationship between Pixel Values',
+    hAxis: {title: 'Values_orig'},
+    vAxis: {title: 'Values_3'}
+  });
+
+// Display the chart
+print(chart);
