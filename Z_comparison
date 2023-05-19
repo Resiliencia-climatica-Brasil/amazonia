@@ -109,14 +109,14 @@ var sampledPixels = cuts.sample({
 
 
 // Get the Z score values of the sampled pixels as lists
-var zScoreListX = sampledPixels.aggregate_array('Original'); 
-var zScoreListY = sampledPixels.aggregate_array('25-75%'); 
+var zScoreX = sampledPixels.aggregate_array('Original'); 
+var zScoreY = sampledPixels.aggregate_array('25-75%'); 
 
 // Create a scatter plot chart
 var chart = ui.Chart.array.values({
-  array: zScoreListX,
+  array: zScoreX,
   axis: 0,
-  xLabels: zScoreListY
+  xLabels: zScoreY
 }).setChartType('ScatterChart')
   .setOptions({
     title: 'Scatterplot of Z scores for Limited and Original',
