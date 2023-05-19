@@ -81,19 +81,19 @@ var z = image
 //calculating the quartiles to limit the distribution of Z-Scores
 
   var quartiles = z.reduceRegion({
-    reducer: ee.Reducer.percentile([0,25, 50, 75, 100]),
+    reducer: ee.Reducer.percentile([5, 50, 95]),
     scale: scale,
     bestEffort: true
-  });
+  });print(quartiles)
 
 //25% quartile
-var q1 = quartiles.getNumber('z_p25'); 
+var q5 = quartiles.getNumber('z_p5'); 
 //75% quartile
-var q3 = quartiles.getNumber('z_p75'); 
+var q95 = quartiles.getNumber('z_p95'); 
   
   // Limit the range of Z-scores by quartiles
-var limited_z = z.where(z.lt(q1), q1)
-                 .where(z.gt(q3), q3);
+var limited_z = z.where(z.lt(q5), q5)
+                 .where(z.gt(q95), q95);
   
 
   // Return the z image
@@ -144,7 +144,7 @@ var Z_wetlands_score = Z_wetlands_count.where(wet_test, wet_average);
 
 Export.image.toAsset({image: Z_elevation, 
                       description: "Z_elevation", 
-                      assetId: "EXPORT/Z-Scores_elevation_range_quartiles", 
+                      assetId: "EXPORT/Z-Scores_elevation_range_95quartiles", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -153,7 +153,7 @@ Export.image.toAsset({image: Z_elevation,
 
 Export.image.toAsset({image: Z_landform, 
                     description: "Z_landform", 
-                     assetId: "EXPORT/Z-Scores_landforms_quartiles", 
+                     assetId: "EXPORT/Z-Scores_landforms_95quartiles", 
                      pyramidingPolicy:"median",
                      region:Biome,
                      scale: scale,
@@ -162,7 +162,7 @@ Export.image.toAsset({image: Z_landform,
 
 Export.image.toAsset({image: Z_soil_diversity, 
                       description: "Z_soil_diversity", 
-                      assetId: "EXPORT/Z-Scores_soil_diversity_quartiles", 
+                      assetId: "EXPORT/Z-Scores_soil_diversity_95quartiles", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -171,7 +171,7 @@ Export.image.toAsset({image: Z_soil_diversity,
 
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score", 
-                      assetId: "EXPORT/Z-Scores_wetlands_quartiles", 
+                      assetId: "EXPORT/Z-Scores_wetlands_95quartiles", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
