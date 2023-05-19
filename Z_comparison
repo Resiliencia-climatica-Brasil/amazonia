@@ -95,8 +95,7 @@ var cuts = ee.Image.cat([
                               ])
                 .rename(['Original', '3', '25-75%', '5-95%']);
 
-print(cuts)
-var pixels = 1e5;
+var pixels = 500;
 
 
 var sampledPixels = cuts.sample({
@@ -108,9 +107,12 @@ var sampledPixels = cuts.sample({
 
 
 
+Map.addLayer(cuts)
+
+
 // Get the Z score values of the sampled pixels as lists
 var zScoreX = sampledPixels.aggregate_array('Original'); 
-var zScoreY = sampledPixels.aggregate_array('25-75%'); 
+var zScoreY = sampledPixels.aggregate_array('5-95%'); 
 
 // Create a scatter plot chart
 var chart = ui.Chart.array.values({
