@@ -78,7 +78,7 @@ var z = image
         .divide(sdValue)
         .rename('z');
 
-//calculating the quartiles
+//calculating the quartiles to limit the distribution of Z-Scores
 
   var quartiles = z.reduceRegion({
     reducer: ee.Reducer.percentile([0,25, 50, 75, 100]),
@@ -141,7 +141,7 @@ var Z_wetlands_score = Z_wetlands_count.where(wet_test, wet_average);
 
 // Exporting Z Scores
 
-Map.addLayer(Z_elevation)
+
 Export.image.toAsset({image: Z_elevation, 
                       description: "Z_elevation", 
                       assetId: "EXPORT/Z-Scores_elevation_range_quartiles", 
