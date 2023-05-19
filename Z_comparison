@@ -85,3 +85,44 @@ var histogram = ui.Chart.image.histogram(({
   });
   
   print(histogram)
+
+
+var cuts = ee.Image.cat([
+                              Z_elev_orig ,
+                              Z_elev_3    ,
+                              Z_elev_75   ,
+                              Z_elev_95   ,
+                              ])
+                .rename(['Original', '3', '25-75%', '5-95%']);
+
+print(cuts)
+var pixels = 1e5;
+
+
+var sampledPixels = cuts.sample({
+  region: table,
+  scale: scale,
+  numPixels: pixels, 
+  seed: 1234 
+});
+
+
+
+// Get the Z score values of the sampled pixels as lists
+var zScoreListX = sampledPixels.aggregate_array('Original'); 
+var zScoreListY = sampledPixels.aggregate_array('25-75%'); 
+
+// Create a scatter plot chart
+var chart = ui.Chart.array.values({
+  array: zScoreListX,
+  axis: 0,
+  xLabels: zScoreListY
+}).setChartType('ScatterChart')
+  .setOptions({
+    title: 'Scatterplot of Z scores for Limited and Original',
+    hAxis: {title: 'Z scores for Limited'},
+    vAxis: {title: 'Z scores for Original'}
+});
+
+// Display the chart
+print(chart);
