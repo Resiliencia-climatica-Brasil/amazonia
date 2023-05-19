@@ -85,9 +85,9 @@ var chart = ui.Chart.array.values({
   xLabels: zScoreListY
 }).setChartType('ScatterChart')
   .setOptions({
-    title: 'Scatterplot of Z scores for X and Y',
-    hAxis: {title: 'Z scores for X'},
-    vAxis: {title: 'Z scores for Y'}
+    title: 'Scatterplot of Z scores for Limited and Original',
+    hAxis: {title: 'Z scores for Original'},
+    vAxis: {title: 'Z scores for Limited (-3.5 to 3.5)'}
 });
 
 // Display the chart
