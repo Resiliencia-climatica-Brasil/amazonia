@@ -24,7 +24,7 @@ var Z_wet_3 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_wetlands")
 
 var scale = Z_elev_orig.projection().nominalScale();
 
-
+/*
 Map.addLayer(Z_elev_orig.subtract(Z_elev_3), {}, 'Z elev orig - Z 3.5');
 Map.addLayer(Z_land_orig.subtract(Z_land_3), {}, 'Z land orig - Z 3.5');
 Map.addLayer(Z_soil_orig.subtract(Z_soil_3), {}, 'Z soil orig - Z 3.5');
@@ -56,7 +56,7 @@ var histogram = ui.Chart.image.histogram(({
   
   print(histogram)
 
-  
+*/  
 var features = ee.FeatureCollection([table]).map(function(feature) {
   var value1 = ee.List([Z_elev_orig.reduceRegion({
     reducer: ee.Reducer.toList(),
