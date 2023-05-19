@@ -49,39 +49,51 @@ var scale = img_elevation.projection().nominalScale();
 // Coding the function to apply the formula of Z-Scores for any raster image that we need
 
 var calculate_Z_scores = function(image) {
- 
-  // Calculate mean and standard deviation
+//calculating the mean
   var mean = image.reduceRegion({
     reducer: ee.Reducer.mean(),
     scale: scale,
     bestEffort: true
   });
-
+//calculating the standar deviation
   var sd = image.reduceRegion({
     reducer: ee.Reducer.stdDev(),
     scale: scale,
     bestEffort: true
   });
 
-  // Extract the mean and standard deviation values from the dictionaries into a raster
+//values as a raster  
 var meanValue = ee.Image.constant(mean
                                   .values()
                                   .get(0));
-                                  //print('mean Dictionary', meanValue);
-                                  
+
 var sdValue = ee.Image.constant(sd
                                   .values()
                                   .get(0));
-                                  //print('sd dictionary', sdValue);
 
-  // Calculate z for the current image
-  var z = image.subtract(meanValue).divide(sdValue);
+//calculating the z scores
 
-// Lets limit the range of Z to be between 3.5 and -3.5sd
-var minValue = -3.5;
-var maxValue = 3.5;
+var z = image
+        .subtract(meanValue)
+        .divide(sdValue)
+        .rename('z');
+
+//calculating the quartiles
+
+  var quartiles = z.reduceRegion({
+    reducer: ee.Reducer.percentile([0,25, 50, 75, 100]),
+    scale: scale,
+    bestEffort: true
+  });
+
+var q1 = quartiles.getNumber('z_p25'); // Adjust 'b1' if you have multiple bands
+
+var q3 = quartiles.getNumber('z_p75'); // Adjust 'b1' if you have multiple bands
   
-var limited_z = z.min(maxValue).max(minValue);
+  // Limit the range of Z-scores by quartiles
+var limited_z = z.where(z.lt(q1), q1)
+                 .where(z.gt(q3), q3);
+  
 
   // Return the z image
   return limited_z.rename('z');
@@ -128,10 +140,10 @@ var Z_wetlands_score = Z_wetlands_count.where(wet_test, wet_average);
 
 // Exporting Z Scores
 
-
+Map.addLayer(Z_elevation)
 Export.image.toAsset({image: Z_elevation, 
                       description: "Z_elevation", 
-                      assetId: "EXPORT/Z-Scores_elevation_range", 
+                      assetId: "EXPORT/Z-Scores_elevation_range_quartiles", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -140,7 +152,7 @@ Export.image.toAsset({image: Z_elevation,
 
 Export.image.toAsset({image: Z_landform, 
                     description: "Z_landform", 
-                     assetId: "EXPORT/Z-Scores_landforms", 
+                     assetId: "EXPORT/Z-Scores_landforms_quartiles", 
                      pyramidingPolicy:"median",
                      region:Biome,
                      scale: scale,
@@ -149,7 +161,7 @@ Export.image.toAsset({image: Z_landform,
 
 Export.image.toAsset({image: Z_soil_diversity, 
                       description: "Z_soil_diversity", 
-                      assetId: "EXPORT/Z-Scores_soil_diversity", 
+                      assetId: "EXPORT/Z-Scores_soil_diversity_quartiles", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -158,8 +170,10 @@ Export.image.toAsset({image: Z_soil_diversity,
 
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score", 
-                      assetId: "EXPORT/Z-Scores_wetlands", 
+                      assetId: "EXPORT/Z-Scores_wetlands_quartiles", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
+
+
