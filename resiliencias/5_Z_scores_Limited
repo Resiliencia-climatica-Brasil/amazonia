@@ -86,8 +86,9 @@ var z = image
     bestEffort: true
   });
 
+//25% quartile
 var q1 = quartiles.getNumber('z_p25'); 
-
+//75% quartile
 var q3 = quartiles.getNumber('z_p75'); 
   
   // Limit the range of Z-scores by quartiles
