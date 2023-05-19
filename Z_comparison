@@ -55,7 +55,7 @@ var histogram = ui.Chart.image.histogram(({
   print(histogram)
 
 */  
-var pixels = 1e5;
+var pixels = 1e7;
 
 
 // Sample the same pixels from both raster images
@@ -73,8 +73,6 @@ var sampledPixels2 = Z_elev_3.sample({
   seed: 1234 // Set a seed for reproducibility
 });
 
-Map.addLayer(sampledPixels)
-Map.addLayer(sampledPixels2)
 // Get the Z score values of the sampled pixels as lists
 var zScoreListX = sampledPixels.aggregate_array('z'); // Replace 'band_name_of_Z_score_X' with the actual band name of the Z score raster for X
 var zScoreListY = sampledPixels2.aggregate_array('z'); // Replace 'band_name_of_Z_score_Y' with the actual band name of the Z score raster for Y
