@@ -1,6 +1,4 @@
 var table = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
-                      .select("Bioma")
-                      .filter(ee.Filter.eq("Bioma", "Amazônia"))
                         .map(function(feature){
                              return feature.bounds()
                              })
@@ -8,7 +6,7 @@ var table = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .dissolve({'maxError': 1})
                         .bounds();
 
-Map.addLayer(table)
+
 
 var brasil_raster = ee.Image("projects/ee-lucasljardim9/assets/brasil_raster");
 
@@ -57,7 +55,7 @@ var histogram = ui.Chart.image.histogram(({
   print(histogram)
 
 */  
-var pixels = 1e7
+var pixels = 1e5
 
 
 // Sample the same pixels from both raster images
@@ -68,11 +66,17 @@ var sampledPixels = Z_elev_orig.sample({
   seed: 1234 // Set a seed for reproducibility
 });
 
+var sampledPixels2 = Z_elev_3.sample({
+  region: table,
+  scale: scale,
+  numPixels: pixels, // Adjust the number of pixels to sample as needed
+  seed: 1234 // Set a seed for reproducibility
+});
 
 
 // Get the Z score values of the sampled pixels as lists
 var zScoreListX = sampledPixels.aggregate_array('z'); // Replace 'band_name_of_Z_score_X' with the actual band name of the Z score raster for X
-var zScoreListY = sampledPixels.aggregate_array('z'); // Replace 'band_name_of_Z_score_Y' with the actual band name of the Z score raster for Y
+var zScoreListY = sampledPixels2.aggregate_array('z'); // Replace 'band_name_of_Z_score_Y' with the actual band name of the Z score raster for Y
 
 // Create a scatter plot chart
 var chart = ui.Chart.array.values({
@@ -88,4 +92,3 @@ var chart = ui.Chart.array.values({
 
 // Display the chart
 print(chart);
-
