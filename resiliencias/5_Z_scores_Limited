@@ -85,7 +85,7 @@ var z = image
     scale: scale,
     maxPixels:1e13,
     bestEffort: false
-  });print(quartiles)
+  });//print(quartiles)
 
 //25% quartile
 var q5 = quartiles.getNumber('z_p25'); 
