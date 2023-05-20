@@ -81,21 +81,34 @@ var z = image
 //calculating the quartiles to limit the distribution of Z-Scores
 
   var quartiles = z.reduceRegion({
-    reducer: ee.Reducer.percentile([5, 50, 95]),
+    reducer: ee.Reducer.percentile([25, 50, 75]),
     scale: scale,
-    bestEffort: true
+    maxPixels:1e13,
+    bestEffort: false
   });print(quartiles)
 
 //25% quartile
-var q5 = quartiles.getNumber('z_p5'); 
+var q5 = quartiles.getNumber('z_p25'); 
 //75% quartile
-var q95 = quartiles.getNumber('z_p95'); 
-  
+var q95 = quartiles.getNumber('z_p75'); 
+ 
   // Limit the range of Z-scores by quartiles
 var limited_z = z.where(z.lt(q5), q5)
                  .where(z.gt(q95), q95);
-  
 
+/*
+var test = z.gt(q95);
+var test2=z.lt(q5);
+var test3 = z.eq(limited_z)
+
+Map.addLayer(limited_z, {min:-1.028681871329687, max: 0.925675140573157}, 'limited Z')
+Map.addLayer(z, {min:-6, max: 14}, 'z')
+Map.addLayer(test.selfMask(), {min:0, max:1, palette:'red', opacity:0.5},'>75');
+Map.addLayer(test2.selfMask(), {min:0, max:1, palette:'blue', opacity:0.5}, '<25');
+Map.addLayer(test3.selfMask(), {min:0, max:1, palette:'green', opacity:0.5}, 'Lz = Z');
+Map.addLayer(test4.selfMask(), {min:0, max:1, palette:'purple', opacity:0.5}, 'Lz = Z_75%');
+Map.addLayer(Z_elev_75)
+*/
   // Return the z image
   return limited_z.rename('z');
 };
@@ -144,8 +157,8 @@ var Z_wetlands_score = Z_wetlands_count.where(wet_test, wet_average);
 
 Export.image.toAsset({image: Z_elevation, 
                       description: "Z_elevation", 
-                      assetId: "EXPORT/Z-Scores_elevation_range_95quartiles", 
-                      pyramidingPolicy:"median",
+                      assetId: "Z-Scores_elevation_range_quartiles", 
+                      pyramidingPolicy:"mean",
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
@@ -153,8 +166,8 @@ Export.image.toAsset({image: Z_elevation,
 
 Export.image.toAsset({image: Z_landform, 
                     description: "Z_landform", 
-                     assetId: "EXPORT/Z-Scores_landforms_95quartiles", 
-                     pyramidingPolicy:"median",
+                     assetId: "Z-Scores_landforms_quartiles", 
+                     pyramidingPolicy:"mean",
                      region:Biome,
                      scale: scale,
                      maxPixels: 1e13});
@@ -162,8 +175,8 @@ Export.image.toAsset({image: Z_landform,
 
 Export.image.toAsset({image: Z_soil_diversity, 
                       description: "Z_soil_diversity", 
-                      assetId: "EXPORT/Z-Scores_soil_diversity_95quartiles", 
-                      pyramidingPolicy:"median",
+                      assetId: "Z-Scores_soil_diversity_quartiles", 
+                      pyramidingPolicy:"mean",
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
@@ -171,8 +184,8 @@ Export.image.toAsset({image: Z_soil_diversity,
 
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score", 
-                      assetId: "EXPORT/Z-Scores_wetlands_95quartiles", 
-                      pyramidingPolicy:"median",
+                      assetId: "Z-Scores_wetlands_quartiles", 
+                      pyramidingPolicy:"mean",
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
