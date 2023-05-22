@@ -34,15 +34,15 @@ var limited_z_scores = function(image) {
   });print(quartiles)
 
 //25% quartile
-var q25 = quartiles.getNumber('z_p10'); 
+var q10 = quartiles.getNumber('z_p10'); 
 //75% quartile
-var q75 = quartiles.getNumber('z_p90'); 
+var q95 = quartiles.getNumber('z_p90'); 
  
   // Limit the range of Z-scores by quartiles
-var limited_z = image.where(image.lt(q25), q25)
-                 .where(image.gt(q75), q75);
+var limited_z = image.where(image.lt(q10), q10)
+                 .where(image.gt(q90), q90);
                  
-return limited_z//.rename('z');
+return limited_z.rename('z');
 };
 
 
