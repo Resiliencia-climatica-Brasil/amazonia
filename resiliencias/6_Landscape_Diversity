@@ -151,11 +151,12 @@ Export.image.toAsset({image: landscape_diversity,
                       maxPixels: 1e13});
 
 //Step 4 ------------------------------------------------------------------
+/*
 
 // Visualization
 //Images
 
-var landscape_limited = limited_z_scores(landscape_diversity)
+var landscape_limited = limited_z_scores(landscape_diversity);
 
 
 // Palette
@@ -184,14 +185,15 @@ ui.root.clear();
 ui.root.add(splitPanel);
 
 // Add the layers to the maps
+
 rightMap.addLayer(landform_Z, {min:-1.95, max:1.39, palette:paleta}, 'Landforms Z Score');
+
 
 leftMap.addLayer(landscape_diversity.updateMask(brasil_raster), {min:-1.55, max: 1.39, palette:paleta}, 'Landscape Diversity');
 
-
-//leftMap.addLayer(landscape_test1, {/*min:-0.7, max:6,*/ palette:paleta}, 'Landscape Diversity teste 1');
 leftMap.addLayer(test_1.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'red']}, 'elevation > Land.Div.');
 leftMap.addLayer(test_2.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'green']}, 'wetlands > Land.Div.');
 leftMap.addLayer(test_3.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'blue']}, 'soil > Land.Div.');
 
+*/
 
