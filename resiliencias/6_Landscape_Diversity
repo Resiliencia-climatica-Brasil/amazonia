@@ -31,12 +31,12 @@ var limited_z_scores = function(image) {
     scale: scale,
     maxPixels:1e13,
     bestEffort: false
-  });print(quartiles)
+  }); //print(quartiles) // if you want so see the values of the cut
 
 //25% quartile
-var q5 = quartiles.getNumber('z_p1'); 
+var q5 = quartiles.getNumber('z_p5'); 
 //75% quartile
-var q95 = quartiles.getNumber('z_p99'); 
+var q95 = quartiles.getNumber('z_p95'); 
  
   // Limit the range of Z-scores by quartiles
 var limited_z = image.where(image.lt(q5), q5)
@@ -46,10 +46,10 @@ return limited_z;
 };
 
 
-var landform_Z = limited_z_scores(orig_landform_Z)
-var elevation_range_Z = limited_z_scores(orig_elevation_range_Z)
-var wetland_score = limited_z_scores(orig_wetland_score)
-var soil_diversity = limited_z_scores(orig_soil_diversity)
+var landform_Z = limited_z_scores(orig_landform_Z);
+var elevation_range_Z = limited_z_scores(orig_elevation_range_Z);
+var wetland_score = limited_z_scores(orig_wetland_score);
+var soil_diversity = limited_z_scores(orig_soil_diversity);
 
 // Step 1 ------------------------------------------------------------------
 // Take the average of landform and elevation range only if elevantion range is higher than landform--------
