@@ -12,14 +12,44 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .bounds();
 
 
-var landform_Z = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_landforms').updateMask(brasil_raster);
+var orig_landform_Z = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_landforms').updateMask(brasil_raster);
 
-var elevation_range_Z = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_elevation_range').updateMask(brasil_raster);
+var orig_elevation_range_Z = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_elevation_range').updateMask(brasil_raster);
 
-var wetland_score = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_wetlands').updateMask(brasil_raster);
+var orig_wetland_score = ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_wetlands').updateMask(brasil_raster);
 
-var soil_diversity =  ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_soil_diversity').updateMask(brasil_raster);
+var orig_soil_diversity =  ee.Image('projects/ee-lucasljardim9/assets/Z-Scores_soil_diversity').updateMask(brasil_raster);
 
+var scale = orig_elevation_range_Z.projection().nominalScale();
+//Step 0 ------------------------------------------------------------------
+//Lets limit the distribution of values of Z between 25 and 75% of the values
+
+//calculating the quartiles to limit the distribution of Z-Scores
+var limited_z_scores = function(image) {
+  var quartiles = image.reduceRegion({
+    reducer: ee.Reducer.percentile([10, 50, 90]),
+    scale: scale,
+    maxPixels:1e13,
+    bestEffort: false
+  });print(quartiles)
+
+//25% quartile
+var q25 = quartiles.getNumber('z_p10'); 
+//75% quartile
+var q75 = quartiles.getNumber('z_p90'); 
+ 
+  // Limit the range of Z-scores by quartiles
+var limited_z = image.where(image.lt(q25), q25)
+                 .where(image.gt(q75), q75);
+                 
+return limited_z//.rename('z');
+};
+
+
+var landform_Z = limited_z_scores(orig_landform_Z)
+var elevation_range_Z = limited_z_scores(orig_elevation_range_Z)
+var wetland_score = limited_z_scores(orig_wetland_score)
+var soil_diversity = limited_z_scores(orig_soil_diversity)
 
 // Step 1 ------------------------------------------------------------------
 // Take the average of landform and elevation range only if elevantion range is higher than landform--------
@@ -121,13 +151,10 @@ Export.image.toAsset({image: landscape_diversity,
                       maxPixels: 1e13});
 
 //Step 4 ------------------------------------------------------------------
-/*
+
 // Visualization
 //Images
-var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
-var landscape_test1 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_1').clip(bioma);
-var landscape_test2 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_2').clip(bioma);
-var landscape_test3 = ee.Image('projects/ee-resilience/assets/Z-Scores/landscape_diversity_test_3').clip(bioma);
+var landscape_limited = limited_z_scores(landscape_diversity)
 
 
 // Palette
@@ -156,17 +183,18 @@ ui.root.clear();
 ui.root.add(splitPanel);
 
 // Add the layers to the maps
-rightMap.addLayer(landform_Z.clip(bioma), {min:-1, max:6, palette:paleta}, 'Landforms Z Score');
+rightMap.addLayer(landform_Z, {min:-1.95, max:1.39, palette:paleta}, 'Landforms Z Score');
+rightMap.addLayer(landscape_limited, {min:-1.95, max:1.39, palette:paleta}, 'Limited Landscape Diversity Z Score');
 
-rightMap.addLayer(landscape_test2.clip(bioma), {min:-1, max: 6, palette:paleta}, 'Landscape Diversity teste 2');
-//leftMap.addLayer(landscape_diversity.clip(bioma), {min:-1, max: 6, palette:paleta}, 'Landscape Diversity teste 3');
-leftMap.addLayer(landscape_test3.clip(bioma), {min:-1, max:6, palette: paleta}, 'Landscaep Diversity teste 3')
-*/
+
+
+leftMap.addLayer(landscape_diversity.updateMask(brasil_raster), {min:-1.55, max: 1.39, palette:paleta}, 'Landscape Diversity');
+
 
 
 //leftMap.addLayer(landscape_test1, {/*min:-0.7, max:6,*/ palette:paleta}, 'Landscape Diversity teste 1');
-//leftMap.addLayer(test_1.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'red']}, 'elevation > Land.Div.');
-//leftMap.addLayer(test_2.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'green']}, 'wetlands > Land.Div.');
-//leftMap.addLayer(test_3.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'blue']}, 'soil > Land.Div.');
+leftMap.addLayer(test_1.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'red']}, 'elevation > Land.Div.');
+leftMap.addLayer(test_2.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'green']}, 'wetlands > Land.Div.');
+leftMap.addLayer(test_3.selfMask().clip(bioma),  {min:0, max:1, palette:['red', 'blue']}, 'soil > Land.Div.');
 
 
