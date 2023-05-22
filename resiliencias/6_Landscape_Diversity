@@ -27,22 +27,22 @@ var scale = orig_elevation_range_Z.projection().nominalScale();
 //calculating the quartiles to limit the distribution of Z-Scores
 var limited_z_scores = function(image) {
   var quartiles = image.reduceRegion({
-    reducer: ee.Reducer.percentile([10, 50, 90]),
+    reducer: ee.Reducer.percentile([5, 50, 95]),
     scale: scale,
     maxPixels:1e13,
     bestEffort: false
   });print(quartiles)
 
 //25% quartile
-var q10 = quartiles.getNumber('z_p10'); 
+var q5 = quartiles.getNumber('z_p1'); 
 //75% quartile
-var q95 = quartiles.getNumber('z_p90'); 
+var q95 = quartiles.getNumber('z_p99'); 
  
   // Limit the range of Z-scores by quartiles
-var limited_z = image.where(image.lt(q10), q10)
-                 .where(image.gt(q90), q90);
+var limited_z = image.where(image.lt(q5), q5)
+                 .where(image.gt(q95), q95);
                  
-return limited_z.rename('z');
+return limited_z;
 };
 
 
