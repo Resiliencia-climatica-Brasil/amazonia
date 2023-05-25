@@ -142,7 +142,7 @@ Export.image.toAsset({image: Z_landform,
 
 Export.image.toAsset({image: Z_soil_diversity, 
                       description: "Z_soil_diversity", 
-                      assetId: "Z-Scores_soil_diversitys", 
+                      assetId: "Z-Scores_soil_diversity", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
