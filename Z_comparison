@@ -20,15 +20,15 @@ var Z_land_3 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_landforms
 var Z_soil_3 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_soil_diversity").updateMask(brasil_raster);
 var Z_wet_3 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_wetlands").updateMask(brasil_raster);
 
-var Z_elev_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_elevation_range_quartiles").updateMask(brasil_raster);
-var Z_land_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_landforms_quartiles").updateMask(brasil_raster);
-var Z_soil_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_soil_diversity_quartiles").updateMask(brasil_raster);
-var Z_wet_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_wetlands_quartiles").updateMask(brasil_raster);
+var Z_elev_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_elevation_range_quantiles").updateMask(brasil_raster);
+var Z_land_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_landforms_quantiles").updateMask(brasil_raster);
+var Z_soil_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_soil_diversity_quantiles").updateMask(brasil_raster);
+var Z_wet_75 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_wetlands_quantiles").updateMask(brasil_raster);
 
-var Z_elev_95 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_elevation_range_95quartiles").updateMask(brasil_raster);
-var Z_land_95 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_landforms_95quartiles").updateMask(brasil_raster);
-var Z_soil_95 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_soil_diversity_95quartiles").updateMask(brasil_raster);
-var Z_wet_95 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_wetlands_95quartiles").updateMask(brasil_raster);
+var Z_elev_95 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_elevation_range_95quantiles").updateMask(brasil_raster);
+var Z_land_95 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_landforms_95quantiles").updateMask(brasil_raster);
+var Z_soil_95 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_soil_diversity_95quantiles").updateMask(brasil_raster);
+var Z_wet_95 = ee.Image("projects/ee-resilience/assets/EXPORT/Z-Scores_wetlands_95quantiles").updateMask(brasil_raster);
 
 
 var scale = Z_elev_orig.projection().nominalScale();
@@ -65,7 +65,7 @@ var histogram = ui.Chart.image.histogram(({
   scale: scale,
   maxPixels: 1e13}))
   .setOptions({
-    title: 'Histogram of Pixel Values Quartiles 75%' ,
+    title: 'Histogram of Pixel Values quantiles 75%' ,
     hAxis: {title: 'Pixel Value'},
     vAxis: {title: 'Count'},
     legend: 'none'
@@ -78,7 +78,7 @@ var histogram = ui.Chart.image.histogram(({
   scale: scale,
   maxPixels: 1e13}))
   .setOptions({
-    title: 'Histogram of Pixel Values Quartiles 95%' ,
+    title: 'Histogram of Pixel Values quantiles 95%' ,
     hAxis: {title: 'Pixel Value'},
     vAxis: {title: 'Count'},
     legend: 'none'
