@@ -29,21 +29,21 @@ var scale = orig_elevation_range_Z.projection().nominalScale();
 //Step 0 ------------------------------------------------------------------
 //Lets limit the distribution of values of Z between 25 and 75% of the values
 
-//calculating the quartiles to limit the distribution of Z-Scores
+//calculating the quantiles to limit the distribution of Z-Scores
 var limited_z_scores = function(image) {
-  var quartiles = image.reduceRegion({
+  var quantiles = image.reduceRegion({
     reducer: ee.Reducer.percentile([5, 50, 95]),
     scale: scale,
     maxPixels:1e13,
     bestEffort: false
-  }); //print(quartiles) // if you want so see the values of the cut
+  }); //print(quantiles) // if you want so see the values of the cut
 
-//25% quartile
-var q5 = quartiles.getNumber('z_p5'); 
-//75% quartile
-var q95 = quartiles.getNumber('z_p95'); 
+//5% quartile
+var q5 = quantiles.getNumber('z_p5'); 
+//95% quartile
+var q95 = quantiles.getNumber('z_p95'); 
  
-  // Limit the range of Z-scores by quartiles
+  // Limit the range of Z-scores by quantiles
 var limited_z = image.where(image.lt(q5), q5)
                  .where(image.gt(q95), q95);
                  
