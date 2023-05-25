@@ -1,5 +1,10 @@
 // Based on the script 08_landscape_diversity.R by Lucas Jardim
 
+
+// This script is diferent becaus we limit the z scores before calculating the diversty to see if there were any diference.
+// use the script in Lucas directory to actually run the diversity were we limit the Z distribution ONLY on the end of landscape diversity image
+
+
 // Importing data ----------------------------------------------------------
 var brasil_raster = ee.Image("projects/ee-lucasljardim9/assets/brasil_raster");
 
