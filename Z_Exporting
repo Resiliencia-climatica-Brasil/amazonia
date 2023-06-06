@@ -1,0 +1,29 @@
+
+var brasil_raster = ee.Image("projects/ee-lucasljardim9/assets/brasil_raster");
+
+var connectedness    = ee.Image('projects/ee-lucasljardim9/assets/Z_connectedness_byregion').updateMask(brasil_raster);
+var elevation_range    = ee.Image('projects/ee-lucasljardim9/assets/Z_elevation_range_byregion').updateMask(brasil_raster);
+var landform_variety    = ee.Image('projects/ee-lucasljardim9/assets/Z_landform_variety_byregion').updateMask(brasil_raster);
+var soil_diversity    = ee.Image('projects/ee-lucasljardim9/assets/Z_soil_diversity_byregion').updateMask(brasil_raster);
+var wetlands_score    = ee.Image('projects/ee-lucasljardim9/assets/Z_wetlands_score_byregion').updateMask(brasil_raster);
+var landscape_diversity    = ee.Image('projects/ee-lucasljardim9/assets/landscape_diversity_byregion').updateMask(brasil_raster);
+var resilience    = ee.Image('projects/ee-lucasljardim9/assets/resilience_byregion').updateMask(brasil_raster);
+
+
+
+Export.image.toDrive({image:connectedness       , description: "Z_connectedness_byregion"       ,folder:'GEE',region:brasil_raster, scale: soil_diversity.projection().nominalScale(), maxPixels:1e13});
+Export.image.toDrive({image:elevation_range     , description: "Z_elevation_range_byregion"     ,folder:'GEE',region:brasil_raster, scale: soil_diversity.projection().nominalScale(), maxPixels:1e13});
+Export.image.toDrive({image:landform_variety    , description: "Z_landform_variety_byregion"   ,folder:'GEE',region:brasil_raster, scale: soil_diversity.projection().nominalScale(), maxPixels:1e13});
+Export.image.toDrive({image:soil_diversity      , description: "Z_soil_diversity_byregion"     ,folder:'GEE',region:brasil_raster, scale: soil_diversity.projection().nominalScale(), maxPixels:1e13});
+Export.image.toDrive({image:wetlands_score      , description: "Z_wetlands_score_byregion"     ,folder:'GEE',region:brasil_raster, scale: soil_diversity.projection().nominalScale(), maxPixels:1e13});
+Export.image.toDrive({image:landscape_diversity , description: "Z_landscape_diversity_byregion",folder:'GEE',region:brasil_raster, scale: soil_diversity.projection().nominalScale(), maxPixels:1e13});
+Export.image.toDrive({image:resilience          , description: "Z_resilience_byregion"         ,folder:'GEE',region:brasil_raster, scale: soil_diversity.projection().nominalScale(), maxPixels:1e13});
+
+
+connectedness
+elevation_range    
+landform_variety   
+soil_diversity
+wetlands_score
+landscape_diversity
+resilience
