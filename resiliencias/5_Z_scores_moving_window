@@ -74,7 +74,7 @@ var calculate_Z_scores = function(image, windows) {
 
 //Defing the window of the moving window
 
-var windows = 23; // test with 15 than change it to 23 to see the diference.
+var windows = 50; // test with 15 than change it to 23 to see the diference.
 
 // Landforms, Elevation Range and Soil Diversity Z scores --------------------------
 
