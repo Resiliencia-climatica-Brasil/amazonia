@@ -132,7 +132,7 @@ Map.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands_scor
 
 // Set a center and zoom level.
 
-var center={lon: -43, lat: -22, zoom:6};
+var center={lon: -43, lat: -22, zoom:8};
 
 // Create two maps.
 var leftMap = ui.Map(center);
@@ -158,9 +158,9 @@ rightMap.addLayer(Z_landform, {palette:paleta, min:-3, max:3}, 'Z_landform');
 rightMap.addLayer(Z_soil_diversity, {palette:paleta, min:-3, max:3}, 'Z_soil_diversity');
 rightMap.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands_score');
 
-leftMap.addLayer(img_elevation, {palette:paleta}, 'elevation');
-leftMap.addLayer(img_landform, {palette:paleta}, 'landform');
-leftMap.addLayer(img_soil_diversity, {palette:paleta}, 'soil_diversity');
+leftMap.addLayer(img_elevation, {palette:paleta, min:-54.862, max:227.255}, 'elevation');
+leftMap.addLayer(img_landform, {palette:paleta, min:1, max:12}, 'landform');
+leftMap.addLayer(img_soil_diversity, {palette:paleta, min:1, max:2.96}, 'soil_diversity');
 
 
 // Exporting Z Scores
