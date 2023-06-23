@@ -115,13 +115,52 @@ var wet_average = wetlands_density
 
 var Z_wetlands_score = Z_wetlands_density.where(wet_test, wet_average);
 
+
+
+// EXPLORING RESULTS
+
 var paleta = ['011301','011D01','012E01','023B01','004C00','056201','207401','3E8601','529400','66A000','74A901','99B718','FCD163','F1B555','DF923D','CE7E45','FFFFFF'];
 
-Map.addLayer(Z_elevation, {palette:paleta}, 'Z_elevation')
-Map.addLayer(Z_landform, {palette:paleta}, 'Z_landform')
-Map.addLayer(Z_soil_diversity, {palette:paleta}, 'Z_soil_diversity')
-Map.addLayer(Z_wetlands_score, {palette:paleta}, 'Z_wetlands_score')
+/*
+Map.addLayer(Z_elevation, {palette:paleta, min:-3, max:3}, 'Z_elevation');
+Map.addLayer(Z_landform, {palette:paleta, min:-3, max:3}, 'Z_landform');
+Map.addLayer(Z_soil_diversity, {palette:paleta, min:-3, max:3}, 'Z_soil_diversity');
+Map.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands_score');
+*/
 
+
+
+// Set a center and zoom level.
+
+var center={lon: -60.13, lat: -3.156, zoom:12};
+
+// Create two maps.
+var leftMap = ui.Map(center);
+var rightMap = ui.Map(center);
+
+// Create a split panel with the two maps.
+var splitPanel = ui.SplitPanel({
+  firstPanel: leftMap,
+  secondPanel: rightMap,
+  orientation: 'horizontal',
+  wipe: true
+});
+
+// Remove the default map from the root panel.
+ui.root.clear();
+
+// Add our split panel to the root panel.
+ui.root.add(splitPanel);
+
+// Add the layers to the maps
+rightMap.addLayer(Z_elevation, {palette:paleta, min:-3, max:3}, 'Z_elevation');
+rightMap.addLayer(Z_landform, {palette:paleta, min:-3, max:3}, 'Z_landform');
+rightMap.addLayer(Z_soil_diversity, {palette:paleta, min:-3, max:3}, 'Z_soil_diversity');
+rightMap.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands_score');
+
+leftMap.addLayer(img_elevation, {palette:paleta}, 'elevation');
+leftMap.addLayer(img_landform, {palette:paleta}, 'landform');
+leftMap.addLayer(img_soil_diversity, {palette:paleta}, 'soil_diversity');
 
 
 // Exporting Z Scores
@@ -129,7 +168,7 @@ Map.addLayer(Z_wetlands_score, {palette:paleta}, 'Z_wetlands_score')
 
 Export.image.toAsset({image: Z_elevation, 
                       description: "Z_elevation", 
-                      assetId: "Z-Scores_elevation_range", 
+                      assetId: "Z-Scores_elevation_range_movingwindows", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -138,7 +177,7 @@ Export.image.toAsset({image: Z_elevation,
 
 Export.image.toAsset({image: Z_landform, 
                     description: "Z_landform", 
-                     assetId: "Z-Scores_landforms", 
+                     assetId: "Z-Scores_landforms_movingwindows", 
                      pyramidingPolicy:"median",
                      region:Biome,
                      scale: scale,
@@ -147,7 +186,7 @@ Export.image.toAsset({image: Z_landform,
 
 Export.image.toAsset({image: Z_soil_diversity, 
                       description: "Z_soil_diversity", 
-                      assetId: "Z-Scores_soil_diversity", 
+                      assetId: "Z-Scores_soil_diversity_movingwindows", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -156,11 +195,10 @@ Export.image.toAsset({image: Z_soil_diversity,
 
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score", 
-                      assetId: "Z-Scores_wetlands", 
+                      assetId: "Z-Scores_wetlands_movingwindows", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
-
 
 */
