@@ -49,11 +49,12 @@ var scale = img_elevation.projection().nominalScale();
 // Coding the function to apply the formula of Z-Scores for any raster image that we need
 
 var calculate_Z_scores = function(image, windows) {
+  
   // Calculating the mean
   var mean = image.reduceNeighborhood({
     reducer: ee.Reducer.mean(),
     kernel: ee.Kernel.circle(windows),
-  });
+  })
 
   // Calculating the standard deviation
   var sd = image.reduceNeighborhood({
@@ -73,7 +74,7 @@ var calculate_Z_scores = function(image, windows) {
 
 //Defing the window of the moving window
 
-var windows = 15; // test with 15 than change it to 23 to see the diference.
+var windows = 23; // test with 15 than change it to 23 to see the diference.
 
 // Landforms, Elevation Range and Soil Diversity Z scores --------------------------
 
@@ -121,18 +122,6 @@ Map.addLayer(Z_landform, {palette:paleta}, 'Z_landform')
 Map.addLayer(Z_soil_diversity, {palette:paleta}, 'Z_soil_diversity')
 Map.addLayer(Z_wetlands_score, {palette:paleta}, 'Z_wetlands_score')
 
-
-// Define the center point
-var center = ee.Geometry.Point([-53, -31]);
-
-// Define the radius in pixels
-var radius = 15;
-
-// Create a circle geometry based on the radius and center point
-var circle = center.buffer(radius);
-Map.addLayer(circle, {color: 'red'}, 'Circle Overlay');
-
-Map.setCenter(-53, -31, 11)
 
 
 // Exporting Z Scores
