@@ -48,20 +48,17 @@ var scale = img_elevation.projection().nominalScale();
 
 // Coding the function to apply the formula of Z-Scores for any raster image that we need
 
-var calculate_Z_scores = function(image, radius) {
-  // Define the radius in meters based on the scale of the image
-  var radius_meters = ee.Number(radius).multiply(image.projection().nominalScale());
-
+var calculate_Z_scores = function(image, windows) {
   // Calculating the mean
   var mean = image.reduceNeighborhood({
     reducer: ee.Reducer.mean(),
-    kernel: ee.Kernel.circle(radius_meters),
+    kernel: ee.Kernel.circle(windows),
   });
 
   // Calculating the standard deviation
   var sd = image.reduceNeighborhood({
     reducer: ee.Reducer.stdDev(),
-    kernel: ee.Kernel.circle(radius_meters),
+    kernel: ee.Kernel.circle(windows),
   });
 
   // Values as a raster
@@ -74,30 +71,30 @@ var calculate_Z_scores = function(image, radius) {
   return z;
 };
 
-//Defing the radius of the moving window
+//Defing the window of the moving window
 
-var radius = 15; // test with 15 than change it to 23 to see the diference.
+var windows = 15; // test with 15 than change it to 23 to see the diference.
 
 // Landforms, Elevation Range and Soil Diversity Z scores --------------------------
 
-var Z_elevation = calculate_Z_scores(img_elevation, radius);
+var Z_elevation = calculate_Z_scores(img_elevation, windows);
 
-var Z_landform = calculate_Z_scores(img_landform);
+var Z_landform = calculate_Z_scores(img_landform, windows);
 
-var Z_soil_diversity = calculate_Z_scores(img_soil_diversity);
+var Z_soil_diversity = calculate_Z_scores(img_soil_diversity, windows);
 
 // Wetlands Diversity -------------------------------------------------------------
 
 // For wetlands we first need to calculate the Z Score for wetlands density in 100 acres
 
-var Z_wetlands_density = calculate_Z_scores (img_wetlands_density);
+var Z_wetlands_density = calculate_Z_scores (img_wetlands_density, windows);
 
 // Z score for wetlands density in 1000 acres
 
-var Z_wetlands_density1000 = calculate_Z_scores (img_wetlands_density1000);
+var Z_wetlands_density1000 = calculate_Z_scores (img_wetlands_density1000, windows);
 
 // Z Score for the wetlands patchness
-var Z_wetlands_count  = calculate_Z_scores (img_wetlands_count);
+var Z_wetlands_count  = calculate_Z_scores (img_wetlands_count, windows);
 
 // Now we can calculate the wetland density as the average of the density for 100 and 1000 acres
 
@@ -117,8 +114,29 @@ var wet_average = wetlands_density
 
 var Z_wetlands_score = Z_wetlands_density.where(wet_test, wet_average);
 
-// Exporting Z Scores
+var paleta = ['011301','011D01','012E01','023B01','004C00','056201','207401','3E8601','529400','66A000','74A901','99B718','FCD163','F1B555','DF923D','CE7E45','FFFFFF'];
 
+Map.addLayer(Z_elevation, {palette:paleta}, 'Z_elevation')
+Map.addLayer(Z_landform, {palette:paleta}, 'Z_landform')
+Map.addLayer(Z_soil_diversity, {palette:paleta}, 'Z_soil_diversity')
+Map.addLayer(Z_wetlands_score, {palette:paleta}, 'Z_wetlands_score')
+
+
+// Define the center point
+var center = ee.Geometry.Point([-53, -31]);
+
+// Define the radius in pixels
+var radius = 15;
+
+// Create a circle geometry based on the radius and center point
+var circle = center.buffer(radius);
+Map.addLayer(circle, {color: 'red'}, 'Circle Overlay');
+
+Map.setCenter(-53, -31, 11)
+
+
+// Exporting Z Scores
+/*
 
 Export.image.toAsset({image: Z_elevation, 
                       description: "Z_elevation", 
@@ -156,3 +174,4 @@ Export.image.toAsset({image: Z_wetlands_score,
                       maxPixels: 1e13});
 
 
+*/
