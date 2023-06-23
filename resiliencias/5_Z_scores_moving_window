@@ -56,14 +56,12 @@ var calculate_Z_scores = function(image, radius) {
   var mean = image.reduceNeighborhood({
     reducer: ee.Reducer.mean(),
     kernel: ee.Kernel.circle(radius_meters),
-    bestEffort: true
   });
 
   // Calculating the standard deviation
   var sd = image.reduceNeighborhood({
     reducer: ee.Reducer.stdDev(),
     kernel: ee.Kernel.circle(radius_meters),
-    bestEffort: true
   });
 
   // Values as a raster
@@ -76,9 +74,13 @@ var calculate_Z_scores = function(image, radius) {
   return z;
 };
 
+//Defing the radius of the moving window
+
+var radius = 15; // test with 15 than change it to 23 to see the diference.
+
 // Landforms, Elevation Range and Soil Diversity Z scores --------------------------
 
-var Z_elevation = calculate_Z_scores(img_elevation);
+var Z_elevation = calculate_Z_scores(img_elevation, radius);
 
 var Z_landform = calculate_Z_scores(img_landform);
 
