@@ -53,13 +53,13 @@ var calculate_Z_scores = function(image, windows) {
   // Calculating the mean
   var mean = image.reduceNeighborhood({
     reducer: ee.Reducer.mean(),
-    kernel: ee.Kernel.circle(windows),
-  })
+    kernel: ee.Kernel.circle({radius:windows,units:'pixels', normalize:false}),
+  });
 
   // Calculating the standard deviation
   var sd = image.reduceNeighborhood({
     reducer: ee.Reducer.stdDev(),
-    kernel: ee.Kernel.circle(windows),
+    kernel: ee.Kernel.circle({radius:windows,units:'pixels', normalize:false}),
   });
 
   // Values as a raster
@@ -132,7 +132,7 @@ Map.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands_scor
 
 // Set a center and zoom level.
 
-var center={lon: -60.13, lat: -3.156, zoom:12};
+var center={lon: -60.13, lat: -3.156, zoom:6};
 
 // Create two maps.
 var leftMap = ui.Map(center);
