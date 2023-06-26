@@ -63,7 +63,7 @@ var image = ee.Image("projects/ee-resilience/assets/Moving_window_TEMP/landscape
 
 var z_diversity = ee.Image("projects/ee-resilience/assets/Moving_window_TEMP/landscape_diversity_movingwindow");
 
-var z_connectedness = ee.Image('');
+var z_connectedness = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_connectedness_movingwindow');
 
 print("Band names:", z_diversity.bandNames());
 print("Band names:", z_connectedness.bandNames());
