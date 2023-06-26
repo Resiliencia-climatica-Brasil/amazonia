@@ -12,13 +12,13 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .bounds();
 
 
-var landform_Z = ee.Image('projects/ee-lucasljardim9/assets/Z_landform_variety_byregion').updateMask(brasil_raster);
+var landform_Z = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindows').updateMask(brasil_raster);
 
-var elevation_range_Z = ee.Image('projects/ee-lucasljardim9/assets/Z_elevation_range_byregion').updateMask(brasil_raster);
+var elevation_range_Z = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindows').updateMask(brasil_raster);
 
-var wetland_score = ee.Image('projects/ee-lucasljardim9/assets/Z_wetlands_score_byregion').updateMask(brasil_raster);
+var wetland_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindows').updateMask(brasil_raster);
 
-var soil_diversity =  ee.Image('projects/ee-lucasljardim9/assets/Z_soil_diversity_byregion').updateMask(brasil_raster);
+var soil_diversity =  ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindows').updateMask(brasil_raster);
 
 
 var limited_z_scores = function(image) {{
@@ -211,8 +211,8 @@ var histogram = ui.Chart.image.histogram(({
 
 
 Export.image.toAsset({image: landscape_diversity, 
-                      description: "Landscape_Diversity_byregion", 
-                      assetId: "landscape_diversity_byregion", 
+                      description: "Landscape_Diversity", 
+                      assetId: "landscape_diversity_movingwindow", 
                       pyramidingPolicy:"median",
                       region:bioma,
                       scale: landform_Z.projection().nominalScale(),
