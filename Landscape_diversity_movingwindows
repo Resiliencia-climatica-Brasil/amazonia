@@ -12,13 +12,13 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .bounds();
 
 
-var landform_Z = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindows').updateMask(brasil_raster);
+var landform_Z = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow').updateMask(brasil_raster);
 
-var elevation_range_Z = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindows').updateMask(brasil_raster);
+var elevation_range_Z = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow').updateMask(brasil_raster);
 
-var wetland_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindows').updateMask(brasil_raster);
+var wetland_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow').updateMask(brasil_raster);
 
-var soil_diversity =  ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindows').updateMask(brasil_raster);
+var soil_diversity =  ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow').updateMask(brasil_raster);
 
 
 var limited_z_scores = function(image) {{
