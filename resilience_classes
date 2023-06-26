@@ -1,3 +1,6 @@
+/**** Start of imports. If edited, may not auto-convert in the playground. ****/
+var image = ee.Image("projects/ee-resilience/assets/Moving_window_TEMP/landscape_diversity_movingwindow");
+/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // This script will classify the pixels based on the values of LAndscape Diversity and Local Connectedness
 
 //We will divide the Landscape Resilience on several classes based on what is create high resilience sites
@@ -25,33 +28,40 @@
 // The classes will be based on the value of diversity and connectedness
 
 1) Diversity:
-  >0.5 = 10 (HIGH div)
-  -0.5<0<0.5 = 5 (ZERO div)
+  >0.5 = 100 (HIGH div)
+  -0.5<0<0.5 = 10 (ZERO div)
   -0.5< =1 (LOW div)
 
 2) Connectedness:
-  >0.5 = 20 (HIGH con)
-  -0.5<0<0.5 = 6 (ZERO con)
+  >0.5 = 200 (HIGH con)
+  -0.5<0<0.5 = 20 (ZERO con)
   -0.5< =2 (LOW con)
 
 //So the classes will be based on the sum of the values
 
 1)LOW div LOW con = 3
 
-2)LOW div ZERO con = 
+2)LOW div ZERO con = 21
 
-3)LOW div HIGH con = 
+3)LOW div HIGH con = 201
 
-4)ZERO div LOW con = 
+4)ZERO div LOW con = 13
 
-5)ZERO div ZERO con = 
+5)ZERO div ZERO con = 30
 
-6)ZERO div HIGH con = 
+6)ZERO div HIGH con = 210
 
-7)HIGH div LOW con = 
+7)HIGH div LOW con = 103
 
-8)HIGH div ZERO con = 
+8)HIGH div ZERO con = 120
 
-9)HIGH div HIGH con = 
+9)HIGH div HIGH con = 300
+
 
 */
+
+// Loading the rasters
+
+var z_diversity = ee.Image("projects/ee-resilience/assets/Moving_window_TEMP/landscape_diversity_movingwindow");
+
+var z_connectedness = ee.Image('')
