@@ -1,6 +1,3 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var image = ee.Image("projects/ee-resilience/assets/Moving_window_TEMP/landscape_diversity_movingwindow");
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 // This script will classify the pixels based on the values of LAndscape Diversity and Local Connectedness
 
 //We will divide the Landscape Resilience on several classes based on what is create high resilience sites
@@ -60,13 +57,14 @@ var image = ee.Image("projects/ee-resilience/assets/Moving_window_TEMP/landscape
 */
 
 // Loading the rasters
+var brasil_raster = ee.Image("projects/ee-lucasljardim9/assets/brasil_raster");
 
 var z_diversity = ee.Image("projects/ee-resilience/assets/Moving_window_TEMP/landscape_diversity_movingwindow");
 
 var z_connectedness = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_connectedness_movingwindow');
 
-print("Band names:", z_diversity.bandNames());
-print("Band names:", z_connectedness.bandNames());
+print("Band names div:", z_diversity.bandNames());
+print("Band names con:", z_connectedness.bandNames());
 
 //creating the classes for Diversity
 
@@ -74,10 +72,9 @@ var class_div = z_diversity.expression(
   "b('z') < -0.5 ? 1 : (b('z') >= -0.5 && b('z') <= 0.5) ? 10 : 100",
   {
     '0': z_diversity.select('z')
-  }
-);
+  }).updateMask(brasil_raster);
 
-Map.addLayer(class_div)
+Map.addLayer(class_div);
 
 
 //creating the classes for Connectedness
@@ -86,8 +83,7 @@ var class_con = z_connectedness.expression(
   "b('z') < -0.5 ? 1 : (b('z') >= -0.5 && b('z') <= 0.5) ? 10 : 100",
   {
     '0': z_connectedness.select('z')
-  }
-);
+  }).updateMask(brasil_raster);
 
 Map.addLayer(class_con);
 
@@ -96,5 +92,5 @@ Map.addLayer(class_con);
 
 var resilience = class_div.add(class_con);
 
-Map.addLayer(resilience)
+Map.addLayer(resilience);
 
