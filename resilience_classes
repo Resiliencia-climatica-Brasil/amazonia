@@ -57,11 +57,44 @@ var image = ee.Image("projects/ee-resilience/assets/Moving_window_TEMP/landscape
 
 9)HIGH div HIGH con = 300
 
-
 */
 
 // Loading the rasters
 
 var z_diversity = ee.Image("projects/ee-resilience/assets/Moving_window_TEMP/landscape_diversity_movingwindow");
 
-var z_connectedness = ee.Image('')
+var z_connectedness = ee.Image('');
+
+print("Band names:", z_diversity.bandNames());
+print("Band names:", z_connectedness.bandNames());
+
+//creating the classes for Diversity
+
+var class_div = z_diversity.expression(
+  "b('z') < -0.5 ? 1 : (b('z') >= -0.5 && b('z') <= 0.5) ? 10 : 100",
+  {
+    '0': z_diversity.select('z')
+  }
+);
+
+Map.addLayer(class_div)
+
+
+//creating the classes for Connectedness
+
+var class_con = z_connectedness.expression(
+  "b('z') < -0.5 ? 1 : (b('z') >= -0.5 && b('z') <= 0.5) ? 10 : 100",
+  {
+    '0': z_connectedness.select('z')
+  }
+);
+
+Map.addLayer(class_con);
+
+
+//// Sum the classified rasters to create the landscape_resilience image
+
+var resilience = class_div.add(class_con);
+
+Map.addLayer(resilience)
+
