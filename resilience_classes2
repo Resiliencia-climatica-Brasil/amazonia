@@ -1,0 +1,18 @@
+// This script will classify the pixels based on the values of LAndscape Diversity and Local Connectedness
+
+//We will divide the Landscape Resilience on several classes based on what is create high resilience sites
+/*
+1) HIGH div LOW con = 
+
+2)HIGH con LOW div =
+
+3)LOW div LOW con =
+
+4)HIGH div HIGH con =
+
+
+
+
+
+
+*/
