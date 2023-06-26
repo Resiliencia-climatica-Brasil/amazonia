@@ -30,9 +30,9 @@ var limited_z_scores = function(image) {{
   }); print(quartiles); // if you want so see the values of the cut
 
 //5% quantiles
-var q5 = quartiles.getNumber('sum_p5'); 
+var q5 = quartiles.getNumber('z_p5'); 
 //95% quantiles
-var q95 = quartiles.getNumber('sum_p95'); 
+var q95 = quartiles.getNumber('z_p95'); 
  
 // Limit the range of Z-scores by quantiles
 var limited_z = image.where(image.lt(q5), q5)
@@ -144,7 +144,14 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).a
 //Explore the histogram for landscape diversity unlimited
 
 //Plot the map of unlimited diversity to explore it visually
-Map.addLayer(landscape_diversity, {min:-3.1955448164007882, max:9}, 'diversity unlimited');
+var paleta = ['66A000','74A901','99B718','FCD163','F1B555','DF923D','CE7E45','FFFFFF','CE7E45','DF923D','F1B555','FCD163','99B718','74A901','66A000'];
+
+
+//['FFFFFF','CE7E45','DF923D','F1B555','FCD163','99B718','74A901','66A000','74A901','99B718','FCD163','F1B555','DF923D','CE7E45','FFFFFF'];
+
+
+
+Map.addLayer(landscape_diversity, {min:-1.5184523547776378, max:1.5783312898331017, palette:paleta}, 'diversity unlimited');
 
 //create the histogram
 var histogram = ui.Chart.image.histogram(({
@@ -161,27 +168,8 @@ var histogram = ui.Chart.image.histogram(({
 
 
 //calculating the quantiles to limit the distribution of Z-Scores
-/*
-var limited_z_scores = function(image) {
-  var quartiles = image.reduceRegion({
-    reducer: ee.Reducer.percentile([0,5, 50, 95,100]), // will calculate the 'quantiles' for min, max, mean, and 5% - 95% limits
-    scale: landform_Z.projection().nominalScale(),
-    maxPixels:1e13,
-    bestEffort: false
-  });// print(quartiles); // if you want so see the values of the cut
 
-//5% quantiles
-var q5 = quartiles.getNumber('sum_p5'); 
-//95% quantiles
-var q95 = quartiles.getNumber('sum_p95'); 
- 
-// Limit the range of Z-scores by quantiles
-var limited_z = image.where(image.lt(q5), q5)
-                     .where(image.gt(q95), q95);
-                 
-return limited_z;
-};
-*/
+
 // Limit landscape diversity
 var landscape_diversity_limited = limited_z_scores(landscape_diversity);
 
@@ -190,7 +178,7 @@ var landscape_diversity_limited = limited_z_scores(landscape_diversity);
 
 
 //plot the map
-Map.addLayer(landscape_diversity_limited, {min:-0.6633379003039692, max:2.2348453514007347}, 'diversity limited');
+Map.addLayer(landscape_diversity_limited, {min:-0.6170970589959565, max:1.560253989279364, palette:paleta}, 'diversity limited');
 
 //create histogram
 var histogram = ui.Chart.image.histogram(({
@@ -217,6 +205,7 @@ Export.image.toAsset({image: landscape_diversity,
                       region:bioma,
                       scale: landform_Z.projection().nominalScale(),
                       maxPixels: 1e13});
+
 
 //Step 5 ------------------------------------------------------------------
 /*
