@@ -46,6 +46,8 @@ var img_soil_diversity = ee.Image('projects/ee-resilience/assets/New_window_size
 
 var scale = img_elevation.projection().nominalScale();
 
+var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel");
+
 // Coding the function to apply the formula of Z-Scores for any raster image that we need
 
 var calculate_Z_scores = function(image, windows) {
@@ -83,6 +85,7 @@ var Z_elevation = calculate_Z_scores(img_elevation, windows);
 var Z_landform = calculate_Z_scores(img_landform, windows);
 
 var Z_soil_diversity = calculate_Z_scores(img_soil_diversity, windows);
+var Z_connectedness = calculate_Z_scores(connectedness, windows);
 
 // Wetlands Diversity -------------------------------------------------------------
 
@@ -164,7 +167,17 @@ leftMap.addLayer(img_soil_diversity, {palette:paleta, min:1, max:3.4091796875}, 
 
 
 // Exporting Z Scores
+
 /*
+Export.image.toAsset({image: Z_connectedness, 
+                      description: "Z_connectedness", 
+                      assetId: "Z-Scores_connectedness_movingwindows", 
+                      pyramidingPolicy:"median",
+                      region:Biome,
+                      scale: scale,
+                      maxPixels: 1e13});
+
+
 
 Export.image.toAsset({image: Z_elevation, 
                       description: "Z_elevation", 
