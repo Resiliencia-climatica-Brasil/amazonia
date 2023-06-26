@@ -177,17 +177,17 @@ leftMap.addLayer(img_soil_diversity, {palette:paleta, min:1, max:3.4091796875}, 
 
 
 // Exporting Z Scores
-
+/*
 
 Export.image.toAsset({image: Z_connectedness, 
                       description: "Z_connectedness", 
-                      assetId: "Z-Scores_connectedness_movingwindow", 
+                      assetId: "Moving_window_TEMP/Z-Scores_connectedness_movingwindow", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
 
-/*
+
 
 Export.image.toAsset({image: Z_elevation, 
                       description: "Z_elevation", 
