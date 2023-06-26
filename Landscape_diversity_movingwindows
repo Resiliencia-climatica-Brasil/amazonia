@@ -88,7 +88,8 @@ var average_wetland_2 = landform_Z.multiply(2).add(wetland_score).divide(3);
 //IF values of landscape_diversity are < elevation Z Score AND Wetland Z score we will calculate the diversity as landforms*2 + elevation + wetland / 4  
 
 var landscape_diversity = landscape_diversity.where(test_1.and(test_2), average_wetland_1); 
-//var landscape_diversity = landscape_diversity.where(test_2, wetland_score); 
+
+//var landscape_diversity = landscape_diversity.where(test_2, wetland_score); // I don´t know why we were not calculting the mean, but if we need to go back we just remove the averages on lines 79 and 81 an run this code 
 
 
 //IF the values of diversity are < elevation but > wetland; then the diversity will be calculated by landforms*2 + wetlands / 3 
