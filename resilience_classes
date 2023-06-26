@@ -68,29 +68,52 @@ print("Band names con:", z_connectedness.bandNames());
 
 //creating the classes for Diversity
 
-var class_div = z_diversity.expression(
-  "b('z') < -0.5 ? 1 : (b('z') >= -0.5 && b('z') <= 0.5) ? 10 : 100",
-  {
-    '0': z_diversity.select('z')
-  }).updateMask(brasil_raster);
-
-Map.addLayer(class_div);
+var class_div = z_diversity.where(
+  z_diversity.lt(-0.5), 1
+).where(
+  z_diversity.gte(-0.5).and(z_diversity.lte(0.5)), 10
+).where(
+  z_diversity.gt(0.5), 100
+).updateMask(brasil_raster);
 
 
 //creating the classes for Connectedness
 
-var class_con = z_connectedness.expression(
-  "b('z') < -0.5 ? 1 : (b('z') >= -0.5 && b('z') <= 0.5) ? 10 : 100",
-  {
-    '0': z_connectedness.select('z')
-  }).updateMask(brasil_raster);
-
-Map.addLayer(class_con);
+var class_con = z_connectedness.where(
+  z_connectedness.lt(-0.5), 2
+).where(
+  z_connectedness.gte(-0.5).and(z_connectedness.lte(0.5)), 20
+).where(
+  z_connectedness.gt(0.5), 200
+).updateMask(brasil_raster);
 
 
 //// Sum the classified rasters to create the landscape_resilience image
 
 var resilience = class_div.add(class_con);
 
-Map.addLayer(resilience);
 
+//Visualization
+
+var paleta_div_con = [
+  '012E01',
+  '99B718',
+  'da9e74'
+  ];
+
+var paleta_res = [
+'011301',
+'012E01',
+'056201',
+'529400',
+'99B718',
+'DF923D',
+'CE7E45',
+'da9e74',
+'f3dfd1'
+];
+
+
+Map.addLayer(class_div, {min: 1, max:100, palette:paleta_div_con}, 'Landscape Diversity');
+Map.addLayer(class_con, {min: 2, max:200, palette:paleta_div_con}, 'Local Connectedness');
+Map.addLayer(resilience,{min: 3, max:300, palette:paleta_res}, 'Landscape Resilience');
