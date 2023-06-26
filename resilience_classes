@@ -63,12 +63,7 @@ var z_diversity = ee.Image("projects/ee-resilience/assets/Moving_window_TEMP/lan
 
 var z_connectedness = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_connectedness_movingwindow');
 
-var img_resistance = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel");
 
-print("Band names div:", z_diversity.bandNames());
-print("Band names con:", z_connectedness.bandNames());
-
-var z_connectedness =z_connectedness.multiply(-1)
 
 
 //creating the classes for Diversity
@@ -117,8 +112,8 @@ var paleta_res = [
 'da9e74',
 'f3dfd1'
 ];
-Map.addLayer(img_resistance.multiply(-1),{}, 'Local conectedness' )
-Map.addLayer(z_connectedness, {palette:paleta_res},'z_connectedness')
+
+
 Map.addLayer(class_div, {min: 1, max:100, palette:paleta_div_con}, 'Landscape Diversity');
 Map.addLayer(class_con, {min: 2, max:200, palette:paleta_div_con}, 'Local Connectedness');
 Map.addLayer(resilience,{min: 3, max:300, palette:paleta_res}, 'Landscape Resilience');
