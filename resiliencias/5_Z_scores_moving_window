@@ -46,7 +46,7 @@ var img_soil_diversity = ee.Image('projects/ee-resilience/assets/New_window_size
 
 var scale = img_elevation.projection().nominalScale();
 
-var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel");
+var img_resistance = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel");
 
 // Coding the function to apply the formula of Z-Scores for any raster image that we need
 
@@ -85,7 +85,7 @@ var Z_elevation = calculate_Z_scores(img_elevation, windows);
 var Z_landform = calculate_Z_scores(img_landform, windows);
 
 var Z_soil_diversity = calculate_Z_scores(img_soil_diversity, windows);
-var Z_connectedness = calculate_Z_scores(connectedness, windows);
+
 
 // Wetlands Diversity -------------------------------------------------------------
 
@@ -119,10 +119,17 @@ var wet_average = wetlands_density
 var Z_wetlands_score = Z_wetlands_density.where(wet_test, wet_average);
 
 
+//Calculating the Z for Local Connectedness
+
+// We have to multiply the resistance map 
+var Z_connectedness = calculate_Z_scores(img_resistance.multiply(-1), windows);
+
 
 // EXPLORING RESULTS
 
 var paleta = ['011301','011D01','012E01','023B01','004C00','056201','207401','3E8601','529400','66A000','74A901','99B718','FCD163','F1B555','DF923D','CE7E45','FFFFFF'];
+
+Map.addLayer(Z_connectedness, {palette:paleta, min:-3.3177107796671943, max:1.0016083952931503},'Connectedness');
 
 /*
 Map.addLayer(Z_elevation, {palette:paleta, min:-3, max:3}, 'Z_elevation');
@@ -132,7 +139,9 @@ Map.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands_scor
 */
 
 
+// Side by side comparison
 
+/*
 // Set a center and zoom level.
 
 var center={lon: -43, lat: -22, zoom:8};
@@ -164,11 +173,12 @@ rightMap.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands
 leftMap.addLayer(img_elevation, {palette:paleta, min:-67.38247773603679, max:421.076489559455}, 'elevation');
 leftMap.addLayer(img_landform, {palette:paleta, min:1, max:12}, 'landform');
 leftMap.addLayer(img_soil_diversity, {palette:paleta, min:1, max:3.4091796875}, 'soil_diversity');
+*/
 
 
 // Exporting Z Scores
 
-/*
+
 Export.image.toAsset({image: Z_connectedness, 
                       description: "Z_connectedness", 
                       assetId: "Z-Scores_connectedness_movingwindow", 
@@ -177,11 +187,11 @@ Export.image.toAsset({image: Z_connectedness,
                       scale: scale,
                       maxPixels: 1e13});
 
-
+/*
 
 Export.image.toAsset({image: Z_elevation, 
                       description: "Z_elevation", 
-                      assetId: "Z-Scores_elevation_range_movingwindow", 
+                      assetId: "/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -190,7 +200,7 @@ Export.image.toAsset({image: Z_elevation,
 
 Export.image.toAsset({image: Z_landform, 
                     description: "Z_landform", 
-                     assetId: "Z-Scores_landforms_movingwindow", 
+                     assetId: "/Moving_window_TEMP/Z-Scores_landforms_movingwindow", 
                      pyramidingPolicy:"median",
                      region:Biome,
                      scale: scale,
@@ -199,7 +209,7 @@ Export.image.toAsset({image: Z_landform,
 
 Export.image.toAsset({image: Z_soil_diversity, 
                       description: "Z_soil_diversity", 
-                      assetId: "Z-Scores_soil_diversity_movingwindow", 
+                      assetId: "/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -208,7 +218,7 @@ Export.image.toAsset({image: Z_soil_diversity,
 
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score", 
-                      assetId: "Z-Scores_wetlands_movingwindow", 
+                      assetId: "/Moving_window_TEMP/Z-Scores_wetlands_movingwindow", 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
