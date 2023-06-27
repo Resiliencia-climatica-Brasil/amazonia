@@ -64,8 +64,6 @@ var z_diversity = ee.Image("projects/ee-resilience/assets/Moving_window_TEMP/lan
 var z_connectedness = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_connectedness_movingwindow');
 
 
-
-
 //creating the classes for Diversity
 
 var class_div = z_diversity.where(
