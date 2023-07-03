@@ -55,13 +55,23 @@ var calculate_Z_scores = function(image, windows) {
   // Calculating the mean
   var mean = image.reduceNeighborhood({
     reducer: ee.Reducer.mean(),
-    kernel: ee.Kernel.gaussian({radius:windows,units:'pixels', normalize:false, sigma:12}),
+    kernel: ee.Kernel.gaussian({
+                                radius:windows,
+                                units:'pixels', 
+                                normalize:false, 
+                                sigma:12
+                              }),
   });
 
   // Calculating the standard deviation
   var sd = image.reduceNeighborhood({
     reducer: ee.Reducer.stdDev(),
-    kernel: ee.Kernel.gaussian({radius:windows,units:'pixels', normalize:false, sigma:12}),
+    kernel: ee.Kernel.gaussian({
+                                radius:windows,
+                                units:'pixels', 
+                                normalize:false, 
+                                sigma:12
+                              }),
   });
 
   // Values as a raster
@@ -127,7 +137,10 @@ var Z_connectedness = calculate_Z_scores(img_resistance.multiply(-1), windows);
 
 // EXPLORING RESULTS
 
-var paleta = ['011301','011D01','012E01','023B01','004C00','056201','207401','3E8601','529400','66A000','74A901','99B718','FCD163','F1B555','DF923D','CE7E45','FFFFFF'];
+//var paleta = ['011301','011D01','012E01','023B01','004C00','056201','207401','3E8601','529400','66A000','74A901','99B718','FCD163','F1B555','DF923D','CE7E45','FFFFFF'];
+
+var paleta = ['FFFFFF', 'CE7E45', 'DF923D', 'F1B555', 'FCD163', '99B718', '74A901', '66A000', '529400', '3E8601', '207401', '056201', '004C00', '023B01', '012E01', '011D01', '011301'];
+
 
 Map.addLayer(Z_connectedness, {palette:paleta, min:-3.3177107796671943, max:1.0016083952931503},'Connectedness');
 
@@ -329,7 +342,7 @@ var histogram = ui.Chart.image.histogram(({
   }); print('Unlimited div',histogram);
 
 Export.image.toDrive({image: landscape_diversity.updateMask(brasil_raster), 
-                      description: "Landscape_Diversity_GLOBAL", 
+                      description: "Landscape_Diversity_MovingWindow", 
                       folder:'GEE',
                       region:Biome,
                       scale: scale,
