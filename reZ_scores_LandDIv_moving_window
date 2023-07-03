@@ -140,13 +140,13 @@ var Z_connectedness = calculate_Z_scores(img_resistance.multiply(-1), windows);
 //var paleta = ['011301','011D01','012E01','023B01','004C00','056201','207401','3E8601','529400','66A000','74A901','99B718','FCD163','F1B555','DF923D','CE7E45','FFFFFF'];
 
 var paleta = [
-  'CE7E45', 'DF923D', 'F1B555', 'FCD163', 'FFFF00',
+  '9d5a29','b1652f','CE7E45', 'DF923D', 'F1B555', 'FCD163', 'FFFF00',
   'FFFFFF', '529400', '3E8601', '207401', '056201',
-  '004C00', '023B01', '012E01', '011D01', '011301'
-];
+  '004C00', '023B01'];
+  
+  
+  
 Map.addLayer(Z_connectedness, {palette:paleta, min:-3.3177107796671943, max:1.0016083952931503},'Connectedness');
-
-
 Map.addLayer(Z_elevation, {palette:paleta, min:-3, max:3}, 'Z_elevation');
 Map.addLayer(Z_landform, {palette:paleta, min:-3, max:3}, 'Z_landform');
 Map.addLayer(Z_soil_diversity, {palette:paleta, min:-3, max:3}, 'Z_soil_diversity');
