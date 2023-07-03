@@ -265,7 +265,7 @@ var histogram = ui.Chart.image.histogram(({
   }); print('Unlimited div',histogram);
 
 Export.image.toDrive({image: landscape_diversity.updateMask(brasil_raster), 
-                      description: "Landscape_Diversity", 
+                      description: "Landscape_Diversity_GLOBAL", 
                       folder:'GEE',
                       region:Biome,
                       scale: scale,
