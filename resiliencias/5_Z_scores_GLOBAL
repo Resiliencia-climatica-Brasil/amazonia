@@ -1,0 +1,272 @@
+/**
+ * This script generates and exports rasters with the z score for each image generated in steps 1:4 in Gee
+ * 
+ * 
+
+- Steps to calculate Z-scores
+
+1- Calculate the mean and standard deviation for the extention of the images 
+
+2- Subtract the mean from value for each pixel and divide by the sd
+
+3- Export
+
+*/
+
+var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                        .map(function(feature){
+                             return feature.bounds()
+                             })
+                        .geometry()
+                        .dissolve({'maxError': 1})
+                        .bounds();
+
+var brasil_raster = ee.Image("projects/ee-lucasljardim9/assets/brasil_raster");
+
+
+//NOVAS JANELAS ATUALIZADAS
+
+var img_elevation = ee.Image('projects/ee-lucasljardim9/assets/elevation_range_residual')
+                    .updateMask(brasil_raster);
+
+var img_landform = ee.Image('projects/ee-lucasljardim9/assets/landform_variety')
+                   .updateMask(brasil_raster);
+
+var img_wetlands_count = ee.Image("projects/ee-lucasljardim9/assets/wetlands_count")
+                   .updateMask(brasil_raster);
+
+var img_wetlands_density = ee.Image("projects/ee-lucasljardim9/assets/wetlands_density")
+                   .updateMask(brasil_raster);
+
+var img_wetlands_density1000 = ee.Image("projects/ee-lucasljardim9/assets/wetlands_density_1000")
+                   .updateMask(brasil_raster);
+
+var img_soil_diversity = ee.Image('projects/ee-resilience/assets/New_window_size/soil_diversity')
+                         .updateMask(brasil_raster);
+
+
+var scale = img_elevation.projection().nominalScale();
+
+// Coding the function to apply the formula of Z-Scores for any raster image that we need
+
+var calculate_Z_scores = function(image) {
+//calculating the mean
+  var mean = image.reduceRegion({
+    reducer: ee.Reducer.mean(),
+    scale: scale,
+    bestEffort: true
+  });
+//calculating the standar deviation
+  var sd = image.reduceRegion({
+    reducer: ee.Reducer.stdDev(),
+    scale: scale,
+    bestEffort: true
+  });
+
+//values as a raster  
+var meanValue = ee.Image.constant(mean
+                                  .values()
+                                  .get(0));
+
+var sdValue = ee.Image.constant(sd
+                                  .values()
+                                  .get(0));
+
+var z = image
+        .subtract(meanValue)
+        .divide(sdValue)
+        .rename('z');
+
+return z
+};
+
+// Landforms, Elevation Range and Soil Diversity Z scores --------------------------
+
+var Z_elevation = calculate_Z_scores(img_elevation);
+
+var Z_landform = calculate_Z_scores(img_landform);
+
+var Z_soil_diversity = calculate_Z_scores(img_soil_diversity);
+
+// Wetlands Diversity -------------------------------------------------------------
+
+// For wetlands we first need to calculate the Z Score for wetlands density in 100 acres
+
+var Z_wetlands_density = calculate_Z_scores(img_wetlands_density);
+
+// Z score for wetlands density in 1000 acres
+
+var Z_wetlands_density1000 = calculate_Z_scores(img_wetlands_density1000);
+
+// Z Score for the wetlands patchness
+var Z_wetlands_count  = calculate_Z_scores(img_wetlands_count);
+
+// Now we can calculate the wetland density as the average of the density for 100 and 1000 acres
+
+var wetlands_density = Z_wetlands_density
+                        .multiply(2)
+                        .add(Z_wetlands_density1000)
+                        .divide(3);
+
+//The final Wetland Z score is the average of wetland density and wetland patchness, but ONLY when patchness is higher than density
+
+var wet_test = wetlands_density.lte(Z_wetlands_count);
+
+var wet_average = wetlands_density
+                  .multiply(3)
+                  .add(Z_wetlands_count)
+                  .divide(4);
+
+var Z_wetlands_score = wetlands_density.where(wet_test, wet_average);
+
+/*
+// Exporting Z Scores
+
+
+Export.image.toAsset({image: Z_elevation, 
+                      description: "Z_elevation", 
+                      assetId: "Z-Scores_elevation_range", 
+                      pyramidingPolicy:"median",
+                      region:Biome,
+                      scale: scale,
+                      maxPixels: 1e13});
+
+
+Export.image.toAsset({image: Z_landform, 
+                    description: "Z_landform", 
+                     assetId: "Z-Scores_landforms", 
+                     pyramidingPolicy:"median",
+                     region:Biome,
+                     scale: scale,
+                     maxPixels: 1e13});
+
+
+Export.image.toAsset({image: Z_soil_diversity, 
+                      description: "Z_soil_diversity", 
+                      assetId: "Z-Scores_soil_diversity", 
+                      pyramidingPolicy:"median",
+                      region:Biome,
+                      scale: scale,
+                      maxPixels: 1e13});
+
+
+Export.image.toAsset({image: Z_wetlands_score, 
+                      description: "Z_wetlands_score", 
+                      assetId: "Z-Scores_wetlands", 
+                      pyramidingPolicy:"median",
+                      region:Biome,
+                      scale: scale,
+                      maxPixels: 1e13});
+
+
+*/
+
+
+
+// Step 1 ------------------------------------------------------------------
+// Take the average of landform and elevation range only if elevantion range is higher than landform--------
+
+// Test if elevation range is greater than landscape diversity
+
+var landscape_diversity = Z_landform;
+
+
+var test_1 = Z_elevation.gt(landscape_diversity);
+
+
+// Compute the average elevation
+var average_elevation = Z_landform.multiply(2).add(Z_elevation).divide(3);
+
+// Update landscape diversity where test_1 is true
+
+var landscape_diversity = landscape_diversity.where(test_1, average_elevation);
+
+
+// Step 2 ------------------------------------------------------------------
+// Take the average of landform, elevation range, and wetland score only if wetland score is higher than Step 1
+
+var test_2 = Z_wetlands_score.gt(landscape_diversity);
+
+
+// Calculate average -------------------------------------------------------
+// Elevation range higher than landform ------------------------------------
+
+var average_wetland_1 = Z_landform.multiply(2).add(Z_elevation).add(Z_wetlands_score).divide(4);
+
+var average_wetland_2 = Z_landform.multiply(2).add(Z_wetlands_score).divide(3);
+
+
+// Assigning new landform diversity values ---------------------------------
+
+
+
+//IF values of landscape_diversity are < elevation Z Score AND Wetland Z score we will calculate the diversity as landforms*2 + elevation + wetland / 4  
+
+var landscape_diversity = landscape_diversity.where(test_1.and(test_2), average_wetland_1); 
+
+//var landscape_diversity = landscape_diversity.where(test_2, wetland_score); // I don´t know why we were not calculting the mean, but if we need to go back we just remove the averages on lines 79 and 81 an run this code 
+
+
+//IF the values of diversity are < elevation but > wetland; then the diversity will be calculated by landforms*2 + wetlands / 3 
+
+landscape_diversity = landscape_diversity.where(test_1.not().and(test_2), average_wetland_2); 
+
+
+// Step 3 ------------------------------------------------------------------
+// Take the average of soil diversity only if it is higher than Step 2
+
+var test_3 = Z_soil_diversity.gt(landscape_diversity);
+
+
+// Averages ----------------------------------------------------------------
+
+var average_soil_1 = Z_landform.multiply(2).add(Z_elevation).add(Z_wetlands_score).add(Z_soil_diversity).divide(5);
+
+var average_soil_2 = Z_landform.multiply(2).add(Z_elevation).add(Z_soil_diversity).divide(4);
+
+var average_soil_3 = Z_landform.multiply(2).add(Z_wetlands_score).add(Z_soil_diversity).divide(4);
+
+var average_soil_4 = Z_landform.multiply(2).add(Z_soil_diversity).divide(3);
+
+
+// Assigning new landscape diversity values  -------------------------------
+
+//1) IF values of Diversity are SMALLER than elevation AND Wetlands AND Soil Diversity:
+// Landscape diversity = landforms*2 + elevation + wetland + soil /5
+
+//2) IF diversity is SMALER then elevation AND Soil but BIGGER then Wetlands:
+// Landscape diversity = landforms*2 + elevation + soil /4
+
+//3) IF diversity is SMALLER than Wetlands AND soil but bigger than Elevation:
+// Landscape diversity = landforms*2 + wetland + soil /4
+
+//4) IF diversity is SMALLER than soil but bigger than Elevation AND Wetlands:
+// Landscape diversity = landforms*2 + soil /3
+
+
+landscape_diversity = landscape_diversity.where(test_1.and(test_2).and(test_3), average_soil_1); // 1)
+
+landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()).and(test_3), average_soil_2); // 2)
+
+landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(test_3), average_soil_3); // 3)
+
+landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
+
+//create the histogram
+var histogram = ui.Chart.image.histogram(({
+  image: landscape_diversity,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('Unlimited div',histogram);
+
+Export.image.toDrive({image: landscape_diversity.updateMask(brasil_raster), 
+                      description: "Landscape_Diversity", 
+                      folder:'GEE',
+                      region:Biome,
+                      scale: scale,
+                      maxPixels: 1e13});
