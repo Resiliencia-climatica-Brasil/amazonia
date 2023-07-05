@@ -343,7 +343,7 @@ var histogram = ui.Chart.image.histogram(({
     legend: 'none'
   }); print('Unlimited div',histogram);
 
-Export.image.toDrive({image: landscape_diversity.updateMask(brasil_raster), 
+Export.image.toDrive({image: landscape_diversity, 
                       description: "Landscape_Diversity_MovingWindow", 
                       folder:'GEE',
                       region:Biome,
