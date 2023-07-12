@@ -1,0 +1,72 @@
+//var connectedness =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/') //precisamos mudar para o raster atualizado
+var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel").multiply(-1);
+
+
+var diversity =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Landscape_Diversity_GLOBAL');
+
+var scale = diversity.projection().nominalScale();
+var geometry = diversity.geometry();
+
+// Define the number of quantiles
+var numQuantiles = 4; // You can adjust this value as per your needs
+
+// Compute the quantiles for each raster, the value of the quantiles will be stored as a band
+
+var quartiles_Div = diversity.reduceRegion({
+    reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
+    scale: scale,
+    maxPixels:1e13,
+    bestEffort: false
+  }); print(quartiles_Div); // if you want so see the values of the cut
+
+var quartiles_Con = connectedness.reduceRegion({
+    reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
+    scale: scale,
+    maxPixels:1e13,
+    bestEffort: false
+  }); print(quartiles_Con); 
+
+//creating the classes for Diversity
+var div_25 = quartiles_Div.getNumber('z_p25');
+var div_50 = quartiles_Div.getNumber('z_p50');
+var div_75 = quartiles_Div.getNumber('z_p75');
+
+
+var class_div = diversity
+.where(diversity.lte(div_25), 1)
+.where(diversity.gt(div_25).and(diversity.lte(div_50)), 5)
+.where(diversity.gt(div_50).and(diversity.lte(div_75)), 10)
+.where(diversity.gt(div_75), 15);
+
+//creating the classes for Connectedness
+var con_25 = quartiles_Con.getNumber('b1_p25');
+var con_50 = quartiles_Con.getNumber('b1_p50');
+var con_75 = quartiles_Con.getNumber('b1_p75');
+
+var class_con = diversity
+.where(connectedness.lte(div_25), 2)
+.where(connectedness.gt(div_25).and(connectedness.lte(div_50)), 6)
+.where(connectedness.gt(div_50).and(connectedness.lte(div_75)), 12)
+.where(connectedness.gt(div_75), 16);
+
+//// Sum the classified rasters to create the landscape_resilience image
+
+var resilience = class_con.add(class_div);
+
+
+//Visualization
+
+
+
+var paleta_div_con = [
+'f3dfd1',
+'CE7E45',
+'99B718',
+'056201',
+'011301',
+];
+
+
+Map.addLayer(class_div, {min: 1, max:15, palette:paleta_div_con}, 'Landscape Diversity');
+Map.addLayer(class_con, {min: 2, max:16, palette:paleta_div_con}, 'Local Connectedness');
+Map.addLayer(resilience,{min: 3, max:300, palette:paleta_div_con}, 'Landscape Resilience');
