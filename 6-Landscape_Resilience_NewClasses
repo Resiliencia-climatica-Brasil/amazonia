@@ -39,10 +39,10 @@ var div_75 = quartiles_Div.getNumber('z_p75');
 
 
 var class_div = diversity 
-.where(diversity.lte(div_25), 2)  
-.where(diversity.gt(div_25).and(diversity.lte(div_50)), 3)
-.where(diversity.gt(div_50).and(diversity.lte(div_75)), 4)
-.where(diversity.gt(div_75), 5);
+.where(diversity.lt(div_25), 2)  
+.where(diversity.gte(div_25).and(diversity.lt(div_50)), 3)
+.where(diversity.gte(div_50).and(diversity.lt(div_75)), 4)
+.where(diversity.gte(div_75), 5);
 
 //creating the classes for Connectedness
 var con_25 = quartiles_Con.getNumber('b1_p25');
@@ -50,10 +50,10 @@ var con_50 = quartiles_Con.getNumber('b1_p50');
 var con_75 = quartiles_Con.getNumber('b1_p75');
 
 var class_con = diversity
-.where(connectedness.lte(div_25), 10)
-.where(connectedness.gt(div_25).and(connectedness.lte(div_50)), 20)
-.where(connectedness.gt(div_50).and(connectedness.lte(div_75)), 30)
-.where(connectedness.gt(div_75), 40);
+.where(connectedness.lt(div_25), 10)
+.where(connectedness.gte(div_25).and(connectedness.lt(div_50)), 20)
+.where(connectedness.gte(div_50).and(connectedness.lt(div_75)), 30)
+.where(connectedness.gte(div_75), 40);
 
 //// Sum the classified rasters to create the landscape_resilience image
 
