@@ -7,8 +7,29 @@ var diversity =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Landsc
 var scale = diversity.projection().nominalScale();
 var geometry = diversity.geometry();
 
-// Define the number of quantiles
-var numQuantiles = 4; // You can adjust this value as per your needs
+// The classes are calculated as the sum of the classified values of the original rasters 
+/*
+
+Group	      Variable 1    	Variable 2	Sum of Values
+Group 1 	    <25%	          <25%	        3
+Group 2	      <25%	         25-50%       	7
+Group 3	      <25%	         50-75%       	13
+Group 4	      <25%	         >75%	          17
+Group 5	      25-50%        	25%	          7
+Group 6	      25-50%        	25-50%	      11
+Group 7	      25-50%        	50-75%	      17
+Group 8	      25-50%        	>75%	        21
+Group 9	      50-75%        	25%	          12
+Group 10      50-75%        	25-50%	      16
+Group 11      50-75%        	50-75%	      22
+Group 12      50-75%        	>75%	        26
+Group 13      >75%	          25%	          17
+Group 14      >75%	         25-50%	        21
+Group 15      >75%	         50-75%	        27
+Group 16      >75%	         >75%	          31
+
+*/
+
 
 // Compute the quantiles for each raster, the value of the quantiles will be stored as a band
 
@@ -17,23 +38,24 @@ var quartiles_Div = diversity.reduceRegion({
     scale: scale,
     maxPixels:1e13,
     bestEffort: false
-  }); print(quartiles_Div); // if you want so see the values of the cut
+  }); //print(quartiles_Div); // if you want so see the values of the cut
+
 
 var quartiles_Con = connectedness.reduceRegion({
     reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
     scale: scale,
     maxPixels:1e13,
     bestEffort: false
-  }); print(quartiles_Con); 
+  }); //print(quartiles_Con); 
 
-//creating the classes for Diversity
+//creating the classes for Diversity based on the valeus.
 var div_25 = quartiles_Div.getNumber('z_p25');
 var div_50 = quartiles_Div.getNumber('z_p50');
 var div_75 = quartiles_Div.getNumber('z_p75');
 
 
-var class_div = diversity
-.where(diversity.lte(div_25), 1)
+var class_div = diversity 
+.where(diversity.lte(div_25), 1)  
 .where(diversity.gt(div_25).and(diversity.lte(div_50)), 5)
 .where(diversity.gt(div_50).and(diversity.lte(div_75)), 10)
 .where(diversity.gt(div_75), 15);
@@ -56,8 +78,6 @@ var resilience = class_con.add(class_div);
 
 //Visualization
 
-
-
 var paleta_div_con = [
 'f3dfd1',
 'CE7E45',
@@ -65,6 +85,8 @@ var paleta_div_con = [
 '056201',
 '011301',
 ];
+
+
 
 
 Map.addLayer(class_div, {min: 1, max:15, palette:paleta_div_con}, 'Landscape Diversity');
