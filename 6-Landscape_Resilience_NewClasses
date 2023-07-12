@@ -10,23 +10,7 @@ var geometry = diversity.geometry();
 // The classes are calculated as the sum of the classified values of the original rasters 
 /*
 
-Group	      Diversity    	Connectedness 	Values on Map
-Group 1 	    <25%	          <25%	        3
-Group 2	      <25%	         25-50%       	7
-Group 3	      <25%	         50-75%       	13
-Group 4	      <25%	         >75%	          17
-Group 5	      25-50%        	25%	          7
-Group 6	      25-50%        	25-50%	      11
-Group 7	      25-50%        	50-75%	      17
-Group 8	      25-50%        	>75%	        21
-Group 9	      50-75%        	25%	          12
-Group 10      50-75%        	25-50%	      16
-Group 11      50-75%        	50-75%	      22
-Group 12      50-75%        	>75%	        26
-Group 13      >75%	          25%	          17
-Group 14      >75%	         25-50%	        21
-Group 15      >75%	         50-75%	        27
-Group 16      >75%	         >75%	          31
+
 
 */
 
@@ -55,10 +39,10 @@ var div_75 = quartiles_Div.getNumber('z_p75');
 
 
 var class_div = diversity 
-.where(diversity.lte(div_25), 1)  
-.where(diversity.gt(div_25).and(diversity.lte(div_50)), 10)
-.where(diversity.gt(div_50).and(diversity.lte(div_75)), 100)
-.where(diversity.gt(div_75), 1000);
+.where(diversity.lte(div_25), 2)  
+.where(diversity.gt(div_25).and(diversity.lte(div_50)), 3)
+.where(diversity.gt(div_50).and(diversity.lte(div_75)), 4)
+.where(diversity.gt(div_75), 5);
 
 //creating the classes for Connectedness
 var con_25 = quartiles_Con.getNumber('b1_p25');
@@ -66,10 +50,10 @@ var con_50 = quartiles_Con.getNumber('b1_p50');
 var con_75 = quartiles_Con.getNumber('b1_p75');
 
 var class_con = diversity
-.where(connectedness.lte(div_25), 2)
+.where(connectedness.lte(div_25), 10)
 .where(connectedness.gt(div_25).and(connectedness.lte(div_50)), 20)
-.where(connectedness.gt(div_50).and(connectedness.lte(div_75)), 200)
-.where(connectedness.gt(div_75), 2000);
+.where(connectedness.gt(div_50).and(connectedness.lte(div_75)), 30)
+.where(connectedness.gt(div_75), 40);
 
 //// Sum the classified rasters to create the landscape_resilience image
 
@@ -92,6 +76,6 @@ var paleta_res = [
 
 
 
-Map.addLayer(class_div, {min: 1, max:1000, palette:paleta_div_con}, 'Landscape Diversity');
-Map.addLayer(class_con, {min: 2, max:2000, palette:paleta_div_con}, 'Local Connectedness');
-Map.addLayer(resilience,{min: 3, max:3000, palette:paleta_res}, 'Landscape Resilience');
+Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity');
+Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness');
+Map.addLayer(resilience,{min: 12, max:45, palette:paleta_res}, 'Landscape Resilience');
