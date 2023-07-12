@@ -10,6 +10,25 @@ var geometry = diversity.geometry();
 // The classes are calculated as the sum of the classified values of the original rasters 
 /*
 
+|Group      | Diversity   |Connectedness   | Values in Gee |
+
+|Group 1    |    <25%     |     <25%       |       12      |
+|Group 2    |    <25%     |     25-50%     |       22      |
+|Group 3    |    <25%     |     50-75%     |       32      |
+|Group 4    |    <25%     |     >75%       |       42      |
+|Group 5    |    25-50%   |     <25%       |       13      |
+|Group 6    |    25-50%   |     25-50%     |       23      |
+|Group 7    |    25-50%   |     50-75%     |       33      |
+|Group 8    |    25-50%   |     >75%       |       43      |
+|Group 9    |    50-75%   |     <25%       |       14      |
+|Group 10   |    50-75%   |     25-50%     |       24      |
+|Group 11   |    50-75%   |     50-75%     |       34      |
+|Group 12   |    50-75%   |     >75%       |       44      |
+|Group 13   |    >75%     |     <25%       |       15      |
+|Group 14   |    >75%     |     25-50%     |       25      |
+|Group 15   |    >75%     |     50-75%     |       35      |
+|Group 16   |    >75%     |     >75%       |       45      |
+
 
 
 */
