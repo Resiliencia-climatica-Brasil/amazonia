@@ -86,9 +86,12 @@ var paleta_div_con = [
 '011301',
 ];
 
+var paleta_res = [
+  'ceac94','9d5a29','b1652f','CE7E45', 'DF923D', 'F1B555', 'FCD163', 'FFFF00',
+  'FFFFFF', 'cbdeb2', '529400', '3E8601', '207401', '056201','004C00', '023B01'];
 
 
 
 Map.addLayer(class_div, {min: 1, max:15, palette:paleta_div_con}, 'Landscape Diversity');
 Map.addLayer(class_con, {min: 2, max:16, palette:paleta_div_con}, 'Local Connectedness');
-Map.addLayer(resilience,{min: 3, max:300, palette:paleta_div_con}, 'Landscape Resilience');
+Map.addLayer(resilience,{min: 3, max:31, palette:paleta_res}, 'Landscape Resilience');
