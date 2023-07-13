@@ -78,6 +78,7 @@ var class_con = connectedness
 
 var resilience = class_con.add(class_div);
 
+/*
 var histogram = ui.Chart.image.histogram(({
   image: class_con,
   scale: scale,
@@ -90,7 +91,7 @@ var histogram = ui.Chart.image.histogram(({
   }); print('class_con',histogram);
 
 var histogram = ui.Chart.image.histogram(({
-  image: connectedness,
+  image: class_div,
   scale: scale,
   maxPixels: 1e13}))
   .setOptions({
@@ -98,8 +99,8 @@ var histogram = ui.Chart.image.histogram(({
     hAxis: {title: 'Pixel Value'},
     vAxis: {title: 'Count'},
     legend: 'none'
-  }); print('connectedness',histogram);
-
+  }); print('class_div',histogram);
+*/
 
 //Visualization
 
@@ -111,6 +112,7 @@ var paleta_div_con = [
 '011301',
 ];
 
+/*
 var paleta_res = [
   'ceac94',
   '9d5a29',
@@ -128,22 +130,24 @@ var paleta_res = [
   '056201',
   '004C00', 
   '023B01'];
-
+*/
 
 var paleta_res = [
 "#E6E6E6",
-"#F9F9F9",
-"#FCFCB4",
-"#FEEF6D",
+"#F2F2CB",
+"#F9F9A0",
+"#FDFD75",
 "#FDE725",
-"#B6DE2B",
+"#D0E119",
+"#A4D525",
 "#6DCD59",
-"#35B779",
+"#35C389",
 "#1F9E89",
 "#26828E",
 "#31688E",
 "#3E4989",
 "#482878",
+"#4F027B",
 "#440154"
   ];
 
@@ -186,44 +190,44 @@ var makeRow = function(color, name) {
 };
 
 var palette = [
-  'ceac94',
-  '9d5a29',
-  'b1652f',
-  'CE7E45', 
-  'DF923D', 
-  'F1B555', 
-  'FCD163', 
-  'FFFF00',
-  'FFFFFF', 
-  'cbdeb2', 
-  '529400', 
-  '3E8601', 
-  '207401', 
-  '056201',
-  '004C00', 
-  '023B01'
+  '#E6E6E6',
+  '#F2F2CB',
+  '#F9F9A0',
+  '#FDFD75', 
+  '#FDE725', 
+  '#D0E119', 
+  '#A4D525', 
+  '#6DCD59',
+  '#35C389', 
+  '#1F9E89', 
+  '#26828E', 
+  '#31688E', 
+  '#3E4989', 
+  '#482878',
+  '#4F027B', 
+  '#440154'
 ];
 
 var res =[
-"12 <25%   Diversity and  <25%    Connectedness ",
-"22 <25%   Diversity and  25-50%  Connectedness ",
-"32 <25%   Diversity and  50-75%  Connectedness ",
-"42 <25%   Diversity and  >75%    Connectedness ",
-"13 25-50% Diversity and  <25%    Connectedness ",
-"23 25-50% Diversity and  25-50%  Connectedness ",
-"33 25-50% Diversity and  50-75%  Connectedness ",
-"43 25-50% Diversity and  >75%    Connectedness ",
-"14 50-75% Diversity and  <25%    Connectedness ",
-"24 50-75% Diversity and  25-50%  Connectedness ",
-"34 50-75% Diversity and  50-75%  Connectedness ",
-"44 50-75% Diversity and  >75%    Connectedness ",
-"15 >75%   Diversity and  <25%    Connectedness ",
-"25 >75%   Diversity and  25-50%  Connectedness ",
-"35 >75%   Diversity and  50-75%  Connectedness ",
-"45 >75%   Diversity and  >75%    Connectedness "
+"12___ <25%   Diversity and  <25%    Connectedness ",
+"22___ <25%   Diversity and  25-50%  Connectedness ",
+"32___ <25%   Diversity and  50-75%  Connectedness ",
+"42___ <25%   Diversity and  >75%    Connectedness ",
+"13___ 25-50% Diversity and  <25%    Connectedness ",
+"23___ 25-50% Diversity and  25-50%  Connectedness ",
+"33___ 25-50% Diversity and  50-75%  Connectedness ",
+"43___ 25-50% Diversity and  >75%    Connectedness ",
+"14___ 50-75% Diversity and  <25%    Connectedness ",
+"24___ 50-75% Diversity and  25-50%  Connectedness ",
+"34___ 50-75% Diversity and  50-75%  Connectedness ",
+"44___ 50-75% Diversity and  >75%    Connectedness ",
+"15___ >75%   Diversity and  <25%    Connectedness ",
+"25___ >75%   Diversity and  25-50%  Connectedness ",
+"35___ >75%   Diversity and  50-75%  Connectedness ",
+"45___ >75%   Diversity and  >75%    Connectedness "
 ];
 
-for (var i = 0; i < 14; i++) {
+for (var i = 0; i < 16; i++) {
   legend.add(makeRow(palette[i], res[i]));
   }  
  
