@@ -1,11 +1,15 @@
 //var connectedness =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/') //precisamos mudar para o raster atualizado
-var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel").multiply(-1);
+var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel")
+
+var connectedness = connectedness
+                          .where(connectedness.gte(90), 90)
+                          //.multiply(-1);
 
 
-var diversity =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Landscape_Diversity_GLOBAL');
+var diversity =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Landscape_Diversity_MovingWindow');
 
 var scale = diversity.projection().nominalScale();
-var geometry = diversity.geometry();
+
 
 // The classes are calculated as the sum of the classified values of the original rasters 
 /*
@@ -38,7 +42,7 @@ var geometry = diversity.geometry();
 
 var quartiles_Div = diversity.reduceRegion({
     reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
-    scale: scale,
+    scale: diversity.projection().nominalScale(),
     maxPixels:1e13,
     bestEffort: false
   }); //print(quartiles_Div); // if you want so see the values of the cut
@@ -46,10 +50,10 @@ var quartiles_Div = diversity.reduceRegion({
 
 var quartiles_Con = connectedness.reduceRegion({
     reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
-    scale: scale,
+    scale: connectedness.projection().nominalScale(),
     maxPixels:1e13,
     bestEffort: false
-  }); //print(quartiles_Con); 
+  }); print(quartiles_Con); 
 
 //creating the classes for Diversity based on the valeus.
 var div_25 = quartiles_Div.getNumber('z_p25');
@@ -64,19 +68,41 @@ var class_div = diversity
 .where(diversity.gte(div_75), 5);
 
 //creating the classes for Connectedness
-var con_25 = quartiles_Con.getNumber('b1_p25');
-var con_50 = quartiles_Con.getNumber('b1_p50');
-var con_75 = quartiles_Con.getNumber('b1_p75');
+var con_25 = quartiles_Con.getNumber('b1_p25');print(con_25)
+var con_50 = quartiles_Con.getNumber('b1_p50');print(con_50)
+var con_75 = quartiles_Con.getNumber('b1_p75');print(con_75)
 
 var class_con = diversity
-.where(connectedness.lt(div_25), 10)
-.where(connectedness.gte(div_25).and(connectedness.lt(div_50)), 20)
-.where(connectedness.gte(div_50).and(connectedness.lt(div_75)), 30)
-.where(connectedness.gte(div_75), 40);
+.where(connectedness.lt(div_25), 2)
+.where(connectedness.gte(div_25).and(connectedness.lt(div_50)), 3)
+.where(connectedness.gte(div_50).and(connectedness.lt(div_75)),4)
+.where(connectedness.gte(div_75), 5);
 
 //// Sum the classified rasters to create the landscape_resilience image
 
 var resilience = class_con.add(class_div);
+
+var histogram = ui.Chart.image.histogram(({
+  image: class_con,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('class_con',histogram);
+
+var histogram = ui.Chart.image.histogram(({
+  image: connectedness,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('connectedness',histogram);
 
 
 //Visualization
@@ -93,8 +119,9 @@ var paleta_res = [
   'ceac94','9d5a29','b1652f','CE7E45', 'DF923D', 'F1B555', 'FCD163', 'FFFF00',
   'FFFFFF', 'cbdeb2', '529400', '3E8601', '207401', '056201','004C00', '023B01'];
 
+Map.addLayer(connectedness, {min: 2, max:5, palette:paleta_div_con}, 'connectedness');
 
 
-Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity');
-Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness');
+Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
+Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
 Map.addLayer(resilience,{min: 12, max:45, palette:paleta_res}, 'Landscape Resilience');
