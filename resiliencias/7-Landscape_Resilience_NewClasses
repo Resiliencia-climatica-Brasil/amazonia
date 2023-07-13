@@ -1,8 +1,5 @@
 //var connectedness =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/') //precisamos mudar para o raster atualizado
 var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel")
-
-var connectedness = connectedness
-                          //.where(connectedness.gte(66), 66)
                           .multiply(-1);
 
 
@@ -45,15 +42,14 @@ var quartiles_Div = diversity.reduceRegion({
     scale: diversity.projection().nominalScale(),
     maxPixels:1e13,
     bestEffort: false
-  }); //print(quartiles_Div); // if you want so see the values of the cut
-
+  }); 
 
 var quartiles_Con = connectedness.reduceRegion({
     reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
     scale: connectedness.projection().nominalScale(),
     maxPixels:1e13,
     bestEffort: false
-  }); print(quartiles_Con); 
+  });
 
 //creating the classes for Diversity based on the valeus.
 var div_25 = quartiles_Div.getNumber('z_p25');
@@ -68,9 +64,9 @@ var class_div = diversity
 .where(diversity.gte(div_75), 5);
 
 //creating the classes for Connectedness
-var con_25 = quartiles_Con.getNumber('b1_p25');print(con_25)
-var con_50 = quartiles_Con.getNumber('b1_p50');print(con_50)
-var con_75 = quartiles_Con.getNumber('b1_p75');print(con_75)
+var con_25 = quartiles_Con.getNumber('b1_p25');
+var con_50 = quartiles_Con.getNumber('b1_p50');
+var con_75 = quartiles_Con.getNumber('b1_p75');
 
 var class_con = connectedness
 .where(connectedness.lt(con_25),10)
@@ -116,12 +112,120 @@ var paleta_div_con = [
 ];
 
 var paleta_res = [
-  'ceac94','9d5a29','b1652f','CE7E45', 'DF923D', 'F1B555', 'FCD163', 'FFFF00',
-  'FFFFFF', 'cbdeb2', '529400', '3E8601', '207401', '056201','004C00', '023B01'];
+  'ceac94',
+  '9d5a29',
+  'b1652f',
+  'CE7E45', 
+  'DF923D', 
+  'F1B555', 
+  'FCD163', 
+  'FFFF00',
+  'FFFFFF', 
+  'cbdeb2', 
+  '529400', 
+  '3E8601', 
+  '207401', 
+  '056201',
+  '004C00', 
+  '023B01'];
 
-Map.addLayer(connectedness, {min: 2, max:5, palette:paleta_div_con}, 'connectedness');
+
+var paleta_res = [
+"#E6E6E6",
+"#F9F9F9",
+"#FCFCB4",
+"#FEEF6D",
+"#FDE725",
+"#B6DE2B",
+"#6DCD59",
+"#35B779",
+"#1F9E89",
+"#26828E",
+"#31688E",
+"#3E4989",
+"#482878",
+"#440154"
+  ];
 
 
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
 Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
 Map.addLayer(resilience,{min: 12, max:45, palette:paleta_res}, 'Landscape Resilience');
+
+
+var legend = ui.Panel({
+             style: {
+               position:'bottom-right',
+               padding: '8px 10px'
+             }
+});
+
+var makeRow = function(color, name) {
+ 
+      // Create the label that is actually the colored box.
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: color,
+          // Use padding to give the box height and width.
+          padding: '8px',
+          margin: '0 0 4px 0'
+        }
+      });
+ 
+      // Create the label filled with the description text.
+      var description = ui.Label({
+        value: name,
+        style: {margin: '0 0 4px 6px'}
+      });
+ 
+      // return the panel
+      return ui.Panel({
+        widgets: [colorBox, description],
+        layout: ui.Panel.Layout.Flow('horizontal')
+      });
+};
+
+var palette = [
+  'ceac94',
+  '9d5a29',
+  'b1652f',
+  'CE7E45', 
+  'DF923D', 
+  'F1B555', 
+  'FCD163', 
+  'FFFF00',
+  'FFFFFF', 
+  'cbdeb2', 
+  '529400', 
+  '3E8601', 
+  '207401', 
+  '056201',
+  '004C00', 
+  '023B01'
+];
+
+var res =[
+"12 <25%   Diversity and  <25%    Connectedness ",
+"22 <25%   Diversity and  25-50%  Connectedness ",
+"32 <25%   Diversity and  50-75%  Connectedness ",
+"42 <25%   Diversity and  >75%    Connectedness ",
+"13 25-50% Diversity and  <25%    Connectedness ",
+"23 25-50% Diversity and  25-50%  Connectedness ",
+"33 25-50% Diversity and  50-75%  Connectedness ",
+"43 25-50% Diversity and  >75%    Connectedness ",
+"14 50-75% Diversity and  <25%    Connectedness ",
+"24 50-75% Diversity and  25-50%  Connectedness ",
+"34 50-75% Diversity and  50-75%  Connectedness ",
+"44 50-75% Diversity and  >75%    Connectedness ",
+"15 >75%   Diversity and  <25%    Connectedness ",
+"25 >75%   Diversity and  25-50%  Connectedness ",
+"35 >75%   Diversity and  50-75%  Connectedness ",
+"45 >75%   Diversity and  >75%    Connectedness "
+];
+
+for (var i = 0; i < 14; i++) {
+  legend.add(makeRow(palette[i], res[i]));
+  }  
+ 
+Map.add(legend);
+
