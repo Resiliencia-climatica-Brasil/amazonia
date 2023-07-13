@@ -2,8 +2,8 @@
 var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel")
 
 var connectedness = connectedness
-                          .where(connectedness.gte(90), 90)
-                          //.multiply(-1);
+                          //.where(connectedness.gte(66), 66)
+                          .multiply(-1);
 
 
 var diversity =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Landscape_Diversity_MovingWindow');
@@ -72,11 +72,11 @@ var con_25 = quartiles_Con.getNumber('b1_p25');print(con_25)
 var con_50 = quartiles_Con.getNumber('b1_p50');print(con_50)
 var con_75 = quartiles_Con.getNumber('b1_p75');print(con_75)
 
-var class_con = diversity
-.where(connectedness.lt(div_25), 2)
-.where(connectedness.gte(div_25).and(connectedness.lt(div_50)), 3)
-.where(connectedness.gte(div_50).and(connectedness.lt(div_75)),4)
-.where(connectedness.gte(div_75), 5);
+var class_con = connectedness
+.where(connectedness.lt(con_25),10)
+.where(connectedness.gte(con_25).and(connectedness.lt(con_50)), 20)
+.where(connectedness.gte(con_50).and(connectedness.lt(con_75)),30)
+.where(connectedness.gte(con_75), 40);
 
 //// Sum the classified rasters to create the landscape_resilience image
 
