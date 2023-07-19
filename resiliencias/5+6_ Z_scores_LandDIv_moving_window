@@ -99,9 +99,10 @@ var calculate_Z_scores = function(image, windows) {
   return z;
 };
 
-//Defing the window of the moving window
+//Defing the window size for the moving window
 
-var windows = 50; // test with 15 than change it to 23 to see the diference.
+var windows = 100; 
+
 
 // Landforms, Elevation Range and Soil Diversity Z scores --------------------------
 
@@ -146,8 +147,6 @@ var Z_wetlands_score = Z_wetlands_density.where(wet_test, wet_average);
 
 
 // EXPLORING RESULTS
-
-//var paleta = ['011301','011D01','012E01','023B01','004C00','056201','207401','3E8601','529400','66A000','74A901','99B718','FCD163','F1B555','DF923D','CE7E45','FFFFFF'];
 
 var paleta = [
   '9d5a29','b1652f','CE7E45', 'DF923D', 'F1B555', 'FCD163', 'FFFF00',
@@ -322,7 +321,7 @@ var histogram = ui.Chart.image.histogram(({
   }); print('Landscape div',histogram);
 
 
-//Exporting
+//Exporting to Drive
 
 
 Export.image.toDrive({image: landscape_diversity, 
