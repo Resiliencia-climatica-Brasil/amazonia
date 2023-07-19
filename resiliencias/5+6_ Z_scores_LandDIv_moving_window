@@ -1,5 +1,6 @@
 /**
- * This script generates and exports rasters with the z score for each image generated in steps 1:4 in Gee
+ * This script generates and exports rasters with the z score for each image generated in steps 1:4 in Gee and then 
+ * calculates the LandscapeDiversity
  * 
  * 
 
