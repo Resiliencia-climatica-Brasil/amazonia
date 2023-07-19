@@ -23,8 +23,10 @@
 
 4) Export
 
-
 */
+
+//************************************ Z-Scores with a Moving Window ***************************************** 
+
 
 var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .map(function(feature){
