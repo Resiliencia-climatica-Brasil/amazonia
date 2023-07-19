@@ -144,11 +144,6 @@ var wet_average = wetlands_density
 var Z_wetlands_score = Z_wetlands_density.where(wet_test, wet_average);
 
 
-//Calculating the Z for Local Connectedness
-
-// We have to multiply the resistance map 
-var Z_connectedness = calculate_Z_scores(img_resistance.multiply(-1), windows);
-
 
 // EXPLORING RESULTS
 
@@ -311,7 +306,10 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(tes
 
 landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
 
-//create the histogram
+// create the histogram to explore the distribution of pixel value
+
+
+
 var histogram = ui.Chart.image.histogram(({
   image: landscape_diversity,
   scale: scale,
@@ -321,7 +319,11 @@ var histogram = ui.Chart.image.histogram(({
     hAxis: {title: 'Pixel Value'},
     vAxis: {title: 'Count'},
     legend: 'none'
-  }); print('Unlimited div',histogram);
+  }); print('Landscape div',histogram);
+
+
+//Exporting
+
 
 Export.image.toDrive({image: landscape_diversity, 
                       description: "Landscape_Diversity_MovingWindow_50", 
