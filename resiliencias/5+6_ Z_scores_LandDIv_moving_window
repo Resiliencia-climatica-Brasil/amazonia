@@ -101,11 +101,16 @@ var calculate_Z_scores = function(image, windows) {
 
 //Defing the window size for the moving window
 
-var windows = 100; 
+//var windows = 100; 
 
+var windows = prompt('Enter the window size:', '50');
+windows = parseInt(windows);
+if (isNaN(windows) || windows <= 0) {
+   print('Invalid input. Using default value for the window size.');
+  windows = 1;}
 
 // Landforms, Elevation Range and Soil Diversity Z scores --------------------------
-
+print(windows);
 var Z_elevation = calculate_Z_scores(img_elevation, windows);
 
 var Z_landform = calculate_Z_scores(img_landform, windows);
@@ -155,7 +160,6 @@ var paleta = [
   
   /*
   
-Map.addLayer(Z_connectedness, {palette:paleta, min:-3.3177107796671943, max:1.0016083952931503},'Connectedness');
 Map.addLayer(Z_elevation, {palette:paleta, min:-3, max:3}, 'Z_elevation');
 Map.addLayer(Z_landform, {palette:paleta, min:-3, max:3}, 'Z_landform');
 Map.addLayer(Z_soil_diversity, {palette:paleta, min:-3, max:3}, 'Z_soil_diversity');
@@ -308,7 +312,7 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).a
 // create the histogram to explore the distribution of pixel value
 
 
-
+/*
 var histogram = ui.Chart.image.histogram(({
   image: landscape_diversity,
   scale: scale,
@@ -319,7 +323,7 @@ var histogram = ui.Chart.image.histogram(({
     vAxis: {title: 'Count'},
     legend: 'none'
   }); print('Landscape div',histogram);
-
+*/
 
 //Exporting to Drive
 
