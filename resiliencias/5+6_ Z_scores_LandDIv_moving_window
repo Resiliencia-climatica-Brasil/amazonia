@@ -25,7 +25,7 @@
 
 */
 
-//************************************ Z-Scores with a Moving Window ***************************************** 
+//************************************ Importing Data ***************************************** 
 
 
 var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
