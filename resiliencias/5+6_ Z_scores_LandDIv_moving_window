@@ -329,7 +329,7 @@ var histogram = ui.Chart.image.histogram(({
 
 
 Export.image.toDrive({image: landscape_diversity, 
-                      description: "Landscape_Diversity_MovingWindow_50", 
+                      description: "Landscape_Diversity_MovingWindow_" + windows.toString(), 
                       folder:'GEE',
                       region:Biome,
                       scale: scale,
