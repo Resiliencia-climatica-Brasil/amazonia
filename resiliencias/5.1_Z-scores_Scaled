@@ -22,6 +22,12 @@ var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEM
 
 var scale = brasil_raster.projection().nominalScale();
 
+var windows = prompt('Enter the window size based on the Z image name:', '50');
+windows = parseInt(windows);
+if (isNaN(windows) || windows <= 0) {
+   print('Invalid input. Using default value for the window size.');
+  windows = 1;}
+
 
 //Scaling the Z values based on the min-max scaling technique
 var scale_z = function(image){
@@ -56,3 +62,40 @@ var Z_wetlands_score_scaled = scale_z(Z_wetlands_score);
 // Map.addLayer(Z_landform_scaled,       {palette:'red', min:0, max:1}, 'Z_landform');
 // Map.addLayer(Z_soil_diversity_scaled, {palette:'green', min:0, max:1}, 'Z_soil_diversity');
 // Map.addLayer(Z_wetlands_score_scaled, {palette:'blue', min:0, max:1}, 'Z_wetlands_scor');
+
+
+Export.image.toAsset({image: Z_elevation_scaled, 
+                      description: "Z_elevation"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_" + windows.toString(), 
+                      pyramidingPolicy:"median",
+                      region:Biome,
+                      scale: scale,
+                      maxPixels: 1e13});
+
+
+Export.image.toAsset({image: Z_landform_scaled, 
+                    description: "Z_landform"+ windows.toString(), 
+                     assetId: "Moving_window_TEMP/Z-Scores_landforms_movingwindow_"+ windows.toString(), 
+                     pyramidingPolicy:"median",
+                     region:Biome,
+                     scale: scale,
+                     maxPixels: 1e13});
+
+
+Export.image.toAsset({image: Z_soil_diversity_scaled, 
+                      description: "Z_soil_diversity"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_"+ windows.toString(), 
+                      pyramidingPolicy:"median",
+                      region:Biome,
+                      scale: scale,
+                      maxPixels: 1e13});
+
+
+Export.image.toAsset({image: Z_wetlands_score_scaled, 
+                      description: "Z_wetlands_score"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/Z-Scores_wetlands_movingwindow_"+ windows.toString(), 
+                      pyramidingPolicy:"median",
+                      region:Biome,
+                      scale: scale,
+                      maxPixels: 1e13});
+
