@@ -158,7 +158,7 @@ var minmax = image.reduceRegion({
       scale: scale,
       maxPixels:1e20,
       bestEffort: true
-     }); //print('minmax', minmax); // if you want so see the values of the minmax
+     }); print('minmax', minmax); // if you want so see the values of the minmax
 
 var minValue = minmax.getNumber('z_p0'); 
 var maxValue = minmax.getNumber('z_p100'); 
@@ -170,18 +170,18 @@ var z_scaled = image.subtract(minValue)
 return z_scaled;
 };
 
-//var Z_elevation_scaled = scale_z( Z_elevation);
-//var Z_landform_scaled = scale_z( Z_landform);
-//var Z_soil_diversity_scaled = scale_z( Z_soil_diversity);
-var Z_wetlands_score_scaled = scale_z( Z_wetlands_score);
+var Z_elevation_scaled = scale_z(Z_elevation);
+var Z_landform_scaled = scale_z(Z_landform);
+var Z_soil_diversity_scaled = scale_z(Z_soil_diversity);
+var Z_wetlands_score_scaled = scale_z(Z_wetlands_score);
 
-//Map.addLayer(Z_elevation_scaled,      {palette:'black', min:0, max:1}, 'Z_elevation');
-//Map.addLayer(Z_landform_scaled,       {palette:'red', min:0, max:1}, 'Z_landform');
-//Map.addLayer(Z_soil_diversity_scaled, {palette:'green', min:0, max:1}, 'Z_soil_diversity');
-Map.addLayer(Z_wetlands_score_scaled, {palette:'blue', min:0, max:1}, 'Z_wetlands_scor');
+// Map.addLayer(Z_elevation_scaled,      {palette:'black', min:0, max:1}, 'Z_elevation');
+// Map.addLayer(Z_landform_scaled,       {palette:'red', min:0, max:1}, 'Z_landform');
+// Map.addLayer(Z_soil_diversity_scaled, {palette:'green', min:0, max:1}, 'Z_soil_diversity');
+// Map.addLayer(Z_wetlands_score_scaled, {palette:'blue', min:0, max:1}, 'Z_wetlands_scor');
 
 
-// E0LORING1RESULTS
+
 
 
 var paleta = [
@@ -199,16 +199,8 @@ Map.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands_scor
 */
 
 // Exporting Z Scores
+
 /*
-
-Export.image.toAsset({image: Z_connectedness, 
-                      description: "Z_connectedness", 
-                      assetId: "Moving_window_TEMP/Z-Scores_connectedness_movingwindow", 
-                      pyramidingPolicy:"median",
-                      region:Biome,
-                      scale: scale,
-                      maxPixels: 1e13});
-
 
 
 Export.image.toAsset({image: Z_elevation, 
@@ -247,6 +239,47 @@ Export.image.toAsset({image: Z_wetlands_score,
                       maxPixels: 1e13});
 
 */
+
+// Exporting Z Scores Scaled 0 to 1
+
+
+
+
+Export.image.toAsset({image: Z_elevation_scaled, 
+                      description: "Z_elevation", 
+                      assetId: "Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_"+windows.toString(), 
+                      pyramidingPolicy:"median",
+                      region:Biome,
+                      scale: scale,
+                      maxPixels: 1e13});
+
+
+Export.image.toAsset({image: Z_landform_scaled, 
+                    description: "Z_landform", 
+                     assetId: "Moving_window_TEMP/Z-Scores_landforms_movingwindow_"+windows.toString(), 
+                     pyramidingPolicy:"median",
+                     region:Biome,
+                     scale: scale,
+                     maxPixels: 1e13});
+
+
+Export.image.toAsset({image: Z_soil_diversity_scaled, 
+                      description: "Z_soil_diversity", 
+                      assetId: "Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_"+windows.toString(), 
+                      pyramidingPolicy:"median",
+                      region:Biome,
+                      scale: scale,
+                      maxPixels: 1e13});
+
+
+Export.image.toAsset({image: Z_wetlands_score_scaled, 
+                      description: "Z_wetlands_score", 
+                      assetId: "Moving_window_TEMP/Z-Scores_wetlands_movingwindow_"+windows.toString(), 
+                      pyramidingPolicy:"median",
+                      region:Biome,
+                      scale: scale,
+                      maxPixels: 1e13});
+
 
 
 
