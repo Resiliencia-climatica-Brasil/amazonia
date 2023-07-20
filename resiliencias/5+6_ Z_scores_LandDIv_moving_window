@@ -95,36 +95,7 @@ var calculate_Z_scores = function(image, windows) {
   // Calculating the z scores
   var z = image.subtract(meanValue).divide(sdValue).rename('z');
 
-
-//calculating the min
-  var min = image.reduceRegion({
-    reducer: ee.Reducer.min(),
-    scale: scale,
-    bestEffort: false
-  });
-//calculating the max
-  var max = image.reduceRegion({
-    reducer: ee.Reducer.max(),
-    scale: scale,
-    bestEffort: false
-  });
-
-//values for min and max as a raster  
-var minValue = ee.Image.constant(min
-                                  .values()
-                                  .get(0));
-
-var maxValue = ee.Image.constant(max
-                                  .values()
-                                  .get(0));
-
-//scaling the Z-Score to vary between 0-1
-var z_scaled = image
-                .subtract(minValue)
-                .divide(maxValue.subtract(minValue))
-                .rename('scaled');
-
-  return z_scaled;
+  return z;
 };
 
 //Defing the window size for the moving window
@@ -176,13 +147,6 @@ var wet_average = wetlands_density
                   .divide(4);
 
 var Z_wetlands_score = Z_wetlands_density.where(wet_test, wet_average);
-
-
-
-Map.addLayer(Z_elevation, {palette:paleta, min:0, max:1},'Z_elevation_scaled       ');
-Map.addLayer(Z_landform, {palette:paleta, min:0, max:1},'Z_landform_scaled        ');
-Map.addLayer(Z_soil_diversity, {palette:paleta, min:0, max:1},'Z_soil_diversity_scaled  ');
-Map.addLayer(Z_wetlands_score, {palette:paleta, min:0, max:1},'Z_wetlands_score_scaled  ');
 
 
 
@@ -264,7 +228,7 @@ var landscape_diversity = Z_landform;
 
 
 var test_1 = Z_elevation.gt(landscape_diversity);
-Map.addLayer(test_1.selfMask(), {palette:'red'}, 'Elev>Diversidade')
+
 
 // Compute the average elevation
 var average_elevation = Z_landform.multiply(2).add(Z_elevation).divide(3);
@@ -278,7 +242,7 @@ var landscape_diversity = landscape_diversity.where(test_1, average_elevation);
 // Take the average of landform, elevation range, and wetland score only if wetland score is higher than Step 1
 
 var test_2 = Z_wetlands_score.gt(landscape_diversity);
-Map.addLayer(test_2.selfMask(), {palette:'blue'}, 'Wetlands>Diversidade')
+
 
 // Calculate average -------------------------------------------------------
 // Elevation range higher than landform ------------------------------------
@@ -308,7 +272,7 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2), averag
 // Take the average of soil diversity only if it is higher than Step 2
 
 var test_3 = Z_soil_diversity.gt(landscape_diversity);
-Map.addLayer(test_3.selfMask(), {palette:'green'}, 'Soil>Diversidade')
+
 
 // Averages ----------------------------------------------------------------
 
@@ -364,9 +328,11 @@ var histogram = ui.Chart.image.histogram(({
 
 //Exporting to Drive
 
+/*
 Export.image.toDrive({image: landscape_diversity, 
                       description: "Landscape_Diversity_MovingWindow_" + windows.toString(), 
                       folder:'GEE',
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
+*/
