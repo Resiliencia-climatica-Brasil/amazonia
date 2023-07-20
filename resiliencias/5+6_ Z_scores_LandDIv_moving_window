@@ -110,6 +110,7 @@ if (isNaN(windows) || windows <= 0) {
 
 // Landforms, Elevation Range and Soil Diversity Z scores --------------------------
 print(windows);
+
 var Z_elevation = calculate_Z_scores(img_elevation, windows);
 
 var Z_landform = calculate_Z_scores(img_landform, windows);
@@ -149,6 +150,31 @@ var wet_average = wetlands_density
 var Z_wetlands_score = Z_wetlands_density.where(wet_test, wet_average);
 
 
+
+//Scaling the Z values based on the min-max scaling technique
+var scale_z = function(image){
+var minmax = image.reduceRegion({
+      reducer: ee.Reducer.percentile([0,100]), // will calculate the 'quantiles' for min, max, mean, and 5% - 95% limits
+      scale: scale,
+      maxPixels:1e13,
+      bestEffort: false
+     }); print('' + image.toString(), minmax); // if you want so see the values of the minmax
+
+var minValue = minmax.getNumber('z_p0'); 
+
+var maxValue = minmax.getNumber('z_p100'); 
+
+var z_scaled = z.subtract(minValue)
+                .divide(maxValue.subtract(minValue))
+                .rename('scaled');
+
+return z_scaled;
+};
+
+var Z_elevation      = 
+var Z_landform       = 
+var Z_soil_diversity = 
+var Z_wetlands_score = 
 
 // EXPLORING RESULTS
 
