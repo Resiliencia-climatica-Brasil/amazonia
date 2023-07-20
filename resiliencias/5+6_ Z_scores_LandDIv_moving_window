@@ -156,40 +156,46 @@ var scale_z = function(image){
 var minmax = image.reduceRegion({
       reducer: ee.Reducer.percentile([0,100]), // will calculate the 'quantiles' for min, max, mean, and 5% - 95% limits
       scale: scale,
-      maxPixels:1e13,
-      bestEffort: false
-     }); print('' + image.toString(), minmax); // if you want so see the values of the minmax
+      maxPixels:1e20,
+      bestEffort: true
+     }); //print('minmax', minmax); // if you want so see the values of the minmax
 
 var minValue = minmax.getNumber('z_p0'); 
-
 var maxValue = minmax.getNumber('z_p100'); 
 
-var z_scaled = z.subtract(minValue)
+var z_scaled = image.subtract(minValue)
                 .divide(maxValue.subtract(minValue))
                 .rename('scaled');
 
 return z_scaled;
 };
 
-var Z_elevation      = 
-var Z_landform       = 
-var Z_soil_diversity = 
-var Z_wetlands_score = 
+//var Z_elevation_scaled = scale_z( Z_elevation);
+//var Z_landform_scaled = scale_z( Z_landform);
+//var Z_soil_diversity_scaled = scale_z( Z_soil_diversity);
+var Z_wetlands_score_scaled = scale_z( Z_wetlands_score);
 
-// EXPLORING RESULTS
+//Map.addLayer(Z_elevation_scaled,      {palette:'black', min:0, max:1}, 'Z_elevation');
+//Map.addLayer(Z_landform_scaled,       {palette:'red', min:0, max:1}, 'Z_landform');
+//Map.addLayer(Z_soil_diversity_scaled, {palette:'green', min:0, max:1}, 'Z_soil_diversity');
+Map.addLayer(Z_wetlands_score_scaled, {palette:'blue', min:0, max:1}, 'Z_wetlands_scor');
+
+
+// E0LORING1RESULTS
+
 
 var paleta = [
   '9d5a29','b1652f','CE7E45', 'DF923D', 'F1B555', 'FCD163', 'FFFF00',
   'FFFFFF', '529400', '3E8601', '207401', '056201',
   '004C00', '023B01'];
+
+
   
-  /*
-  
+/*
 Map.addLayer(Z_elevation, {palette:paleta, min:-3, max:3}, 'Z_elevation');
 Map.addLayer(Z_landform, {palette:paleta, min:-3, max:3}, 'Z_landform');
 Map.addLayer(Z_soil_diversity, {palette:paleta, min:-3, max:3}, 'Z_soil_diversity');
 Map.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands_score');
-
 */
 
 // Exporting Z Scores
@@ -242,6 +248,9 @@ Export.image.toAsset({image: Z_wetlands_score,
 
 */
 
+
+
+/*
 //************************************ Landscape Diversity******************************************************
 
 
@@ -362,3 +371,4 @@ Export.image.toDrive({image: landscape_diversity,
                       scale: scale,
                       maxPixels: 1e13});
 */
+
