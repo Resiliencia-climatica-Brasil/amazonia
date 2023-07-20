@@ -247,9 +247,9 @@ var test_2 = Z_wetlands_score.gt(landscape_diversity);
 // Calculate average -------------------------------------------------------
 // Elevation range higher than landform ------------------------------------
 
-var average_wetland_1 = Z_landform.multiply(2).add(Z_elevation).add(Z_wetlands_score).divide(4);
+var average_wetland_1 = Z_landform.add(Z_elevation).add(Z_wetlands_score.multiply(2)).divide(4);
 
-var average_wetland_2 = Z_landform.multiply(2).add(Z_wetlands_score).divide(3);
+var average_wetland_2 = Z_landform.add(Z_wetlands_score.multiply(2)).divide(3);
 
 
 // Assigning new landform diversity values ---------------------------------
