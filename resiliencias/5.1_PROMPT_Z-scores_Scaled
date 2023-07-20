@@ -118,9 +118,6 @@ showInputDialog();
 
 
 
-var windows = 50
-
-
 //Scaling the Z values based on the min-max scaling technique
 var scale_z = function(image){
 var minmax = image.reduceRegion({
