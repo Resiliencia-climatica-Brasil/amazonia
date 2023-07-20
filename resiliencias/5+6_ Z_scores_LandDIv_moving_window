@@ -308,8 +308,10 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(tes
 
 landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
 
-// create the histogram to explore the distribution of pixel value
+Map.addLayer(landscape_diversity, {palette:paleta, min:-1.4515484890222818, max:3.3655354909905575}, 'landscape_diversity_'+windows.toString());
 
+
+// create the histogram to explore the distribution of pixel value
 
 /*
 var histogram = ui.Chart.image.histogram(({
@@ -326,10 +328,11 @@ var histogram = ui.Chart.image.histogram(({
 
 //Exporting to Drive
 
-
+/*
 Export.image.toDrive({image: landscape_diversity, 
                       description: "Landscape_Diversity_MovingWindow_" + windows.toString(), 
                       folder:'GEE',
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
+*/
