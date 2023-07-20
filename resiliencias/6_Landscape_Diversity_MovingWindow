@@ -10,6 +10,33 @@
 4) Export
 */
 
+//************************************ Importing Data ***************************************** 
+
+
+var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                        .map(function(feature){
+                             return feature.bounds()
+                             })
+                        .geometry()
+                        .dissolve({'maxError': 1})
+                        .bounds();
+
+var brasil_raster = ee.Image("projects/ee-lucasljardim9/assets/brasil_raster");
+
+var Z_landform = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_50')
+                   .updateMask(brasil_raster);
+
+var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_50')
+                    .updateMask(brasil_raster);
+
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_50')
+                   .updateMask(brasil_raster);
+
+var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_50')
+                         .updateMask(brasil_raster);
+
+var scale = brasil_raster.projection().nominalScale();
+
 
 
 //************************************ Landscape Diversity******************************************************
