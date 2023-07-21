@@ -1,4 +1,4 @@
-var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+var Biome = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/BR_Municipios_2021")
                         .map(function(feature){
                              return feature.bounds()
                              })
@@ -6,7 +6,7 @@ var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .dissolve({'maxError': 1})
                         .bounds();
 
-var brasil_raster = ee.Image("projects/ee-lucasljardim9/assets/brasil_raster");
+var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 
 var Z_landform = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_50')
                    .updateMask(brasil_raster);
@@ -36,7 +36,7 @@ reducer: ee.Reducer.percentile([0,100]),
 scale: scale,
 maxPixels:1e20,
 bestEffort: true
-}); print('minmax', minmax); // if you want so see the values of the minmax
+}); print(['minmax'], minmax); // if you want so see the values of the minmax
 
 var minValue = minmax.getNumber('z_p0'); 
 
@@ -58,12 +58,57 @@ var Z_soil_diversity_scaled = scale_z(Z_soil_diversity);
 var Z_wetlands_score_scaled = scale_z(Z_wetlands_score);
 
 
+var histogram = ui.Chart.image.histogram(({
+image: Z_elevation_scaled,
+scale: scale,
+maxPixels: 1e13}))
+.setOptions({
+ title: 'Histogram of Pixel Values Original' ,
+ hAxis: {title: 'Pixel Value'},
+ vAxis: {title: 'Count'},
+ legend: 'none'
+}); print('Z_elevation_scaled ',histogram);
+	
+var histogram = ui.Chart.image.histogram(({
+image: Z_landform_scaled,
+scale: scale,
+maxPixels: 1e13}))
+.setOptions({
+  title: 'Histogram of Pixel Values Original' ,
+  hAxis: {title: 'Pixel Value'},
+  vAxis: {title: 'Count'},
+  legend: 'none'
+}); print('Z_landform_scaled',histogram);
+	
+var histogram = ui.Chart.image.histogram(({
+image: Z_soil_diversity_scaled,
+scale: scale,
+maxPixels: 1e13}))
+.setOptions({
+  title: 'Histogram of Pixel Values Original' ,
+  hAxis: {title: 'Pixel Value'},
+  vAxis: {title: 'Count'},
+  legend: 'none'
+}); print('Z_soil_diversity_scaled',histogram);
+	
+var histogram = ui.Chart.image.histogram(({
+image: Z_wetlands_score_scaled,
+scale: scale,
+maxPixels: 1e13}))
+.setOptions({
+  title: 'Histogram of Pixel Values Original' ,
+  hAxis: {title: 'Pixel Value'},
+  vAxis: {title: 'Count'},
+  legend: 'none'
+}); print('Z_wetlands_score_scaled',histogram);
+
+
 // Map.addLayer(Z_elevation_scaled,      {palette:'black', min:0, max:1}, 'Z_elevation');
 // Map.addLayer(Z_landform_scaled,       {palette:'red', min:0, max:1}, 'Z_landform');
 // Map.addLayer(Z_soil_diversity_scaled, {palette:'green', min:0, max:1}, 'Z_soil_diversity');
 // Map.addLayer(Z_wetlands_score_scaled, {palette:'blue', min:0, max:1}, 'Z_wetlands_scor');
 
-
+/*
 Export.image.toAsset({image: Z_elevation_scaled, 
                       description: "Z_elevation"+ windows.toString(), 
                       assetId: "Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_" + windows.toString(), 
@@ -98,4 +143,4 @@ Export.image.toAsset({image: Z_wetlands_score_scaled,
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
-
+*/
