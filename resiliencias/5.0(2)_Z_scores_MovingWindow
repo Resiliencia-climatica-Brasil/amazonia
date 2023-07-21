@@ -151,9 +151,8 @@ Map.addLayer(Z_landform, {palette:paleta, min:-3, max:3}, 'Z_landform');
 Map.addLayer(Z_soil_diversity, {palette:paleta, min:-3, max:3}, 'Z_soil_diversity');
 Map.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands_score');
 */
-Map.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands_score2');
 
-Map.addLayer(img_wetlands_density.updateMask(img_wetlands_density.neq(0)))
+
 // Exporting Z Scores
 
 /*
@@ -186,12 +185,9 @@ Export.image.toAsset({image: Z_soil_diversity,
 
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score_masked_"+ windows.toString(), 
-                      assetId: "Moving_window_TEMP/Z-Scores_wetlands_movingwindow_"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/MASKED_Z-Scores_wetlands_movingwindow_"+ windows.toString(), 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
-
-
-
 
