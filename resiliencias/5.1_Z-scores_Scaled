@@ -15,39 +15,54 @@ var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-S
                     .updateMask(brasil_raster);
 
 var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_50')
-                   .updateMask(brasil_raster);
+                   .updateMask(brasil_raster)
+
 
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_50')
                          .updateMask(brasil_raster);
 
 var scale = brasil_raster.projection().nominalScale();
 
+/*
 var windows = prompt('Enter the window size based on the Z image name:', '50');
 windows = parseInt(windows);
 if (isNaN(windows) || windows <= 0) {
    print('Invalid input. Using default value for the window size.');
-  windows = 1;}
+  windows = 50;}
+*/
 
+// Function to calculate global minimum and maximum
+var calculateGlobalMinMax = function(image){
+  var minMax = image.reduceRegion({
+    reducer: ee.Reducer.minMax(),
+    geometry: image.geometry(),
+    scale: scale,
+    maxPixels: 1e13
+  });
+  
+  var globalMin = ee.Number(minMax.get('z_min'));
+  var globalMax = ee.Number(minMax.get('z_max'));
+  
+  return {
+    min: globalMin,
+    max: globalMax
+  };
+}
 
-//Scaling the Z values based on the min-max scaling technique
-var scale_z = function(image){
-var minmax = image.reduceRegion({
-reducer: ee.Reducer.percentile([0,100]),
-scale: scale,
-maxPixels:1e20,
-bestEffort: true
-}); print(['minmax'], minmax); // if you want so see the values of the minmax
+// Call the function to get global min and max
+var scale_z= function(image){
+  var minMaxValues = calculateGlobalMinMax(image); print(minMaxValues);
 
-var minValue = minmax.getNumber('z_p0'); 
-
-var maxValue = minmax.getNumber('z_p100'); 
-
-var z_scaled = image.subtract(minValue)
-.divide(maxValue.subtract(minValue))
-.rename('scaled');
-
-return z_scaled;
+// Subtract global min from each pixel and divide by the range
+  var image_scaled = image.subtract(minMaxValues.min)
+                          .divide(minMaxValues.max.subtract(minMaxValues.min))
+                          ;
+return(image_scaled);
 };
+
+
+
+
 
 var Z_elevation_scaled = scale_z(Z_elevation);
 
@@ -55,8 +70,12 @@ var Z_landform_scaled = scale_z(Z_landform);
 
 var Z_soil_diversity_scaled = scale_z(Z_soil_diversity);
 
-var Z_wetlands_score_scaled = scale_z(Z_wetlands_score);
+var Z_wetlands_score_scaled = scale_z(Z_wetlands_score.unmask().updateMask(brasil_raster));
 
+
+Map.addLayer(Z_wetlands_score_scaled.updateMask(Z_wetlands_score_scaled.gte(0.30).and(Z_wetlands_score_scaled.lt(0.40))), {palette:'green'}, 'Z_wetlands_score_scaled 0.30 a 0.40');
+Map.addLayer(Z_wetlands_score_scaled.updateMask(Z_wetlands_score_scaled.gte(0.40)), {palette:'blue'}, 'Z_wetlands_score_scaled >0.40');
+Map.addLayer(Z_wetlands_score_scaled.updateMask(Z_wetlands_score_scaled.lt(0.30)), {palette:'red'}, 'Z_wetlands_score_scaled<0.30');
 
 var histogram = ui.Chart.image.histogram(({
 image: Z_elevation_scaled,
