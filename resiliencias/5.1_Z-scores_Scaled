@@ -1,4 +1,4 @@
-var Biome = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/BR_Municipios_2021")
+var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .map(function(feature){
                              return feature.bounds()
                              })
@@ -6,7 +6,7 @@ var Biome = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/BR_Mu
                         .dissolve({'maxError': 1})
                         .bounds();
 
-var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
+var brasil_raster = ee.Image("projects/ee-lucasljardim9/assets/brasil_raster");
 
 var Z_landform = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_50')
                    .updateMask(brasil_raster);
@@ -31,32 +31,23 @@ if (isNaN(windows) || windows <= 0) {
 
 //Scaling the Z values based on the min-max scaling technique
 var scale_z = function(image){
-  var minValue = image.reduceRegion({
-      reducer: ee.Reducer.min(),
-      geometry: brasil_raster.geometry(),
-      scale : scale,
-      maxPixels:1e13
-      });
-      
-  //var minValue = ee.Image.constant(min);
- 
-   var maxValue = image.reduceRegion({
-      reducer: ee.Reducer.max(),
-      scale : scale,
-      geometry: brasil_raster.geometry(),
-      maxPixels:1e13
-      });
-  //var maxValue = ee.Image.constant(max);
+var minmax = image.reduceRegion({
+reducer: ee.Reducer.percentile([0,100]),
+scale: scale,
+maxPixels:1e20,
+bestEffort: true
+}); print('minmax', minmax); // if you want so see the values of the minmax
 
+var minValue = minmax.getNumber('z_p0'); 
 
-  var z_scaled = image
-                  .subtract(minValue)
-                  .divide(minValue.subtract(minValue))
-                  .rename('scaled');
+var maxValue = minmax.getNumber('z_p100'); 
 
-  return z_scaled;
+var z_scaled = image.subtract(minValue)
+.divide(maxValue.subtract(minValue))
+.rename('scaled');
+
+return z_scaled;
 };
-
 
 var Z_elevation_scaled = scale_z(Z_elevation);
 
@@ -67,62 +58,11 @@ var Z_soil_diversity_scaled = scale_z(Z_soil_diversity);
 var Z_wetlands_score_scaled = scale_z(Z_wetlands_score);
 
 
-/*
+// Map.addLayer(Z_elevation_scaled,      {palette:'black', min:0, max:1}, 'Z_elevation');
+// Map.addLayer(Z_landform_scaled,       {palette:'red', min:0, max:1}, 'Z_landform');
+// Map.addLayer(Z_soil_diversity_scaled, {palette:'green', min:0, max:1}, 'Z_soil_diversity');
+// Map.addLayer(Z_wetlands_score_scaled, {palette:'blue', min:0, max:1}, 'Z_wetlands_scor');
 
- Map.addLayer(Z_elevation_scaled,      {min:0, max:1}, 'Z_elevation');
- Map.addLayer(Z_landform_scaled,       {min:0, max:1}, 'Z_landform');
- Map.addLayer(Z_soil_diversity_scaled, {min:0, max:1}, 'Z_soil_diversity');
- Map.addLayer(Z_wetlands_score_scaled, {min:0, max:1}, 'Z_wetlands_scor');
-*/
-
-var histogram = ui.Chart.image.histogram(({
-  image: Z_elevation_scaled,
-  scale: scale,
-  maxPixels: 1e13}))
-  .setOptions({
-    title: 'Histogram of Pixel Values Original' ,
-    hAxis: {title: 'Pixel Value'},
-    vAxis: {title: 'Count'},
-    legend: 'none'
-  }); print('Z_elevation_scaled ',histogram);
-
-var histogram = ui.Chart.image.histogram(({
-  image: Z_landform_scaled,
-  scale: scale,
-  maxPixels: 1e13}))
-  .setOptions({
-    title: 'Histogram of Pixel Values Original' ,
-    hAxis: {title: 'Pixel Value'},
-    vAxis: {title: 'Count'},
-    legend: 'none'
-  }); print('Z_soil_diversity',histogram);
-
-var histogram = ui.Chart.image.histogram(({
-  image: Z_soil_diversity_scaled,
-  scale: scale,
-  maxPixels: 1e13}))
-  .setOptions({
-    title: 'Histogram of Pixel Values Original' ,
-    hAxis: {title: 'Pixel Value'},
-    vAxis: {title: 'Count'},
-    legend: 'none'
-  }); print('Z_soil_diversity_scaled',histogram);
-
-var histogram = ui.Chart.image.histogram(({
-  image: Z_wetlands_score_scaled,
-  scale: scale,
-  maxPixels: 1e13}))
-  .setOptions({
-    title: 'Histogram of Pixel Values Original' ,
-    hAxis: {title: 'Pixel Value'},
-    vAxis: {title: 'Count'},
-    legend: 'none'
-  }); print('Z_wetlands_score_scaled',histogram);
-
-
-
-
-/////
 
 Export.image.toAsset({image: Z_elevation_scaled, 
                       description: "Z_elevation"+ windows.toString(), 
