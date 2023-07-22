@@ -19,7 +19,6 @@ var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-S
 
 var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_50')
                    .updateMask(brasil_raster)
-                   .updateMask(masked.neq(0))
 
 
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_50')
@@ -27,13 +26,13 @@ var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEM
 
 var scale = brasil_raster.projection().nominalScale();
 
-/*
+
 var windows = prompt('Enter the window size based on the Z image name:', '50');
 windows = parseInt(windows);
 if (isNaN(windows) || windows <= 0) {
    print('Invalid input. Using default value for the window size.');
   windows = 50;}
-*/
+
 
 // Function to calculate global minimum and maximum
 var calculateGlobalMinMax = function(image){
@@ -152,10 +151,10 @@ maxPixels: 1e13}))
 // Map.addLayer(Z_soil_diversity_scaled, {palette:'green', min:0, max:1}, 'Z_soil_diversity');
 // Map.addLayer(Z_wetlands_score_scaled, {palette:'blue', min:0, max:1}, 'Z_wetlands_scor');
 
-/*
+
 Export.image.toAsset({image: Z_elevation_scaled, 
-                      description: "Z_elevation"+ windows.toString(), 
-                      assetId: "Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_" + windows.toString(), 
+                      description: "Z_elevation_SCALED_"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALED_" + windows.toString(), 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -163,8 +162,8 @@ Export.image.toAsset({image: Z_elevation_scaled,
 
 
 Export.image.toAsset({image: Z_landform_scaled, 
-                    description: "Z_landform"+ windows.toString(), 
-                     assetId: "Moving_window_TEMP/Z-Scores_landforms_movingwindow_"+ windows.toString(), 
+                    description: "Z_landform_SCALED_"+ windows.toString(), 
+                     assetId: "Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALED_"+ windows.toString(), 
                      pyramidingPolicy:"median",
                      region:Biome,
                      scale: scale,
@@ -172,8 +171,8 @@ Export.image.toAsset({image: Z_landform_scaled,
 
 
 Export.image.toAsset({image: Z_soil_diversity_scaled, 
-                      description: "Z_soil_diversity"+ windows.toString(), 
-                      assetId: "Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_"+ windows.toString(), 
+                      description: "Z_soil_diversity_SCALED_"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALED_"+ windows.toString(), 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -181,10 +180,10 @@ Export.image.toAsset({image: Z_soil_diversity_scaled,
 
 
 Export.image.toAsset({image: Z_wetlands_score_scaled, 
-                      description: "Z_wetlands_score"+ windows.toString(), 
-                      assetId: "Moving_window_TEMP/Z-Scores_wetlands_movingwindow_"+ windows.toString(), 
+                      description: "Z_wetlands_score_SCALED_"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALED_"+ windows.toString(), 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
-*/
+
