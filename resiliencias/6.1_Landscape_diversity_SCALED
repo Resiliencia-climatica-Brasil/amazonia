@@ -32,7 +32,6 @@ var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEM
 
 var landscape_diversity = Z_landform;
 
-
 var test_1 = Z_elevation.gt(landscape_diversity);
 
 
@@ -118,9 +117,12 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).a
 // ------------------------------------- PLOTING MAPS -----------------------------
 
 // Load the palettes package.
-var palettes=require('users/gena/packages:palettes');
+var palettes=require('users/gena/packages:palettes'); // https://github.com/gee-community/ee-palettes
 
-var palette =   palettes.niccoli.linearlhot[7];
+// var palette =   palettes.kovesi.diverging_linear_bjr_30_55_c53[7];
+//var palette =  palettes.crameri.tofino[25];
+var palette =  palettes.niccoli.linearlhot[7];
+
 
 // Set a center and zoom level.
 
@@ -250,4 +252,4 @@ landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(tes
 
 landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
 
-leftMap.addLayer(landscape_diversity, {/*min:-2.0063 , max:0.80435,*/ palette:palette}, 'Landscape Diversity UNSCALED');
+leftMap.addLayer(landscape_diversity, {/*min:-2 , max:2,*/ palette:palette}, 'Landscape Diversity UNSCALED');
