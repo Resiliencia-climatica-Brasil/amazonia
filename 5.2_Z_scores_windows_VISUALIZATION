@@ -1,0 +1,86 @@
+var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
+
+var windows = prompt('Enter the window size based on the Z image name:', '50');
+windows = parseInt(windows);
+if (isNaN(windows) || windows <= 0) {
+   print('Invalid input. Using default value for the window size.');
+  windows = 50;}
+
+
+
+// ------------------------------------- IMPORTING THE NORMAL Z-SCORES -----------------------------
+var Z_landform = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_'+windows.toString())
+                   .updateMask(brasil_raster);
+
+var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_'+windows.toString())
+                    .updateMask(brasil_raster);
+
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_'+windows.toString())
+                   .updateMask(brasil_raster);
+
+var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_'+windows.toString())
+                         .updateMask(brasil_raster);
+
+var scale = brasil_raster.projection().nominalScale();
+
+
+
+// ------------------------------------- IMPORTING THE SCALED TO 0-1 Z-SCORES -----------------------------
+
+
+var Z_landform_scaled  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALED_'+windows.toString())
+                   .updateMask(brasil_raster);
+
+var Z_elevation_scaled = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALED_'+windows.toString())
+                    .updateMask(brasil_raster);
+
+var Z_wetlands_score_scaled = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALED_'+windows.toString())
+                   .updateMask(brasil_raster);
+
+var Z_soil_diversity_scaled = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALED_'+windows.toString())
+                         .updateMask(brasil_raster);
+                         
+
+
+// ------------------------------------- PLOTING MAPS -----------------------------
+
+// Load the palettes package.
+var palettes=require('users/gena/packages:palettes');
+
+var palette =   palettes.niccoli.linearlhot[7];
+
+// Set a center and zoom level.
+
+var center={lon: -53.3589, lat: -12.1132, zoom:10};
+
+// Create two maps.
+var leftMap = ui.Map(center);
+var rightMap = ui.Map(center);
+
+// Create a split panel with the two maps.
+var splitPanel = ui.SplitPanel({
+  firstPanel: leftMap,
+  secondPanel: rightMap,
+  orientation: 'horizontal',
+  wipe: true
+});
+
+// Remove the default map from the root panel.
+ui.root.clear();
+
+// Add our split panel to the root panel.
+ui.root.add(splitPanel);
+
+// Add the layers to the maps
+leftMap.addLayer(Z_elevation, {min:-2.0063 , max:0.80435, palette:palette}, 'Elevation');
+leftMap.addLayer(Z_landform, {min:-0.7287 , max:0.58808, palette:palette}, 'Landform');
+leftMap.addLayer(Z_wetlands_score, {min:-0.5532 , max:0.75108, palette:palette}, 'Wetlands');
+leftMap.addLayer(Z_soil_diversity, {min:-1.4143 , max:0.9406, palette:palette}, 'Soil');
+
+rightMap.addLayer(Z_elevation_scaled, {min:0, max:1, palette:palette}, 'Elevation SCALED');
+rightMap.addLayer(Z_landform_scaled, {min:0, max:1, palette:palette}, 'Landforms SCALED');
+rightMap.addLayer(Z_wetlands_score_scaled, {min:0, max:1, palette:palette}, 'Wetlands SCALED');
+rightMap.addLayer(Z_soil_diversity_scaled, {min:0, max:1, palette:palette}, 'Soil SCALED');
+
+
+
