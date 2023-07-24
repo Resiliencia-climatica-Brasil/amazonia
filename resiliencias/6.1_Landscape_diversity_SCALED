@@ -121,7 +121,8 @@ var palettes=require('users/gena/packages:palettes'); // https://github.com/gee-
 
 // var palette =   palettes.kovesi.diverging_linear_bjr_30_55_c53[7];
 //var palette =  palettes.crameri.tofino[25];
-var palette =  palettes.niccoli.linearlhot[7];
+// var palette =  palettes.niccoli.linearlhot[7];
+var palette =  palettes.colorbrewer.YlGnBu[3];
 
 
 // Set a center and zoom level.
