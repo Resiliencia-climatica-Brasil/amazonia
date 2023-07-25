@@ -23,8 +23,6 @@ var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEM
                          .updateMask(brasil_raster);
 
 
-
-
 // Step 1 ------------------------------------------------------------------
 // Take the average of landform and elevation range only if elevantion range is higher than landform--------
 
@@ -70,7 +68,7 @@ var landscape_diversity = landscape_diversity.where(test_1.and(test_2), average_
 
 //IF the values of diversity are < elevation but > wetland; then the diversity will be calculated by landforms*2 + wetlands / 3 
 
-landscape_diversity = landscape_diversity.where(test_1.not().and(test_2), average_wetland_2); 
+var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2), average_wetland_2); 
 
 
 // Step 3 ------------------------------------------------------------------
@@ -105,13 +103,13 @@ var average_soil_4 = Z_landform.multiply(2).add(Z_soil_diversity).divide(3);
 // Landscape diversity = landforms*2 + soil /3
 
 
-landscape_diversity = landscape_diversity.where(test_1.and(test_2).and(test_3), average_soil_1); // 1)
+var landscape_diversity = landscape_diversity.where(test_1.and(test_2).and(test_3), average_soil_1); // 1)
 
-landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()).and(test_3), average_soil_2); // 2)
+var landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()).and(test_3), average_soil_2); // 2)
 
-landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(test_3), average_soil_3); // 3)
+var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(test_3), average_soil_3); // 3)
 
-landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
+var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
 
 
 // ------------------------------------- PLOTING MAPS -----------------------------
@@ -122,7 +120,9 @@ var palettes=require('users/gena/packages:palettes'); // https://github.com/gee-
 // var palette =   palettes.kovesi.diverging_linear_bjr_30_55_c53[7];
 //var palette =  palettes.crameri.tofino[25];
 // var palette =  palettes.niccoli.linearlhot[7];
-var palette =  palettes.colorbrewer.YlGnBu[3];
+// var palette =  palettes.colorbrewer.YlGnBu[3];
+var palette = palettes.colorbrewer.Spectral[5]
+
 
 
 // Set a center and zoom level.
@@ -210,7 +210,7 @@ var landscape_diversity = landscape_diversity.where(test_1.and(test_2), average_
 
 //IF the values of diversity are < elevation but > wetland; then the diversity will be calculated by landforms*2 + wetlands / 3 
 
-landscape_diversity = landscape_diversity.where(test_1.not().and(test_2), average_wetland_2); 
+var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2), average_wetland_2); 
 
 
 // Step 3 ------------------------------------------------------------------
@@ -245,12 +245,12 @@ var average_soil_4 = Z_landform.multiply(2).add(Z_soil_diversity).divide(3);
 // Landscape diversity = landforms*2 + soil /3
 
 
-landscape_diversity = landscape_diversity.where(test_1.and(test_2).and(test_3), average_soil_1); // 1)
+var landscape_diversity = landscape_diversity.where(test_1.and(test_2).and(test_3), average_soil_1); // 1)
 
-landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()).and(test_3), average_soil_2); // 2)
+var landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()).and(test_3), average_soil_2); // 2)
 
-landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(test_3), average_soil_3); // 3)
+var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(test_3), average_soil_3); // 3)
 
-landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
+var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
 
 leftMap.addLayer(landscape_diversity, {/*min:-2 , max:2,*/ palette:palette}, 'Landscape Diversity UNSCALED');
