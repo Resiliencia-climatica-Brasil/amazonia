@@ -23,7 +23,7 @@ var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEM
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALED_'+windows.toString())
                          .updateMask(brasil_raster);
 
-
+Map.addLayer(Z_wetlands_score)
 
 
 // Step 1 ------------------------------------------------------------------
@@ -82,11 +82,11 @@ var test_3 = Z_soil_diversity.gt(landscape_diversity);
 
 // Averages ----------------------------------------------------------------
 
-var average_soil_1 = Z_landform.multiply(2).add(Z_elevation).add(Z_wetlands_score).add(Z_soil_diversity).divide(5);
+var average_soil_1 = Z_landform.add(Z_elevation).add(Z_wetlands_score.multiply(2)).add(Z_soil_diversity).divide(5);
 
 var average_soil_2 = Z_landform.multiply(2).add(Z_elevation).add(Z_soil_diversity).divide(4);
 
-var average_soil_3 = Z_landform.multiply(2).add(Z_wetlands_score).add(Z_soil_diversity).divide(4);
+var average_soil_3 = Z_landform.add(Z_wetlands_score.multiply(2)).add(Z_soil_diversity).divide(4);
 
 var average_soil_4 = Z_landform.multiply(2).add(Z_soil_diversity).divide(3);
 
