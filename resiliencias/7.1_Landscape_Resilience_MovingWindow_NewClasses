@@ -76,9 +76,16 @@ var class_con = connectedness
 
 //// Sum the classified rasters to create the landscape_resilience image
 
-var resilience = class_con.add(class_div);
+var resilience = class_div.add(class_con);
 
-/*
+
+var resilience_classes = resilience
+                          .where(resilience.eq([12, 13, 22, 23]), 1) //bad-bad
+                          .where(resilience.eq([32,33,42,43]), 2) //bad-good
+                          .where(resilience.eq([14,15,24,25]), 3) //good-bad
+                          .where(resilience.eq([34,35,44,45]), 4) //good-good
+
+
 var histogram = ui.Chart.image.histogram(({
   image: class_con,
   scale: scale,
@@ -100,7 +107,7 @@ var histogram = ui.Chart.image.histogram(({
     vAxis: {title: 'Count'},
     legend: 'none'
   }); print('class_div',histogram);
-*/
+
 
 //Visualization
 
@@ -154,7 +161,7 @@ var paleta_res = [
 
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
 Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
-Map.addLayer(resilience,{min: 12, max:45, palette:paleta_res}, 'Landscape Resilience');
+Map.addLayer(resilience,{min: 1, max:4, palette:paleta_res}, 'Landscape Resilience');
 
 
 var legend = ui.Panel({
