@@ -1,0 +1,235 @@
+//var connectedness =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/') //precisamos mudar para o raster atualizado
+var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel")
+                          .multiply(-1);
+
+
+var diversity =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Landscape_Diversity_MovingWindow');
+
+var scale = diversity.projection().nominalScale();
+
+
+// The classes are calculated as the sum of the classified values of the original rasters 
+/*
+
+|Group      | Diversity   |Connectedness   | Values in Gee |
+
+|Group 1    |    <25%     |     <25%       |       12      |
+|Group 2    |    <25%     |     25-50%     |       22      |
+|Group 3    |    <25%     |     50-75%     |       32      |
+|Group 4    |    <25%     |     >75%       |       42      |
+|Group 5    |    25-50%   |     <25%       |       13      |
+|Group 6    |    25-50%   |     25-50%     |       23      |
+|Group 7    |    25-50%   |     50-75%     |       33      |
+|Group 8    |    25-50%   |     >75%       |       43      |
+|Group 9    |    50-75%   |     <25%       |       14      |
+|Group 10   |    50-75%   |     25-50%     |       24      |
+|Group 11   |    50-75%   |     50-75%     |       34      |
+|Group 12   |    50-75%   |     >75%       |       44      |
+|Group 13   |    >75%     |     <25%       |       15      |
+|Group 14   |    >75%     |     25-50%     |       25      |
+|Group 15   |    >75%     |     50-75%     |       35      |
+|Group 16   |    >75%     |     >75%       |       45      |
+
+
+
+*/
+
+
+// Compute the quantiles for each raster, the value of the quantiles will be stored as a band
+
+var quartiles_Div = diversity.reduceRegion({
+    reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
+    scale: diversity.projection().nominalScale(),
+    maxPixels:1e13,
+    bestEffort: false
+  }); 
+
+var quartiles_Con = connectedness.reduceRegion({
+    reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
+    scale: connectedness.projection().nominalScale(),
+    maxPixels:1e13,
+    bestEffort: false
+  });
+
+//creating the classes for Diversity based on the valeus.
+var div_25 = quartiles_Div.getNumber('z_p25');
+var div_50 = quartiles_Div.getNumber('z_p50');
+var div_75 = quartiles_Div.getNumber('z_p75');
+
+
+var class_div = diversity 
+.where(diversity.lt(div_25), 2)  
+.where(diversity.gte(div_25).and(diversity.lt(div_50)), 3)
+.where(diversity.gte(div_50).and(diversity.lt(div_75)), 4)
+.where(diversity.gte(div_75), 5);
+
+//creating the classes for Connectedness
+var con_25 = quartiles_Con.getNumber('b1_p25');
+var con_50 = quartiles_Con.getNumber('b1_p50');
+var con_75 = quartiles_Con.getNumber('b1_p75');
+
+var class_con = connectedness
+.where(connectedness.lt(con_25),10)
+.where(connectedness.gte(con_25).and(connectedness.lt(con_50)), 20)
+.where(connectedness.gte(con_50).and(connectedness.lt(con_75)),30)
+.where(connectedness.gte(con_75), 40);
+
+//// Sum the classified rasters to create the landscape_resilience image
+
+var resilience = class_con.add(class_div);
+
+/*
+var histogram = ui.Chart.image.histogram(({
+  image: class_con,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('class_con',histogram);
+
+var histogram = ui.Chart.image.histogram(({
+  image: class_div,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('class_div',histogram);
+*/
+
+//Visualization
+
+var paleta_div_con = [
+'f3dfd1',
+'CE7E45',
+'99B718',
+'056201',
+'011301',
+];
+
+/*
+var paleta_res = [
+  'ceac94',
+  '9d5a29',
+  'b1652f',
+  'CE7E45', 
+  'DF923D', 
+  'F1B555', 
+  'FCD163', 
+  'FFFF00',
+  'FFFFFF', 
+  'cbdeb2', 
+  '529400', 
+  '3E8601', 
+  '207401', 
+  '056201',
+  '004C00', 
+  '023B01'];
+*/
+
+var paleta_res = [
+"#E6E6E6",
+"#F2F2CB",
+"#F9F9A0",
+"#FDFD75",
+"#FDE725",
+"#D0E119",
+"#A4D525",
+"#6DCD59",
+"#35C389",
+"#1F9E89",
+"#26828E",
+"#31688E",
+"#3E4989",
+"#482878",
+"#4F027B",
+"#440154"
+  ];
+
+
+Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
+Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
+Map.addLayer(resilience,{min: 12, max:45, palette:paleta_res}, 'Landscape Resilience');
+
+
+var legend = ui.Panel({
+             style: {
+               position:'bottom-right',
+               padding: '8px 10px'
+             }
+});
+
+var makeRow = function(color, name) {
+ 
+      // Create the label that is actually the colored box.
+      var colorBox = ui.Label({
+        style: {
+          backgroundColor: color,
+          // Use padding to give the box height and width.
+          padding: '8px',
+          margin: '0 0 4px 0'
+        }
+      });
+ 
+      // Create the label filled with the description text.
+      var description = ui.Label({
+        value: name,
+        style: {margin: '0 0 4px 6px'}
+      });
+ 
+      // return the panel
+      return ui.Panel({
+        widgets: [colorBox, description],
+        layout: ui.Panel.Layout.Flow('horizontal')
+      });
+};
+
+var palette = [
+  '#E6E6E6',
+  '#F2F2CB',
+  '#F9F9A0',
+  '#FDFD75', 
+  '#FDE725', 
+  '#D0E119', 
+  '#A4D525', 
+  '#6DCD59',
+  '#35C389', 
+  '#1F9E89', 
+  '#26828E', 
+  '#31688E', 
+  '#3E4989', 
+  '#482878',
+  '#4F027B', 
+  '#440154'
+];
+
+var res =[
+"12___ <25%   Diversity and  <25%    Connectedness ",
+"22___ <25%   Diversity and  25-50%  Connectedness ",
+"32___ <25%   Diversity and  50-75%  Connectedness ",
+"42___ <25%   Diversity and  >75%    Connectedness ",
+"13___ 25-50% Diversity and  <25%    Connectedness ",
+"23___ 25-50% Diversity and  25-50%  Connectedness ",
+"33___ 25-50% Diversity and  50-75%  Connectedness ",
+"43___ 25-50% Diversity and  >75%    Connectedness ",
+"14___ 50-75% Diversity and  <25%    Connectedness ",
+"24___ 50-75% Diversity and  25-50%  Connectedness ",
+"34___ 50-75% Diversity and  50-75%  Connectedness ",
+"44___ 50-75% Diversity and  >75%    Connectedness ",
+"15___ >75%   Diversity and  <25%    Connectedness ",
+"25___ >75%   Diversity and  25-50%  Connectedness ",
+"35___ >75%   Diversity and  50-75%  Connectedness ",
+"45___ >75%   Diversity and  >75%    Connectedness "
+];
+
+for (var i = 0; i < 16; i++) {
+  legend.add(makeRow(palette[i], res[i]));
+  }  
+ 
+Map.add(legend);
+
