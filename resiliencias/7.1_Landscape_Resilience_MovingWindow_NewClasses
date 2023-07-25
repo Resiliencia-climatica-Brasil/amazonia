@@ -199,11 +199,11 @@ var resilience = class_div.add(class_con);
 
 var resilience_classes = resilience
                           .where(resilience.eq(12), 1) 
-                          .where(resilience.eq(13), 1) 
-                          .where(resilience.eq(22), 1)
+                          .where(resilience.eq(13), 2) 
+                          .where(resilience.eq(22), 3)
                           
-                          .where(resilience.eq(15), 2)                         
-                          .where(resilience.eq(14), 2) 
+                          .where(resilience.eq(14), 2)                         
+                          .where(resilience.eq(15), 2) 
                           .where(resilience.eq(32), 2) 
                           .where(resilience.eq(42), 2
                           ) 
