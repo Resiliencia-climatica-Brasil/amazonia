@@ -1,11 +1,129 @@
+//************************************ Landscape Diversity******************************************************
+
+
+var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
+var scale = brasil_raster.projection().nominalScale();
+
+var windows = prompt('Enter the window size based on the Z image name:', '50');
+windows = parseInt(windows);
+if (isNaN(windows) || windows <= 0) {
+   print('Invalid input. Using default value for the window size.');
+  windows = 50;}
+print(windows);
+
+var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_'+windows.toString())
+                   .updateMask(brasil_raster);
+
+var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_'+windows.toString())
+                    .updateMask(brasil_raster);
+
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_'+windows.toString())
+                   .updateMask(brasil_raster);
+
+var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_'+windows.toString())
+                         .updateMask(brasil_raster);
+
+
+
+
+// Step 1 ------------------------------------------------------------------
+// Take the average of landform and elevation range only if elevantion range is higher than landform--------
+
+// Test if elevation range is greater than landscape diversity
+
+var landscape_diversity = Z_landform;
+
+var test_1 = Z_elevation.gt(landscape_diversity);
+
+
+// Compute the average elevation
+var average_elevation = Z_landform.multiply(2).add(Z_elevation).divide(3);
+
+// Update landscape diversity where test_1 is true
+
+var landscape_diversity = landscape_diversity.where(test_1, average_elevation);
+
+
+// Step 2 ------------------------------------------------------------------
+// Take the average of landform, elevation range, and wetland score only if wetland score is higher than Step 1
+
+var test_2 = Z_wetlands_score.gt(landscape_diversity);
+
+
+// Calculate average -------------------------------------------------------
+// Elevation range higher than landform ------------------------------------
+
+var average_wetland_1 = Z_landform.add(Z_elevation).add(Z_wetlands_score.multiply(2)).divide(4);
+
+var average_wetland_2 = Z_landform.add(Z_wetlands_score.multiply(2)).divide(3);
+
+
+// Assigning new landform diversity values ---------------------------------
+
+
+
+//IF values of landscape_diversity are < elevation Z Score AND Wetland Z score we will calculate the diversity as landforms*2 + elevation + wetland / 4  
+
+var landscape_diversity = landscape_diversity.where(test_1.and(test_2), average_wetland_1); 
+
+//var landscape_diversity = landscape_diversity.where(test_2, wetland_score); // I don´t know why we were not calculting the mean, but if we need to go back we just remove the averages on lines 79 and 81 an run this code 
+
+
+//IF the values of diversity are < elevation but > wetland; then the diversity will be calculated by landforms*2 + wetlands / 3 
+
+var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2), average_wetland_2); 
+
+
+// Step 3 ------------------------------------------------------------------
+// Take the average of soil diversity only if it is higher than Step 2
+
+var test_3 = Z_soil_diversity.gt(landscape_diversity);
+
+
+// Averages ----------------------------------------------------------------
+
+var average_soil_1 = Z_landform.multiply(2).add(Z_elevation).add(Z_wetlands_score).add(Z_soil_diversity).divide(5);
+
+var average_soil_2 = Z_landform.multiply(2).add(Z_elevation).add(Z_soil_diversity).divide(4);
+
+var average_soil_3 = Z_landform.multiply(2).add(Z_wetlands_score).add(Z_soil_diversity).divide(4);
+
+var average_soil_4 = Z_landform.multiply(2).add(Z_soil_diversity).divide(3);
+
+
+// Assigning new landscape diversity values  -------------------------------
+
+//1) IF values of Diversity are SMALLER than elevation AND Wetlands AND Soil Diversity:
+// Landscape diversity = landforms*2 + elevation + wetland + soil /5
+
+//2) IF diversity is SMALER then elevation AND Soil but BIGGER then Wetlands:
+// Landscape diversity = landforms*2 + elevation + soil /4
+
+//3) IF diversity is SMALLER than Wetlands AND soil but bigger than Elevation:
+// Landscape diversity = landforms*2 + wetland + soil /4
+
+//4) IF diversity is SMALLER than soil but bigger than Elevation AND Wetlands:
+// Landscape diversity = landforms*2 + soil /3
+
+
+var landscape_diversity = landscape_diversity.where(test_1.and(test_2).and(test_3), average_soil_1); // 1)
+
+var landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()).and(test_3), average_soil_2); // 2)
+
+var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(test_3), average_soil_3); // 3)
+
+var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
+
+var diversity = landscape_diversity;
+// ------------------------------------- PLOTING MAPS -----------------------------
+
+
+
+
+
 //var connectedness =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/') //precisamos mudar para o raster atualizado
 var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel")
                           .multiply(-1);
-
-
-var diversity =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Landscape_Diversity_MovingWindow');
-
-var scale = diversity.projection().nominalScale();
 
 
 // The classes are calculated as the sum of the classified values of the original rasters 
@@ -80,10 +198,27 @@ var resilience = class_div.add(class_con);
 
 
 var resilience_classes = resilience
-                          .where(resilience.eq([12, 13, 22, 23]), 1) //bad-bad
-                          .where(resilience.eq([32,33,42,43]), 2) //bad-good
-                          .where(resilience.eq([14,15,24,25]), 3) //good-bad
-                          .where(resilience.eq([34,35,44,45]), 4) //good-good
+                          .where(resilience.eq(12), 1) 
+                          .where(resilience.eq(13), 1) 
+                          .where(resilience.eq(22), 1)
+                          
+                          .where(resilience.eq(15), 2)                         
+                          .where(resilience.eq(14), 2) 
+                          .where(resilience.eq(32), 2) 
+                          .where(resilience.eq(42), 2
+                          ) 
+                          .where(resilience.eq(25), 3) 
+                          .where(resilience.eq(43), 3)
+                          
+                          .where(resilience.eq(23), 4)                         
+                          .where(resilience.eq(24), 4) 
+                          .where(resilience.eq(33), 4) 
+                          .where(resilience.eq(34), 4)
+                          
+                          .where(resilience.eq(35), 5) 
+                          .where(resilience.eq(45), 5) 
+                          .where(resilience.eq(44), 5);
+
 
 
 var histogram = ui.Chart.image.histogram(({
@@ -108,6 +243,16 @@ var histogram = ui.Chart.image.histogram(({
     legend: 'none'
   }); print('class_div',histogram);
 
+var histogram = ui.Chart.image.histogram(({
+  image: resilience_classes,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('resilience_classes',histogram);
 
 //Visualization
 
@@ -119,25 +264,14 @@ var paleta_div_con = [
 '011301',
 ];
 
-/*
-var paleta_res = [
+
+var paleta = [
   'ceac94',
-  '9d5a29',
-  'b1652f',
   'CE7E45', 
-  'DF923D', 
-  'F1B555', 
-  'FCD163', 
-  'FFFF00',
-  'FFFFFF', 
-  'cbdeb2', 
-  '529400', 
-  '3E8601', 
-  '207401', 
-  '056201',
-  '004C00', 
+  'FFFF0F',
+   '3E8601', 
   '023B01'];
-*/
+
 
 var paleta_res = [
 "#E6E6E6",
@@ -161,7 +295,8 @@ var paleta_res = [
 
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
 Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
-Map.addLayer(resilience,{min: 1, max:4, palette:paleta_res}, 'Landscape Resilience');
+Map.addLayer(resilience,{min: 12, max:45, palette:paleta_res}, 'Landscape Resilience');
+Map.addLayer(resilience_classes,{min: 1, max:4, palette:paleta}, 'Landscape Resilience');
 
 
 var legend = ui.Panel({
@@ -238,5 +373,5 @@ for (var i = 0; i < 16; i++) {
   legend.add(makeRow(palette[i], res[i]));
   }  
  
-Map.add(legend);
+//Map.add(legend);
 
