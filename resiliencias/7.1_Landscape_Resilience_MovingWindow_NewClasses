@@ -225,22 +225,22 @@ var resilience_classes = resilience
                           .where(resilience.eq(13), 2) 
                           .where(resilience.eq(22), 3)
                           
-                          .where(resilience.eq(14), )                         
-                          .where(resilience.eq(15), ) 
-                          .where(resilience.eq(32), ) 
-                          .where(resilience.eq(42), )
+                          .where(resilience.eq(14), 4)                         
+                          .where(resilience.eq(15), 7) 
+                          .where(resilience.eq(32), 5) 
+                          .where(resilience.eq(42), 8)
                            
-                          .where(resilience.eq(25), ) 
-                          .where(resilience.eq(43), )
+                          .where(resilience.eq(25), 11) 
+                          .where(resilience.eq(43), 12)
                           
-                          .where(resilience.eq(23), 4)                         
-                          .where(resilience.eq(24), ) 
-                          .where(resilience.eq(33), ) 
-                          .where(resilience.eq(34), )
+                          .where(resilience.eq(23), 6)                         
+                          .where(resilience.eq(24), 9) 
+                          .where(resilience.eq(33), 10) 
+                          .where(resilience.eq(34), 13)
                           
-                          .where(resilience.eq(35), ) 
-                          .where(resilience.eq(45), ) 
-                          .where(resilience.eq(44), );
+                          .where(resilience.eq(35), 14) 
+                          .where(resilience.eq(45), 16) 
+                          .where(resilience.eq(44), 15);
 
 
 
