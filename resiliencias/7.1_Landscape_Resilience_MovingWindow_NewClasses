@@ -23,7 +23,12 @@ var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEM
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALED_'+windows.toString())
                          .updateMask(brasil_raster);
 
-Map.addLayer(Z_wetlands_score)
+
+var wetlands = ee.Image("projects/ee-lucasljardim9/assets/Cifor_wetlands")
+               .reproject({crs: "EPSG:4326",
+                           scale: 92.76624});
+                           
+var rivers = wetlands.mask(wetlands.eq(10));
 
 
 // Step 1 ------------------------------------------------------------------
@@ -239,8 +244,8 @@ var resilience_classes = resilience
                           .where(resilience.eq(34), 13)
                           
                           .where(resilience.eq(35), 14) 
-                          .where(resilience.eq(45), 16) 
-                          .where(resilience.eq(44), 15);
+                          .where(resilience.eq(44), 15) 
+                          .where(resilience.eq(45), 16);
 
 
 
@@ -318,10 +323,10 @@ var paleta_res = [
   ];
 
 
-Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
-Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
-Map.addLayer(resilience,{min: 12, max:45, palette:paleta_res}, 'Landscape Resilience');
-Map.addLayer(resilience_classes,{min: 1, max:16, palette:paleta_res}, 'Landscape Resilience');
+Map.addLayer(class_div.clip(rivers), {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
+Map.addLayer(class_con.clip(rivers), {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
+//Map.addLayer(resilience.clip(rivers),{min: 12, max:45, palette:paleta_res}, 'Landscape Resilience');
+Map.addLayer(resilience_classes.clip(rivers),{min: 1, max:16, palette:paleta_res}, 'Landscape Resilience');
 
 
 var legend = ui.Panel({
