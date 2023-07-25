@@ -209,7 +209,7 @@ var landscape_diversity = landscape_diversity.where(test_1.and(test_2), average_
 
 //IF the values of diversity are < elevation but > wetland; then the diversity will be calculated by landforms*2 + wetlands / 3 
 
-landscape_diversity = landscape_diversity.where(test_1.not().and(test_2), average_wetland_2); 
+var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2), average_wetland_2); 
 
 
 // Step 3 ------------------------------------------------------------------
@@ -244,13 +244,13 @@ var average_soil_4 = Z_landform.multiply(2).add(Z_soil_diversity).divide(3);
 // Landscape diversity = landforms*2 + soil /3
 
 
-landscape_diversity = landscape_diversity.where(test_1.and(test_2).and(test_3), average_soil_1); // 1)
+var landscape_diversity = landscape_diversity.where(test_1.and(test_2).and(test_3), average_soil_1); // 1)
 
-landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()).and(test_3), average_soil_2); // 2)
+var landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()).and(test_3), average_soil_2); // 2)
 
-landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(test_3), average_soil_3); // 3)
+var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(test_3), average_soil_3); // 3)
 
-landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
+var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
 
 //create the histogram
 var histogram = ui.Chart.image.histogram(({
