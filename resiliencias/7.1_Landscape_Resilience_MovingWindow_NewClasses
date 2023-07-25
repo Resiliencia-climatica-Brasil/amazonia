@@ -196,7 +196,7 @@ var class_con = connectedness
 
 var resilience = class_div.add(class_con);
 
-
+/*
 var resilience_classes = resilience
                           .where(resilience.eq(12), 1) 
                           .where(resilience.eq(13), 1) 
@@ -205,8 +205,8 @@ var resilience_classes = resilience
                           .where(resilience.eq(14), 2)                         
                           .where(resilience.eq(15), 2) 
                           .where(resilience.eq(32), 2) 
-                          .where(resilience.eq(42), 2
-                          ) 
+                          .where(resilience.eq(42), 2)
+                           
                           .where(resilience.eq(25), 3) 
                           .where(resilience.eq(43), 3)
                           
@@ -218,6 +218,29 @@ var resilience_classes = resilience
                           .where(resilience.eq(35), 5) 
                           .where(resilience.eq(45), 5) 
                           .where(resilience.eq(44), 5);
+*/
+
+var resilience_classes = resilience
+                          .where(resilience.eq(12), 1) 
+                          .where(resilience.eq(13), 2) 
+                          .where(resilience.eq(22), 3)
+                          
+                          .where(resilience.eq(14), )                         
+                          .where(resilience.eq(15), ) 
+                          .where(resilience.eq(32), ) 
+                          .where(resilience.eq(42), )
+                           
+                          .where(resilience.eq(25), ) 
+                          .where(resilience.eq(43), )
+                          
+                          .where(resilience.eq(23), 4)                         
+                          .where(resilience.eq(24), ) 
+                          .where(resilience.eq(33), ) 
+                          .where(resilience.eq(34), )
+                          
+                          .where(resilience.eq(35), ) 
+                          .where(resilience.eq(45), ) 
+                          .where(resilience.eq(44), );
 
 
 
