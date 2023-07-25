@@ -290,12 +290,12 @@ var paleta_div_con = [
 
 
 
-var paleta = [
-  'e6d5c8',
-  'CE7E45', 
-  '55b901',
-  '3E8601', 
-  '023B01'];
+//var paleta = [
+//  'e6d5c8',
+//  'CE7E45', 
+//  '55b901',
+//  '3E8601', 
+//  '023B01'];
 
 
 var paleta_res = [
@@ -321,7 +321,7 @@ var paleta_res = [
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
 Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
 Map.addLayer(resilience,{min: 12, max:45, palette:paleta_res}, 'Landscape Resilience');
-Map.addLayer(resilience_classes,{min: 1, max:5, palette:paleta}, 'Landscape Resilience');
+Map.addLayer(resilience_classes,{min: 1, max:16, palette:paleta_res}, 'Landscape Resilience');
 
 
 var legend = ui.Panel({
