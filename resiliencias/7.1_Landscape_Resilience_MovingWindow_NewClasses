@@ -11,16 +11,16 @@ if (isNaN(windows) || windows <= 0) {
   windows = 50;}
 print(windows);
 
-var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_'+windows.toString())
+var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALED_'+windows.toString())
                    .updateMask(brasil_raster);
 
-var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_'+windows.toString())
+var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALED_'+windows.toString())
                     .updateMask(brasil_raster);
 
-var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_'+windows.toString())
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALED_'+windows.toString())
                    .updateMask(brasil_raster);
 
-var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_'+windows.toString())
+var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALED_'+windows.toString())
                          .updateMask(brasil_raster);
 
 
@@ -265,11 +265,13 @@ var paleta_div_con = [
 ];
 
 
+
+
 var paleta = [
-  'ceac94',
+  'e6d5c8',
   'CE7E45', 
-  'FFFF0F',
-   '3E8601', 
+  '55b901',
+  '3E8601', 
   '023B01'];
 
 
@@ -296,7 +298,7 @@ var paleta_res = [
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
 Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
 Map.addLayer(resilience,{min: 12, max:45, palette:paleta_res}, 'Landscape Resilience');
-Map.addLayer(resilience_classes,{min: 1, max:4, palette:paleta}, 'Landscape Resilience');
+Map.addLayer(resilience_classes,{min: 1, max:5, palette:paleta}, 'Landscape Resilience');
 
 
 var legend = ui.Panel({
