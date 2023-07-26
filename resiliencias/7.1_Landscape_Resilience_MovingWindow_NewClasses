@@ -221,20 +221,16 @@ var resilience_classes = resilience
                           .where(resilience.eq(12), 1) 
                           .where(resilience.eq(13), 2) 
                           .where(resilience.eq(22), 3)
-                          
-                          .where(resilience.eq(14), 4)                         
+                          .where(resilience.eq(14), 4)
+                          .where(resilience.eq(32), 5)
+                          .where(resilience.eq(23), 6)                           
                           .where(resilience.eq(15), 7) 
-                          .where(resilience.eq(32), 5) 
                           .where(resilience.eq(42), 8)
-                           
+                          .where(resilience.eq(24), 9) 
+                          .where(resilience.eq(33), 10)                           
                           .where(resilience.eq(25), 11) 
                           .where(resilience.eq(43), 12)
-                          
-                          .where(resilience.eq(23), 6)                         
-                          .where(resilience.eq(24), 9) 
-                          .where(resilience.eq(33), 10) 
                           .where(resilience.eq(34), 13)
-                          
                           .where(resilience.eq(35), 14) 
                           .where(resilience.eq(44), 15) 
                           .where(resilience.eq(45), 16);
@@ -372,19 +368,23 @@ var palette = [
   '#440154'
 ];
 
+
+
+
+
 var res =[
 "12 0-25% Diversity, 0-25% Resilience",
 "13 25-50% Diversity, 0-25% Resilience",
 "22 0-25% Diversity, 25-50% Resilience",
 "14 50-75% Diversity, 0-25% Resilience",
-"15 75-100% Diversity, 0-25% Resilience",
 "32 0-25% Diversity, 50-75% Resilience",
-"42 0-25% Diversity,  Resilience",
-"25 75-100% Diversity, 25-50% Resilience",
-"43 25-50% Diversity, 75-100% Resilience",
 "23 25-50% Diversity, 25-50% Resilience",
+"15 75-100% Diversity, 0-25% Resilience",
+"42 0-25% Diversity, 75-100% Resilience",
 "24 50-75% Diversity, 25-50% Resilience",
 "33 25-50% Diversity, 50-75% Resilience",
+"25 75-100% Diversity, 25-50% Resilience",
+"43 25-50% Diversity, 75-100% Resilience",
 "34 50-75% Diversity, 50-75% Resilience",
 "35 75-100% Diversity, 50-75% Resilience",
 "44 50-75% Diversity, 75-100% Resilience",
