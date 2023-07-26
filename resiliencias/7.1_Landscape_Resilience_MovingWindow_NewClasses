@@ -314,7 +314,6 @@ var paleta_res = [
 "#440154"
   ];
 
-var mask = wetlands_binary.where(wetlands_binary.eq(0),1);
 
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
 Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
