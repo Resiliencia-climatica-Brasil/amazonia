@@ -3,7 +3,8 @@
 
 var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 var scale = brasil_raster.projection().nominalScale();
-Map.addLayer(brasil_raster)
+
+
 var windows = prompt('Enter the window size based on the Z image name:', '50');
 windows = parseInt(windows);
 if (isNaN(windows) || windows <= 0) {
