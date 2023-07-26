@@ -308,7 +308,7 @@ var paleta_res = [
 "#482878",
 "#4F027B",
 "#440154"
-  ];
+];
 
 
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
