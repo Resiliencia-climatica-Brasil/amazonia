@@ -374,27 +374,27 @@ var palette = [
 ];
 
 var res =[
-"12___ <25%   Diversity and  <25%    Connectedness ",
-"22___ <25%   Diversity and  25-50%  Connectedness ",
-"32___ <25%   Diversity and  50-75%  Connectedness ",
-"42___ <25%   Diversity and  >75%    Connectedness ",
-"13___ 25-50% Diversity and  <25%    Connectedness ",
-"23___ 25-50% Diversity and  25-50%  Connectedness ",
-"33___ 25-50% Diversity and  50-75%  Connectedness ",
-"43___ 25-50% Diversity and  >75%    Connectedness ",
-"14___ 50-75% Diversity and  <25%    Connectedness ",
-"24___ 50-75% Diversity and  25-50%  Connectedness ",
-"34___ 50-75% Diversity and  50-75%  Connectedness ",
-"44___ 50-75% Diversity and  >75%    Connectedness ",
-"15___ >75%   Diversity and  <25%    Connectedness ",
-"25___ >75%   Diversity and  25-50%  Connectedness ",
-"35___ >75%   Diversity and  50-75%  Connectedness ",
-"45___ >75%   Diversity and  >75%    Connectedness "
+"12 0-25% Diversity, 0-25% Resilience",
+"13 25-50% Diversity, 0-25% Resilience",
+"22 0-25% Diversity, 25-50% Resilience",
+"14 50-75% Diversity, 0-25% Resilience",
+"15 75-100% Diversity, 0-25% Resilience",
+"32 0-25% Diversity, 50-75% Resilience",
+"42 0-25% Diversity,  Resilience",
+"25 75-100% Diversity, 25-50% Resilience",
+"43 25-50% Diversity, 75-100% Resilience",
+"23 25-50% Diversity, 25-50% Resilience",
+"24 50-75% Diversity, 25-50% Resilience",
+"33 25-50% Diversity, 50-75% Resilience",
+"34 50-75% Diversity, 50-75% Resilience",
+"35 75-100% Diversity, 50-75% Resilience",
+"44 50-75% Diversity, 75-100% Resilience",
+"45 75-100% Diversity, 75-100% Resilience"
 ];
 
 for (var i = 0; i < 16; i++) {
   legend.add(makeRow(palette[i], res[i]));
   }  
  
-//Map.add(legend);
+Map.add(legend);
 
