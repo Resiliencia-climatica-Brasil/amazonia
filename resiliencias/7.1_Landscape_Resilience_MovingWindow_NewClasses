@@ -5,7 +5,7 @@ var table = ee.FeatureCollection("projects/ee-resilience/assets/UC_FedEstMun"),
 //************************************ Landscape Diversity******************************************************
 
 
-var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
+var brasil_raster = ee.Image("projects/ee-Resistance/assets/brasil_raster");
 
 var scale = brasil_raster.projection().nominalScale();
 
@@ -382,22 +382,22 @@ var makeRow = function(color, name) {
 
 
 var res =[
-"12 0-25% Diversity, 0-25% Rsistance",
-"13 25-50% Diversity, 0-25% Rsistance",
-"22 0-25% Diversity, 25-50% Rsistance",
-"14 50-75% Diversity, 0-25% Rsistance",
-"32 0-25% Diversity, 50-75% Rsistance",
-"23 25-50% Diversity, 25-50% Rsistance",
-"15 75-100% Diversity, 0-25% Rsistance",
-"42 0-25% Diversity, 75-100% Rsistance",
-"24 50-75% Diversity, 25-50% Rsistance",
-"33 25-50% Diversity, 50-75% Rsistance",
-"25 75-100% Diversity, 25-50% Rsistance",
-"43 25-50% Diversity, 75-100% Rsistance",
-"34 50-75% Diversity, 50-75% Rsistance",
-"35 75-100% Diversity, 50-75% Rsistance",
-"44 50-75% Diversity, 75-100% Rsistance",
-"45 75-100% Diversity, 75-100% Rsistance"
+"12 0-25% Diversity, 0-25% Resistance",
+"13 25-50% Diversity, 0-25% Resistance",
+"22 0-25% Diversity, 25-50% Resistance",
+"14 50-75% Diversity, 0-25% Resistance",
+"32 0-25% Diversity, 50-75% Resistance",
+"23 25-50% Diversity, 25-50% Resistance",
+"15 75-100% Diversity, 0-25% Resistance",
+"42 0-25% Diversity, 75-100% Resistance",
+"24 50-75% Diversity, 25-50% Resistance",
+"33 25-50% Diversity, 50-75% Resistance",
+"25 75-100% Diversity, 25-50% Resistance",
+"43 25-50% Diversity, 75-100% Resistance",
+"34 50-75% Diversity, 50-75% Resistance",
+"35 75-100% Diversity, 50-75% Resistance",
+"44 50-75% Diversity, 75-100% Resistance",
+"45 75-100% Diversity, 75-100% Resistance"
 ];
 
 for (var i = 0; i < 16; i++) {
