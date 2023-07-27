@@ -251,7 +251,7 @@ var histogram = ui.Chart.image.histogram(({
   scale: scale,
   maxPixels: 1e13}))
   .setOptions({
-    title: 'Histogram of Pixel Values Original' ,
+    title: 'Histogram of Pixel Values ' ,
     hAxis: {title: 'Pixel Value'},
     vAxis: {title: 'Count'},
     legend: 'none'
@@ -262,7 +262,7 @@ var histogram = ui.Chart.image.histogram(({
   scale: scale,
   maxPixels: 1e13}))
   .setOptions({
-    title: 'Histogram of Pixel Values Original' ,
+    title: 'Histogram of Pixel Values ' ,
     hAxis: {title: 'Pixel Value'},
     vAxis: {title: 'Count'},
     legend: 'none'
@@ -273,7 +273,7 @@ var histogram = ui.Chart.image.histogram(({
   scale: scale,
   maxPixels: 1e13}))
   .setOptions({
-    title: 'Histogram of Pixel Values Original' ,
+    title: 'Histogram of Pixel Values ' ,
     hAxis: {title: 'Pixel Value'},
     vAxis: {title: 'Count'},
     legend: 'none'
@@ -300,25 +300,46 @@ var paleta_div_con = [
 //  '023B01'];
 
 
+//viridis color scale
 var paleta_res = [
-"#E6E6E6",
-"#F2F2CB",
-"#F9F9A0",
-"#FDFD75",
-"#FDE725",
-"#D0E119",
-"#A4D525",
-"#6DCD59",
-"#35C389",
-"#1F9E89",
-"#26828E",
-"#31688E",
-"#3E4989",
-"#482878",
-"#4F027B",
-"#440154"
+"#E6E6E6",       //12 -> 1
+"#F2F2CB",       //13 -> 2
+"#F9F9A0",       //22 -> 3
+"#FDFD75",       //14 -> 4
+"#FDE725",       //32 -> 5
+"#D0E119",       //23 -> 6
+"#A4D525",       //15 -> 7
+"#6DCD59",       //42 -> 8
+"#35C389",       //24 -> 9
+"#1F9E89",       //33 -> 10
+"#26828E",       //25 -> 11
+"#31688E",       //43 -> 12
+"#3E4989",       //34 -> 13
+"#482878",       //35 -> 14
+"#4F027B",       //44 -> 15
+"#440154"        //45 -> 16
 ];
 
+/*
+var paleta_res = [
+"#DF0015",       //12 -> 1
+"#A5400F",       //13 -> 2
+"#DF7F09",       //22 -> 3
+"#4F9F06",       //14 -> 4
+"#DFBF03",       //32 -> 5
+"#A2200F",       //23 -> 6
+"#15DF00",       //15 -> 7
+"#DFDF00",       //42 -> 8
+"#616A08",       //24 -> 9
+"#B16A08",       //33 -> 10
+"#12C300",       //25 -> 11
+"#C3C300",       //43 -> 12
+"#663F09",       //34 -> 13
+"#10A700",       //35 -> 14
+"#8B8B00",       //44 -> 15
+"#0B6F00"         //45 -> 16
+];
+*/
 
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
 Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
@@ -402,7 +423,7 @@ var res =[
 ];
 
 for (var i = 0; i < 16; i++) {
-  legend.add(makeRow(palette[i], res[i]));
+  legend.add(makeRow(paleta_res[i], res[i]));
   }  
  
 Map.add(legend);
