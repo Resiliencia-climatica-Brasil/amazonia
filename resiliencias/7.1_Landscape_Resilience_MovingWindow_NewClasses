@@ -299,7 +299,7 @@ var paleta_div_con = [
 //  '3E8601', 
 //  '023B01'];
 
-/*
+
 //viridis color scale
 var paleta_res = [
 "#E6E6E6",       //12 -> 1
@@ -319,8 +319,8 @@ var paleta_res = [
 "#4F027B",       //44 -> 15
 "#440154"        //45 -> 16
 ];
-*/
 
+/*
 var paleta_res = [
 "#DF0015",       //12 -> 1
 "#A5400F",       //13 -> 2
@@ -339,7 +339,7 @@ var paleta_res = [
 "#8B8B00",       //44 -> 15
 "#0B6F00"         //45 -> 16
 ];
-
+*/
 
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
 Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
