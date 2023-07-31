@@ -162,14 +162,14 @@ var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistenci
 // Compute the quantiles for each raster, the value of the quantiles will be stored as a band
 
 var quartiles_Div = diversity.reduceRegion({
-    reducer: ee.Reducer.percentile([0,25, 50, 75,90,100]), 
+    reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
     scale: diversity.projection().nominalScale(),
     maxPixels:1e13,
     bestEffort: false
   }); 
 
 var quartiles_Con = connectedness.reduceRegion({
-    reducer: ee.Reducer.percentile([0,25, 50, 75,90,100]), 
+    reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
     scale: connectedness.projection().nominalScale(),
     maxPixels:1e13,
     bestEffort: false
@@ -179,27 +179,23 @@ var quartiles_Con = connectedness.reduceRegion({
 var div_25 = quartiles_Div.getNumber('z_p25');
 var div_50 = quartiles_Div.getNumber('z_p50');
 var div_75 = quartiles_Div.getNumber('z_p75');
-var div_90 = quartiles_Div.getNumber('z_p90');
 
 var class_div = diversity 
 .where(diversity.lt(div_25), 2)  
 .where(diversity.gte(div_25).and(diversity.lt(div_50)), 3)
 .where(diversity.gte(div_50).and(diversity.lt(div_75)), 4)
-.where(diversity.gte(div_75).and(diversity.lt(div_90)), 5)
-.where(diversity.gte(div_90), 6);
+.where(diversity.gte(div_75).and(diversity.lt(div_90)), 5);
 
 //creating the classes for Connectedness
 var con_25 = quartiles_Con.getNumber('b1_p25');
 var con_50 = quartiles_Con.getNumber('b1_p50');
 var con_75 = quartiles_Con.getNumber('b1_p75');
-var con_90 = quartiles_Con.getNumber('b1_p90');
 
 var class_con = connectedness
 .where(connectedness.lt(con_25),10)
 .where(connectedness.gte(con_25).and(connectedness.lt(con_50)), 20)
 .where(connectedness.gte(con_50).and(connectedness.lt(con_75)),30)
-.where(connectedness.gte(con_75).and(connectedness.lt(con_90)), 40)
-.where(diversity.gte(con_90), 50);
+.where(connectedness.gte(con_75).and(connectedness.lt(con_90)), 40);
 
 //// Sum the classified rasters to create the landscape_resilience image
 
