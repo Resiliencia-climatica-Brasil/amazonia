@@ -58,9 +58,9 @@ var scale = img_elevation.projection().nominalScale();
 
 var calculate_Z_scores = function(image, windows) {
   
-  // Calculating the min
-  var min = image.reduceNeighborhood({
-    reducer: ee.Reducer.min(),
+  // Calculating the mean
+  var mean = image.reduceNeighborhood({
+    reducer: ee.Reducer.mean(),
     kernel: ee.Kernel.circle({
                                 radius:windows,
                                 units:'pixels', 
@@ -68,9 +68,9 @@ var calculate_Z_scores = function(image, windows) {
                               }),
   });
 
-  // Calculating the max
-  var max = image.reduceNeighborhood({
-    reducer: ee.Reducer.max(),
+  // Calculating the standard deviation
+  var sd = image.reduceNeighborhood({
+    reducer: ee.Reducer.stdDev(),
     kernel: ee.Kernel.circle({
                                 radius:windows,
                                 units:'pixels', 
@@ -79,29 +79,24 @@ var calculate_Z_scores = function(image, windows) {
   });
 
   // Values as a raster
-  var minValue = min.rename('min');print(minValue)
-  var maxValue = max.rename('max');print(maxValue)
+  var meanValue = mean.rename('mean');
+  var sdValue = sd.rename('sd');
 
   // Calculating the z scores
-  var scaled = image
-                    .subtract(minValue)
-                    .divide((maxValue.subtract(minValue)))
-                    .rename('scaled_');
+  var z = image.subtract(meanValue).divide(sdValue).rename('z');
 
-  return scaled;
+  return z;
 };
 
 //Defing the window size for the moving window
 
-var windows = 200; 
+//var windows = 100; 
 
-/*
 var windows = prompt('Enter the window size:', '50');
 windows = parseInt(windows);
 if (isNaN(windows) || windows <= 0) {
    print('Invalid input. Using default value for the window size.');
   windows = 1;}
-*/
 
 // Landforms, Elevation Range and Soil Diversity Z scores --------------------------
 print(windows);
