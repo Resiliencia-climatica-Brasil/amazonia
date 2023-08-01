@@ -79,11 +79,14 @@ var calculate_Z_scores = function(image, windows) {
   });
 
   // Values as a raster
-  var minValue = min.rename('min');
-  var maxValue = max.rename('max');
+  var minValue = min.rename('min');print(minValue)
+  var maxValue = max.rename('max');print(maxValue)
 
   // Calculating the z scores
-  var scaled = image.subtract(minValue).divide((maxValue.subtract(minValue))).rename('scaled_');
+  var scaled = image
+                    .subtract(minValue)
+                    .divide((maxValue.subtract(minValue)))
+                    .rename('scaled_');
 
   return scaled;
 };
