@@ -1,7 +1,3 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var table = ee.FeatureCollection("projects/ee-resilience/assets/UC_FedEstMun"),
-    table2 = ee.FeatureCollection("projects/ee-resilience/assets/UC_Ti");
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 //************************************ Landscape Diversity******************************************************
 
 
@@ -281,6 +277,8 @@ var histogram = ui.Chart.image.histogram(({
     legend: 'none'
   }); print('resilience_classes',histogram);
 
+
+
 //Visualization
 
 var paleta_div_con = [
@@ -290,16 +288,6 @@ var paleta_div_con = [
 '056201',
 '011301',
 ];
-
-
-
-
-//var paleta = [
-//  'e6d5c8',
-//  'CE7E45', 
-//  '55b901',
-//  '3E8601', 
-//  '023B01'];
 
 
 //viridis color scale
@@ -320,7 +308,6 @@ var paleta_res = [
 "#482878",       //35 -> 14
 "#4F027B",       //44 -> 15
 "#440154",        //45 -> 16
-"#DF0015"         //56
 ];
 
 /*
