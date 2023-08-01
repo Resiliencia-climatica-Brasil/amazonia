@@ -20,7 +20,7 @@ if (isNaN(windows) || windows <= 0) {
   windows = 50;}
 print(windows);
 
-var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_'+windows.toString())
+var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALED_'+windows.toString())
                    .updateMask(brasil_raster);
 
 var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALED_'+windows.toString())
