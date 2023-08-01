@@ -58,9 +58,9 @@ var scale = img_elevation.projection().nominalScale();
 
 var calculate_Z_scores = function(image, windows) {
   
-  // Calculating the mean
-  var mean = image.reduceNeighborhood({
-    reducer: ee.Reducer.mean(),
+  // Calculating the min
+  var min = image.reduceNeighborhood({
+    reducer: ee.Reducer.min(),
     kernel: ee.Kernel.circle({
                                 radius:windows,
                                 units:'pixels', 
@@ -68,9 +68,9 @@ var calculate_Z_scores = function(image, windows) {
                               }),
   });
 
-  // Calculating the standard deviation
-  var sd = image.reduceNeighborhood({
-    reducer: ee.Reducer.stdDev(),
+  // Calculating the max
+  var max = image.reduceNeighborhood({
+    reducer: ee.Reducer.max(),
     kernel: ee.Kernel.circle({
                                 radius:windows,
                                 units:'pixels', 
@@ -79,13 +79,13 @@ var calculate_Z_scores = function(image, windows) {
   });
 
   // Values as a raster
-  var meanValue = mean.rename('mean');
-  var sdValue = sd.rename('sd');
+  var minValue = min.rename('min');
+  var maxValue = max.rename('max');
 
   // Calculating the z scores
-  var z = image.subtract(meanValue).divide(sdValue).rename('z');
+  var scaled = image.subtract(minValue).divide((maxValue.subtract(minValue))).rename('scaled_');
 
-  return z;
+  return scaled;
 };
 
 //Defing the window size for the moving window
