@@ -90,13 +90,15 @@ var calculate_Z_scores = function(image, windows) {
 
 //Defing the window size for the moving window
 
-//var windows = 100; 
-
+var windows = 200; 
+/*
 var windows = prompt('Enter the window size:', '50');
 windows = parseInt(windows);
 if (isNaN(windows) || windows <= 0) {
    print('Invalid input. Using default value for the window size.');
   windows = 1;}
+*/
+
 
 // Landforms, Elevation Range and Soil Diversity Z scores --------------------------
 print(windows);
