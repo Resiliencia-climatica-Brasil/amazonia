@@ -13,12 +13,16 @@ var UC_FedEstMun = ee.FeatureCollection("projects/ee-resilience/assets/UC_FedEst
 
 var UC_Ti = ee.FeatureCollection("projects/ee-resilience/assets/UC_Ti"); 
 
+
+/* // Vai perguntar o tamanho de janela que você vai usar. se já tivermos decidido usar a formula de baixo
 var windows = prompt('Enter the window size based on the Z image name:', '50');
 windows = parseInt(windows);
 if (isNaN(windows) || windows <= 0) {
    print('Invalid input. Using default value for the window size.');
   windows = 50;}
 print(windows);
+*/
+var windows = 200;
 
 var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALED_'+windows.toString())
                    .updateMask(brasil_raster);
