@@ -35,45 +35,51 @@ var scale = brasil_raster.projection().nominalScale();
 
 
 
-
-
-// Function to calculate global minimum and maximum
-var calculateGlobalMinMax = function(image){
-  var minMax = image.reduceRegion({
-    reducer: ee.Reducer.minMax(),
-    geometry: image.geometry(),
-    scale: scale,
-    maxPixels: 1e13
+var scale_z = function(image, windows) {
+  
+  // Calculating the min
+  var min = image.reduceNeighborhood({
+    reducer: ee.Reducer.min(),
+    kernel: ee.Kernel.circle({
+                                radius:windows,
+                                units:'pixels', 
+                                normalize:false
+                              }),
   });
-  
-  var globalMin = ee.Number(minMax.get('z_min'));
-  var globalMax = ee.Number(minMax.get('z_max'));
-  
-  return {
-    min: globalMin,
-    max: globalMax
-  };
-}
 
-// Call the function to get global min and max
-var scale_z= function(image){
-  var minMaxValues = calculateGlobalMinMax(image); print(minMaxValues);
+  // Calculating the max
+  var max = image.reduceNeighborhood({
+    reducer: ee.Reducer.max(),
+    kernel: ee.Kernel.circle({
+                                radius:windows,
+                                units:'pixels', 
+                                normalize:false
+                              }),
+  });
 
-// Subtract global min from each pixel and divide by the range
-  var image_scaled = image.subtract(minMaxValues.min)
-                          .divide(minMaxValues.max.subtract(minMaxValues.min))
-                          ;
-return(image_scaled);
+  // Values as a raster
+  var minValue = min.rename('min');print(minValue)
+  var maxValue = max.rename('max');print(maxValue)
+
+  // Calculating the z scores
+  var scaled = image
+                    .subtract(minValue)
+                    .divide((maxValue.subtract(minValue)))
+                    .rename('scaled_');
+
+  return scaled;
 };
 
 
-var Z_elevation_scaled = scale_z(Z_elevation);
 
-var Z_landform_scaled = scale_z(Z_landform);
 
-var Z_soil_diversity_scaled = scale_z(Z_soil_diversity);
+var Z_elevation_scaled = scale_z(Z_elevation, windows);
 
-var Z_wetlands_score_scaled = scale_z(Z_wetlands_score);
+var Z_landform_scaled = scale_z(Z_landform, windows);
+
+var Z_soil_diversity_scaled = scale_z(Z_soil_diversity, windows);
+
+var Z_wetlands_score_scaled = scale_z(Z_wetlands_score, windows);
 
 /*
 Map.addLayer(Z_wetlands_score_scaled.updateMask(Z_wetlands_score_scaled.lt(0.4).and(Z_wetlands_score_scaled.lt(0.40))), {palette:'blue'}, '<0.40');
