@@ -1,6 +1,3 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var masked = ee.Image("projects/ee-resilience/assets/Moving_window_TEMP/MASKED_Z-Scores_wetlands_movingwindow_50");
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 var Biome = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/BR_Municipios_2021")
                         .map(function(feature){
                              return feature.bounds()
