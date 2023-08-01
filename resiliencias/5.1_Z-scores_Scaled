@@ -8,11 +8,13 @@ var Biome = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/BR_Mu
 
 var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 
+/*
 var windows = prompt('Enter the window size based on the Z image name:', '50');
 windows = parseInt(windows);
 if (isNaN(windows) || windows <= 0) {
    print('Invalid input. Using default value for the window size.');
   windows = 50;}
+*/
 
 var Z_landform = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_'+windows.toString())
                    .updateMask(brasil_raster);
