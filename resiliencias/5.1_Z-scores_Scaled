@@ -1,4 +1,4 @@
-var Biome = ee.FeatureCollection("projects/ee-resilience/assets/Shapefiles/BR_Municipios_2021")
+var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .map(function(feature){
                              return feature.bounds()
                              })
