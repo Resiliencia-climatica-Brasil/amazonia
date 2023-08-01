@@ -241,8 +241,7 @@ var resilience_classes = resilience
                           .where(resilience.eq(34), 13)
                           .where(resilience.eq(35), 14) 
                           .where(resilience.eq(44), 15) 
-                          .where(resilience.eq(45), 16)
-                          .where(resilience.eq(55), 17);
+                          .where(resilience.eq(45), 16);
 
 
 var histogram = ui.Chart.image.histogram(({
