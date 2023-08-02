@@ -86,7 +86,7 @@ Map.addLayer(Z_wetlands_score_scaled.updateMask(Z_wetlands_score_scaled.gt(0.50)
 Map.addLayer(Z_wetlands_score_scaled.updateMask(Z_wetlands_score_scaled.gte(0.40).and(Z_wetlands_score_scaled.lte(0.5) )  ), {palette:'lightgreen'}, '0.40 - 0.5');
 */
 
-
+/*
 var histogram = ui.Chart.image.histogram(({
 image: Z_elevation_scaled,
 scale: scale,
@@ -97,7 +97,7 @@ maxPixels: 1e13}))
  vAxis: {title: 'Count'},
  legend: 'none'
 }); print('Z_elevation_scaled ',histogram);
-	/*
+	
 var histogram = ui.Chart.image.histogram(({
 image: Z_landform_scaled,
 scale: scale,
@@ -139,7 +139,7 @@ maxPixels: 1e13}))
 // Map.addLayer(Z_soil_diversity_scaled, {palette:'green', min:0, max:1}, 'Z_soil_diversity');
 // Map.addLayer(Z_wetlands_score_scaled, {palette:'blue', min:0, max:1}, 'Z_wetlands_scor');
 
-/*
+
 Export.image.toAsset({image: Z_elevation_scaled, 
                       description: "Z_elevation_SCALED_"+ windows.toString(), 
                       assetId: "Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanela_" + windows.toString(), 
@@ -174,4 +174,4 @@ Export.image.toAsset({image: Z_wetlands_score_scaled,
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
-*/
+
