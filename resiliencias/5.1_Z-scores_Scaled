@@ -57,8 +57,8 @@ var scale_z = function(image, windows) {
   });
 
   // Values as a raster
-  var minValue = min.rename('min');print(minValue)
-  var maxValue = max.rename('max');print(maxValue)
+  var minValue = min.rename('min');
+  var maxValue = max.rename('max');
 
   // Calculating the z scores
   var scaled = image
