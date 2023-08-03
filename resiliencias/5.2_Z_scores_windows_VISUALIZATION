@@ -1,12 +1,14 @@
 var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 
+/*
 var windows = prompt('Enter the window size based on the Z image name:', '50');
 windows = parseInt(windows);
 if (isNaN(windows) || windows <= 0) {
    print('Invalid input. Using default value for the window size.');
   windows = 50;}
+*/
 
-
+var windows = 200;
 
 // ------------------------------------- IMPORTING THE NORMAL Z-SCORES -----------------------------
 var Z_landform = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_'+windows.toString())
@@ -61,9 +63,10 @@ var Z_soil_diversity_scaled_janela = ee.Image('projects/ee-resilience/assets/Mov
 // ------------------------------------- PLOTING MAPS -----------------------------
 
 // Load the palettes package.
-var palettes=require('users/gena/packages:palettes');
+var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
 
-var palette =   palettes.niccoli.linearlhot[7];
+
+var palette = palettes.colorbrewer.Spectral[5].reverse()
 
 // Set a center and zoom level.
 
