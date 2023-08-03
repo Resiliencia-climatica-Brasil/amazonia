@@ -41,6 +41,22 @@ var Z_soil_diversity_scaled = ee.Image('projects/ee-resilience/assets/Moving_win
                          .updateMask(brasil_raster);
                          
 
+// ------------------------------------- IMPORTING THE SCALED TO 0-1 Z-SCORES WITHIN THE MOVING WINDOW -----------------------------
+
+
+var Z_landform_scaled_janela  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALEDJanela_'+windows.toString())
+                   .updateMask(brasil_raster);
+
+var Z_elevation_scaled_janela = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanela_'+windows.toString())
+                    .updateMask(brasil_raster);
+
+var Z_wetlands_score_scaled_janela = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALEDJanela_'+windows.toString())
+                   .updateMask(brasil_raster);
+
+var Z_soil_diversity_scaled_janela = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALEDJanela_'+windows.toString())
+                         .updateMask(brasil_raster);
+                         
+
 
 // ------------------------------------- PLOTING MAPS -----------------------------
 
@@ -81,3 +97,8 @@ rightMap.addLayer(Z_elevation_scaled, {min:0, max:1, palette:palette}, 'Elevatio
 rightMap.addLayer(Z_landform_scaled, {min:0, max:1, palette:palette}, 'Landforms SCALED');
 rightMap.addLayer(Z_wetlands_score_scaled, {min:0, max:1, palette:palette}, 'Wetlands SCALED');
 rightMap.addLayer(Z_soil_diversity_scaled, {min:0, max:1, palette:palette}, 'Soil SCALED');
+
+rightMap.addLayer(Z_elevation_scaled_janela, {min:0, max:1, palette:palette}, 'Elevation SCALED WITHIN');
+rightMap.addLayer(Z_landform_scaled_janela, {min:0, max:1, palette:palette}, 'Landforms SCALED WITHIN');
+rightMap.addLayer(Z_wetlands_score_scaled_janela, {min:0, max:1, palette:palette}, 'Wetlands SCALED WITHIN');
+rightMap.addLayer(Z_soil_diversity_scaled_janela, {min:0, max:1, palette:palette}, 'Soil SCALED WITHIN');
