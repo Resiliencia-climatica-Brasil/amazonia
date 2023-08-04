@@ -64,7 +64,7 @@ var scale_z = function(image, windows) {
   var scaled = image
                     .subtract(minValue)
                     .divide((maxValue.subtract(minValue)))
-                    .rename('scaled_');
+                    .rename('scaled');
 
   return scaled;
 };
