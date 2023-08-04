@@ -10,16 +10,16 @@ if (isNaN(windows) || windows <= 0) {
    print('Invalid input. Using default value for the window size.');
   windows = 50;}
 
-var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALED_'+windows.toString())
+var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALEDJanela_'+windows.toString())
                    .updateMask(brasil_raster);
 
-var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALED_'+windows.toString())
+var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanela_'+windows.toString())
                     .updateMask(brasil_raster);
 
-var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALED_'+windows.toString())
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALEDJanela_'+windows.toString())
                    .updateMask(brasil_raster);
 
-var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALED_'+windows.toString())
+var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALEDJanela_'+windows.toString())
                          .updateMask(brasil_raster);
 
 
@@ -148,19 +148,19 @@ ui.root.clear();
 ui.root.add(splitPanel);
 
 // Add the layers to the maps
-rightMap.addLayer(landscape_diversity, {min:0 , max:1, palette:palette}, 'Landscape Diversity SCALED');
+rightMap.addLayer(landscape_diversity, {min:0 , max:1, palette:palette}, 'Landscape Diversity SCALED WITHIN WINDOWS');
 
 
-var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_'+windows.toString())
+var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALED_'+windows.toString())
                    .updateMask(brasil_raster);
 
-var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_'+windows.toString())
+var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALED_'+windows.toString())
                     .updateMask(brasil_raster);
 
-var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_'+windows.toString())
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALED_'+windows.toString())
                    .updateMask(brasil_raster);
 
-var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_'+windows.toString())
+var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALED_'+windows.toString())
                          .updateMask(brasil_raster);
 
 
@@ -253,4 +253,4 @@ var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and
 
 var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
 
-leftMap.addLayer(landscape_diversity, {/*min:-2 , max:2,*/ palette:palette}, 'Landscape Diversity UNSCALED');
+leftMap.addLayer(landscape_diversity, {/*min:-2 , max:2,*/ palette:palette}, 'Landscape Diversity scaleD');
