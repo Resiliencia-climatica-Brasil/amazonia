@@ -82,13 +82,6 @@ var Z_soil_diversity_scaled = scale_z(Z_soil_diversity, windows);
 
 var Z_wetlands_score_scaled = scale_z(Z_wetlands_score, windows);
 
-
-/*
-Map.addLayer(Z_wetlands_score_scaled.updateMask(Z_wetlands_score_scaled.lt(0.4).and(Z_wetlands_score_scaled.lt(0.40))), {palette:'blue'}, '<0.40');
-Map.addLayer(Z_wetlands_score_scaled.updateMask(Z_wetlands_score_scaled.gt(0.50)), {palette:'red'}, '>0.5');
-Map.addLayer(Z_wetlands_score_scaled.updateMask(Z_wetlands_score_scaled.gte(0.40).and(Z_wetlands_score_scaled.lte(0.5) )  ), {palette:'lightgreen'}, '0.40 - 0.5');
-*/
-
 /*
 var histogram = ui.Chart.image.histogram(({
 image: Z_elevation_scaled,
