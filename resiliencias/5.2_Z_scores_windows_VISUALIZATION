@@ -114,8 +114,12 @@ rightMap.addLayer(Z_soil_diversity_scaled_janela, {min:0, max:1, palette:palette
 */
 
 
-Map.addLayer(Z_wetlands_score_scaled_janela, {min:0, max:1, palette:palette}, 'Wetlands SCALED WITHIN');
-Map.addLayer(Z_wetlands_score, {min:0, max:1, palette:palette}, 'Wetlands');
+Map.addLayer(Z_wetlands_score_scaled_janela, {min:0, max:1, palette:palette}, 'Z-Wetlands SCALED WITHIN WINDOW');
+Map.addLayer(Z_wetlands_score, {min:0, max:1, palette:palette}, 'Z-Wetlands');
+
+
+Map.addLayer(Z_soil_diversity_scaled_janela, {min:0, max:1, palette:palette}, 'Z-soil SCALED WITHIN Window');
+Map.addLayer(Z_soil_diversity, {min:0, max:1, palette:palette}, 'Z-soil');
 
 
 // Apply the distance method to the Point object.
