@@ -73,14 +73,15 @@ var scale_z = function(image, windows) {
 
 
 
-/*
+
 var Z_elevation_scaled = scale_z(Z_elevation, windows);
 
 var Z_landform_scaled = scale_z(Z_landform, windows);
 
 var Z_soil_diversity_scaled = scale_z(Z_soil_diversity, windows);
-*/
+
 var Z_wetlands_score_scaled = scale_z(Z_wetlands_score, windows);
+
 
 /*
 Map.addLayer(Z_wetlands_score_scaled.updateMask(Z_wetlands_score_scaled.lt(0.4).and(Z_wetlands_score_scaled.lt(0.40))), {palette:'blue'}, '<0.40');
@@ -141,10 +142,10 @@ var palette = palettes.colorbrewer.Spectral[7].reverse();
 
 Map.addLayer(Z_wetlands_score_scaled, {/*min:0, max:1 ,*/ palette:palette}, 'Wetlands');
 
-/*
+
 Export.image.toAsset({image: Z_elevation_scaled, 
                       description: "Z_elevation_SCALED_"+ windows.toString(), 
-                      assetId: "Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanela_" + windows.toString(), 
+                      assetId: "Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanelaNew_" + windows.toString(), 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -153,7 +154,7 @@ Export.image.toAsset({image: Z_elevation_scaled,
 
 Export.image.toAsset({image: Z_landform_scaled, 
                     description: "Z_landform_SCALED_"+ windows.toString(), 
-                     assetId: "Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALEDJanela_"+ windows.toString(), 
+                     assetId: "Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALEDJanela_New"+ windows.toString(), 
                      pyramidingPolicy:"median",
                      region:Biome,
                      scale: scale,
@@ -162,7 +163,7 @@ Export.image.toAsset({image: Z_landform_scaled,
 
 Export.image.toAsset({image: Z_soil_diversity_scaled, 
                       description: "Z_soil_diversity_SCALED_"+ windows.toString(), 
-                      assetId: "Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALEDJanela_"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALEDJanela_New"+ windows.toString(), 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
@@ -171,10 +172,9 @@ Export.image.toAsset({image: Z_soil_diversity_scaled,
 
 Export.image.toAsset({image: Z_wetlands_score_scaled, 
                       description: "Z_wetlands_score_SCALED_"+ windows.toString(), 
-                      assetId: "Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALEDJanela_"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALEDJanela_New"+ windows.toString(), 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
 
-*/
