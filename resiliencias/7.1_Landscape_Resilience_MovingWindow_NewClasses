@@ -24,13 +24,13 @@ print(windows);
 */
 var windows = 200;
 
-var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALED_'+windows.toString())
+var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALEDJanela_'+windows.toString())
                    .updateMask(brasil_raster);
 
-var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALED_'+windows.toString())
+var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanela_'+windows.toString())
                     .updateMask(brasil_raster);
 
-var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALED_'+windows.toString())
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALEDJanela_'+windows.toString())
                    .updateMask(brasil_raster);
 
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALED_'+windows.toString())
@@ -181,11 +181,11 @@ var quartiles_Con = connectedness.reduceRegion({
     maxPixels:1e13,
     bestEffort: false
   });
-
+print(quartiles_Div)
 //creating the classes for Diversity based on the valeus.
-var div_25 = quartiles_Div.getNumber('z_p25');
-var div_50 = quartiles_Div.getNumber('z_p50');
-var div_75 = quartiles_Div.getNumber('z_p75');
+var div_25 = quartiles_Div.getNumber('scaled__p25');
+var div_50 = quartiles_Div.getNumber('scaled__p50');
+var div_75 = quartiles_Div.getNumber('scaled__p75');
 
 var class_div = diversity 
 .where(diversity.lt(div_25), 2)  
