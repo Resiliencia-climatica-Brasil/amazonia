@@ -59,25 +59,27 @@ var scale_z = function(image, windows) {
   // Values as a raster
   var minValue = min.rename('min');
   var maxValue = max.rename('max');
+  var maxScale = image.multiply(0).add(1); //defining the max value of your scale (1)
+  var minScale = image.multiply(0); //0
 
-  // Calculating the z scores
+  // Scalling the z scores
   var scaled = image
                     .subtract(minValue)
-                    .divide((maxValue.subtract(minValue)))
-                    .rename('scaled');
+                    .multiply(maxScale.subtract(minScale))
+                    .divide((maxValue.subtract(minValue)).add(minScale)  )
 
   return scaled;
 };
 
 
 
-
+/*
 var Z_elevation_scaled = scale_z(Z_elevation, windows);
 
 var Z_landform_scaled = scale_z(Z_landform, windows);
 
 var Z_soil_diversity_scaled = scale_z(Z_soil_diversity, windows);
-
+*/
 var Z_wetlands_score_scaled = scale_z(Z_wetlands_score, windows);
 
 /*
@@ -132,14 +134,14 @@ maxPixels: 1e13}))
   legend: 'none'
 }); print('Z_wetlands_score_scaled',histogram);
 */
+var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
 
 
-// Map.addLayer(Z_elevation_scaled,      {palette:'black', min:0, max:1}, 'Z_elevation');
-// Map.addLayer(Z_landform_scaled,       {palette:'red', min:0, max:1}, 'Z_landform');
-// Map.addLayer(Z_soil_diversity_scaled, {palette:'green', min:0, max:1}, 'Z_soil_diversity');
-// Map.addLayer(Z_wetlands_score_scaled, {palette:'blue', min:0, max:1}, 'Z_wetlands_scor');
+var palette = palettes.colorbrewer.Spectral[7].reverse();
 
+Map.addLayer(Z_wetlands_score_scaled, {/*min:0, max:1 ,*/ palette:palette}, 'Wetlands');
 
+/*
 Export.image.toAsset({image: Z_elevation_scaled, 
                       description: "Z_elevation_SCALED_"+ windows.toString(), 
                       assetId: "Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanela_" + windows.toString(), 
@@ -175,3 +177,4 @@ Export.image.toAsset({image: Z_wetlands_score_scaled,
                       scale: scale,
                       maxPixels: 1e13});
 
+*/
