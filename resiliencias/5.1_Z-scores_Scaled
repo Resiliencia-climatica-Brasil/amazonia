@@ -1,18 +1,3 @@
-/**** Start of imports. If edited, may not auto-convert in the playground. ****/
-var geometry = 
-    /* color: #d63000 */
-    /* shown: false */
-    /* displayProperties: [
-      {
-        "type": "rectangle"
-      }
-    ] */
-    ee.Geometry.Polygon(
-        [[[-42.65921182785301, -8.600869279427403],
-          [-42.65921182785301, -11.628855360836095],
-          [-38.61624307785301, -11.628855360836095],
-          [-38.61624307785301, -8.600869279427403]]], null, false);
-/***** End of imports. If edited, may not auto-convert in the playground. *****/
 var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .map(function(feature){
                              return feature.bounds()
@@ -21,6 +6,11 @@ var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .dissolve({'maxError': 1})
                         .bounds();
 
+var geometry = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                      .select("Bioma")
+                       .filter(ee.Filter.eq("Bioma", "Caatinga"))
+                       
+Map.centerObject(geometry)
 var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 
 /*
@@ -40,14 +30,12 @@ var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-S
                     .updateMask(brasil_raster);
 
 var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_'+windows.toString())
-                   .updateMask(brasil_raster);
+                   .updateMask(brasil_raster).clip(geometry);
 
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_'+windows.toString())
                          .updateMask(brasil_raster);
 
 var scale = brasil_raster.projection().nominalScale();
-
-
 
 var scale_z = function(image, windows) {
   
@@ -85,17 +73,14 @@ var scale_z = function(image, windows) {
 
   return scaled;
 };
-
+/*
 var Z_elevation_scaled = scale_z(Z_elevation, windows);
 
 var Z_landform_scaled = scale_z(Z_landform, windows);
 
 var Z_soil_diversity_scaled = scale_z(Z_soil_diversity, windows);
-
-
-var mask_wetlands_200 = Z_wetlands_score.where(Z_wetlands_score.gt(0), 1).fastDistanceTransform(150, "pixels", 'squared_euclidean').updateMask(brasil_raster);
-
-var Z_wetlands_score_scaled = scale_z(Z_wetlands_score.where(mask_wetlands_200.gt(0), 0), windows);
+*/
+var Z_wetlands_score_scaled = scale_z(Z_wetlands_score, windows);
 
 /*
 var histogram = ui.Chart.image.histogram(({
@@ -146,12 +131,11 @@ maxPixels: 1e13}))
 
 var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
 
-
 var palette = palettes.colorbrewer.Spectral[7].reverse();
 
 Map.addLayer(Z_wetlands_score_scaled, {min:0, max:1 , palette:palette}, 'Wetlands');
 
-
+/*
 Export.image.toAsset({image: Z_elevation_scaled, 
                       description: "Z_elevation_SCALED_"+ windows.toString(), 
                       assetId: "Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanelaNew_" + windows.toString(), 
@@ -181,9 +165,9 @@ Export.image.toAsset({image: Z_soil_diversity_scaled,
 
 Export.image.toAsset({image: Z_wetlands_score_scaled, 
                       description: "Z_wetlands_score_SCALED_"+ windows.toString(), 
-                      assetId: "Moving_window_TEMP/Z-Scores_wetlands_score_movingwindow_SCALEDJanela_New"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/Z-Scores_wetlands_score_movingwindow_SCALEDJanela_NewMASKED_"+ windows.toString(), 
                       pyramidingPolicy:"median",
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
-
+*/
