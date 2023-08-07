@@ -30,7 +30,7 @@ var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-S
                     .updateMask(brasil_raster);
 
 var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_'+windows.toString())
-                   .updateMask(brasil_raster).clip(geometry);
+                   .updateMask(brasil_raster)//.clip(geometry);
 
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_'+windows.toString())
                          .updateMask(brasil_raster);
