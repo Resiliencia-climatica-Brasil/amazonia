@@ -1,6 +1,6 @@
 /**** Start of imports. If edited, may not auto-convert in the playground. ****/
 var geometry = 
-    /* color: #0b4a8b */
+    /* color: #d63000 */
     /* shown: false */
     /* displayProperties: [
       {
@@ -8,10 +8,10 @@ var geometry =
       }
     ] */
     ee.Geometry.Polygon(
-        [[[-48.41074921817835, -5.926782575784731],
-          [-48.41074921817835, -18.650758452642528],
-          [-37.35850312442835, -18.650758452642528],
-          [-37.35850312442835, -5.926782575784731]]], null, false);
+        [[[-42.65921182785301, -8.600869279427403],
+          [-42.65921182785301, -11.628855360836095],
+          [-38.61624307785301, -11.628855360836095],
+          [-38.61624307785301, -8.600869279427403]]], null, false);
 /***** End of imports. If edited, may not auto-convert in the playground. *****/
 var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .map(function(feature){
@@ -92,7 +92,10 @@ var Z_landform_scaled = scale_z(Z_landform, windows);
 
 var Z_soil_diversity_scaled = scale_z(Z_soil_diversity, windows);
 
-var Z_wetlands_score_scaled = scale_z(Z_wetlands_score, windows);
+
+var mask_wetlands_200 = Z_wetlands_score.where(Z_wetlands_score.gt(0), 1).fastDistanceTransform(150, "pixels", 'squared_euclidean').updateMask(brasil_raster);
+
+var Z_wetlands_score_scaled = scale_z(Z_wetlands_score.where(mask_wetlands_200.gt(0), 0), windows);
 
 /*
 var histogram = ui.Chart.image.histogram(({
