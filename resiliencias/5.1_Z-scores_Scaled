@@ -86,9 +86,6 @@ var scale_z = function(image, windows) {
   return scaled;
 };
 
-
-
-
 var Z_elevation_scaled = scale_z(Z_elevation, windows);
 
 var Z_landform_scaled = scale_z(Z_landform, windows);
