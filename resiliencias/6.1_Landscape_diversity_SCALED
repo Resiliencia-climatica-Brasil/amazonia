@@ -53,9 +53,9 @@ var test_2 = Z_wetlands_score.gt(landscape_diversity);
 // Calculate average -------------------------------------------------------
 // Elevation range higher than landform ------------------------------------
 
-var average_wetland_1 = Z_landform.add(Z_elevation).add(Z_wetlands_score.multiply(2)).divide(4);
+var average_wetland_1 = Z_landform.multiply(2).add(Z_elevation).add(Z_wetlands_score).divide(4);
 
-var average_wetland_2 = Z_landform.add(Z_wetlands_score.multiply(2)).divide(3);
+var average_wetland_2 = Z_landform.multiply(2).add(Z_wetlands_score).divide(3);
 
 
 // Assigning new landform diversity values ---------------------------------
@@ -124,7 +124,7 @@ var palettes=require('users/gena/packages:palettes'); // https://github.com/gee-
 //var palette =  palettes.crameri.tofino[25];
 // var palette =  palettes.niccoli.linearlhot[7];
 // var palette =  palettes.colorbrewer.YlGnBu[3];
-var palette = palettes.colorbrewer.Spectral[5]
+var palette = palettes.colorbrewer.Spectral[11]
 
 
 
@@ -154,16 +154,16 @@ ui.root.add(splitPanel);
 rightMap.addLayer(landscape_diversity, {min:0 , max:1, palette:palette}, 'Landscape Diversity SCALED WITHIN WINDOWS');
 
 
-var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALED_'+windows.toString())
+var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALEDJanela_'+windows.toString())
                    .updateMask(brasil_raster);
 
-var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALED_'+windows.toString())
+var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanela_'+windows.toString())
                     .updateMask(brasil_raster);
 
-var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALED_'+windows.toString())
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALEDJanela_'+windows.toString())
                    .updateMask(brasil_raster);
 
-var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALED_'+windows.toString())
+var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALEDJanela_'+windows.toString())
                          .updateMask(brasil_raster);
 
 
