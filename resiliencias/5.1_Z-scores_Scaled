@@ -8,9 +8,9 @@ var Biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
 
 var geometry = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                       .select("Bioma")
-                       .filter(ee.Filter.eq("Bioma", "Caatinga"))
+                       .filter(ee.Filter.eq("Bioma", "Pampa"))
                        
-Map.centerObject(geometry)
+//Map.centerObject(geometry)
 var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 
 /*
@@ -45,7 +45,7 @@ var scale_z = function(image, windows) {
     kernel: ee.Kernel.circle({
                                 radius:windows,
                                 units:'pixels', 
-                                normalize:false
+                                normalize:true
                               }),
   });
 
@@ -55,7 +55,7 @@ var scale_z = function(image, windows) {
     kernel: ee.Kernel.circle({
                                 radius:windows,
                                 units:'pixels', 
-                                normalize:false
+                                normalize:true
                               }),
   });
 
