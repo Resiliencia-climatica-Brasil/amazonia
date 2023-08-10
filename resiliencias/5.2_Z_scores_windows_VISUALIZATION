@@ -74,10 +74,10 @@ var palettes=require('users/gena/packages:palettes');// https://github.com/gee-c
 
 var palette = palettes.colorbrewer.Spectral[7].reverse();
 
-/*
+
 // Set a center and zoom level.
 
-var center={lon: -53.3589, lat: -12.1132, zoom:10};
+var center={lon: -41.33, lat: -12.2, zoom:7};
 
 // Create two maps.
 var leftMap = ui.Map(center);
@@ -100,19 +100,22 @@ ui.root.add(splitPanel);
 // Add the layers to the maps
 // leftMap.addLayer(Z_elevation, {min:-2.0063 , max:0.80435, palette:palette}, 'Elevation');
 // leftMap.addLayer(Z_landform, {min:-0.7287 , max:0.58808, palette:palette}, 'Landform');
-// leftMap.addLayer(Z_wetlands_score, {min:-0.5532 , max:0.75108, palette:palette}, 'Wetlands');
+ leftMap.addLayer(Z_wetlands_score, {min:-0.5532 , max:0.75108, palette:palette}, 'Wetlands');
 // leftMap.addLayer(Z_soil_diversity, {min:-1.4143 , max:0.9406, palette:palette}, 'Soil');
 
-leftMap.addLayer(Z_elevation_scaled, {min:0, max:1, palette:palette}, 'Elevation SCALED');
-leftMap.addLayer(Z_landform_scaled, {min:0, max:1, palette:palette}, 'Landforms SCALED');
-leftMap.addLayer(Z_wetlands_score_scaled, {min:0, max:1, palette:palette}, 'Wetlands SCALED');
-leftMap.addLayer(Z_soil_diversity_scaled, {min:0, max:1, palette:palette}, 'Soil SCALED');
+//leftMap.addLayer(Z_elevation_scaled, {min:0, max:1, palette:palette}, 'Elevation SCALED');
+//leftMap.addLayer(Z_landform_scaled, {min:0, max:1, palette:palette}, 'Landforms SCALED');
+//leftMap.addLayer(Z_wetlands_score_scaled, {min:0, max:1, palette:palette}, 'Wetlands SCALED');
+//leftMap.addLayer(Z_soil_diversity_scaled, {min:0, max:1, palette:palette}, 'Soil SCALED');
 
-rightMap.addLayer(Z_elevation_scaled_janela, {min:0, max:1, palette:palette}, 'Elevation SCALED WITHIN');
-rightMap.addLayer(Z_landform_scaled_janela, {min:0, max:1, palette:palette}, 'Landforms SCALED WITHIN');
+//rightMap.addLayer(Z_elevation_scaled_janela, {min:0, max:1, palette:palette}, 'Elevation SCALED WITHIN');
+//rightMap.addLayer(Z_landform_scaled_janela, {min:0, max:1, palette:palette}, 'Landforms SCALED WITHIN');
 rightMap.addLayer(Z_wetlands_score_scaled_janela, {min:0, max:1, palette:palette}, 'Wetlands SCALED WITHIN');
-rightMap.addLayer(Z_soil_diversity_scaled_janela, {min:0, max:1, palette:palette}, 'Soil SCALED WITHIN');
-*/
+//rightMap.addLayer(Z_soil_diversity_scaled_janela, {min:0, max:1, palette:palette}, 'Soil SCALED WITHIN');
+
+
+
+/*
 Map.addLayer(Z_landform_scaled_janela, {min:0, max:1, palette:palette}, 'Z-landfomrs SCALED WITHIN WINDOW');
 Map.addLayer(Z_landform_scaled, {min:0, max:1, palette:palette}, 'Z-landforms');
 
@@ -125,7 +128,7 @@ Map.addLayer(Z_wetlands_score_scaled, {min:0, max:1, palette:palette}, 'Z-Wetlan
 Map.addLayer(Z_soil_diversity_scaled_janela, {min:0, max:1, palette:palette}, 'Z-soil SCALED WITHIN Window');
 Map.addLayer(Z_soil_diversity_scaled, {min:0, max:1, palette:palette}, 'Z-soil');
 
-
+*/
 
 // Apply the distance method to the Point object.
 var pointDistance = geometry.distance({'right': geometry2, 'maxError': 1});
