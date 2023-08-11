@@ -18,8 +18,10 @@ var brazil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 
 var wetlands = ee.Image("projects/ee-resilience/assets/Cifor_wetlands")
                .reproject({crs: "EPSG:4326",
-                           scale: 92.76624}).updateMask(brazil_raster);
+                           scale: 92.76624})
+               .updateMask(brazil_raster);
                            
+ 
  var rivers = wetlands.mask(wetlands.neq(10));  
 
 // // Filtering riverine and lacustrine out
