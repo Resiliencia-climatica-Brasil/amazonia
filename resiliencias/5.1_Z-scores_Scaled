@@ -29,8 +29,8 @@ var Z_landform = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Sc
 var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_'+windows.toString())
                     .updateMask(brasil_raster);
 
-var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_'+windows.toString())
-                   .updateMask(brasil_raster)//.clip(geometry);
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_UNMASKED_'+windows.toString())
+                   .updateMask(brasil_raster).clip(geometry);
 
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_'+windows.toString())
                          .updateMask(brasil_raster);
@@ -70,7 +70,6 @@ var scale_z = function(image, windows) {
                     .subtract(minValue)
                     .multiply(maxScale.subtract(minScale))
                     .divide((maxValue.subtract(minValue)).add(minScale)  )
-
   return scaled;
 };
 /*
@@ -161,7 +160,7 @@ Export.image.toAsset({image: Z_soil_diversity_scaled,
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
-
+*/
 
 Export.image.toAsset({image: Z_wetlands_score_scaled, 
                       description: "Z_wetlands_score_SCALED_"+ windows.toString(), 
@@ -170,4 +169,4 @@ Export.image.toAsset({image: Z_wetlands_score_scaled,
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
-*/
+
