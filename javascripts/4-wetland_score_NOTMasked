@@ -11,12 +11,12 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                         .dissolve({'maxError': 1})
                         .bounds();
                         
-var brazil_raster = ee.Image("projects/ee-lucasljardim9/assets/brasil_raster");                        
+var brazil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");                        
                         
 /* Import wetland raster from CIFOR database*/                        
 /* Reproject to the same projection as the other variables */
 
-var wetlands = ee.Image("projects/ee-lucasljardim9/assets/Cifor_wetlands")
+var wetlands = ee.Image("projects/ee-resilience/assets/Cifor_wetlands")
                .reproject({crs: "EPSG:4326",
                            scale: 92.76624}).updateMask(brazil_raster);
                            
