@@ -20,15 +20,15 @@ var wetlands = ee.Image("projects/ee-lucasljardim9/assets/Cifor_wetlands")
                .reproject({crs: "EPSG:4326",
                            scale: 92.76624}).updateMask(brazil_raster);
                            
-var rivers = wetlands.mask(wetlands);  
+ var rivers = wetlands.mask(wetlands.neq(10));  
 
-// Filtering riverine and lacustrine out
+// // Filtering riverine and lacustrine out
 
-var wetlands = wetlands.mask(rivers)
+ var wetlands = wetlands.mask(rivers)
 
 /* Transform wetland raster into a binary raster of wetland presence */
 
-var wetlands_binary = wetlands.where(wetlands.gt(0), 1)//.unmask();
+var wetlands_binary = wetlands.where(wetlands.gt(0), 1).unmask().updateMask(brazil_raster);
 
 
 //Wetland density 100 acres
@@ -81,7 +81,86 @@ var wetlands_density_1000 = wetlands_count.divide(ee.Number(neighbors_amount));
 /*
 Map.setCenter(-50, -15, 11);
 */
+
+// Load the palettes package.
+var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
+
+
+var palette = palettes.colorbrewer.Spectral[7].reverse();
+
+Map.addLayer(wetlands_count        ,{min:0, max: 306,palette:palette},  'Contagem EXCLUINDO os rios');
+
+Map.addLayer(wetlands_density      ,{palette:palette},  'Densidade local EXCLUINDO os rios');
+
+Map.addLayer(wetlands_density_1000 ,{palette:palette},  'Densidade regional EXCLUINDO os rios');
+
+
+var wetlands = ee.Image("projects/ee-lucasljardim9/assets/Cifor_wetlands")
+               .reproject({crs: "EPSG:4326",
+                           scale: 92.76624}).updateMask(brazil_raster);
+                           
+// var rivers = wetlands.mask(wetlands);  
+
+// // // Filtering riverine and lacustrine out
+
+// var wetlands = wetlands.mask(rivers)
+
+/* Transform wetland raster into a binary raster of wetland presence */
+
+var wetlands_binary = wetlands.where(wetlands.gt(0), 1).unmask().updateMask(brazil_raster);
+
+
+//Wetland density 100 acres
 /*
+The circle radius was defined by the TNC area, calculating 100 acre backwards to squared meters, than to meters.
+
+r = (A/pi)^1/2
+
+100 acre equal to 404686 squared meters
+
+r = (404686/3.14)^1/2
+*/
+
+var r = ee.Number(404686).divide(ee.Number(Math.PI)).sqrt(); // radius in meters
+
+var radius_pixels = 5
+
+var neighbors = wetlands_binary.neighborhoodToBands(ee.Kernel.circle(ee.Number(radius_pixels)));
+
+/* Count the amount of wetlands within a cell neighborhood */
+
+var wetlands_count = neighbors.reduce(ee.Reducer.sum()).toDouble();
+
+/* Calculate the number of cells within neighborhood */
+
+var neighbors_amount = neighbors.bandNames().length();
+
+/* Calculate wetland density */
+/* Number of wetlands divided by the number of cells */
+
+var wetlands_density = wetlands_count.divide(ee.Number(neighbors_amount));
+
+/* Replicate the same procedure to a neighborhood of 1000 acres */
+
+// Wetland density 1000 acre
+
+var r = ee.Number(4046860).divide(ee.Number(Math.PI)).sqrt() // radius in meters
+
+var radius_pixels = r.divide(ee.Number(90)).round();
+
+var neighbors = wetlands_binary.neighborhoodToBands(ee.Kernel.circle(ee.Number(radius_pixels)));
+
+var wetlands_count = neighbors.reduce(ee.Reducer.sum()).toDouble();
+
+var neighbors_amount = neighbors.bandNames().length();
+
+var wetlands_density_1000 = wetlands_count.divide(ee.Number(neighbors_amount));
+
+/* Mapping wetland density and patchness */
+/*
+Map.setCenter(-50, -15, 11);
+*/
+
 // Load the palettes package.
 var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
 
@@ -89,44 +168,10 @@ var palettes=require('users/gena/packages:palettes');// https://github.com/gee-c
 var palette = palettes.colorbrewer.Spectral[7].reverse();
 
 
-Map.addLayer(wetlands_count        ,{palette:palette});
+Map.addLayer(wetlands_count.updateMask(brazil_raster)        ,{min:0, max: 306,palette:palette},  'Contagem Sem mascarar os rios');
 
-Map.addLayer(wetlands_density      ,{palette:palette} );
+Map.addLayer(wetlands_density      ,{palette:palette},  'Densidade local Sem mascarar os rios');
 
-Map.addLayer(wetlands_density_1000 ,{palette:palette} );
-
-*/
-/* Exporting wetlands patchness (number of wetlands within neighborhood) */
-
-Export.image.toAsset({
-  image: wetlands_count,
-  description: 'wetlands_count',
-  assetId: "projects/ee-resilience/assets/wetlands_count_ALLWETLANDS",
-  scale: 92.76624,
-  region: brazil_raster,
-  maxPixels: 5072319225
-});
-
-// Wetlands density at 100 and 1000 acres
-
-Export.image.toAsset({
-  image: wetlands_density,
-  description: 'wetlands_density',
-  assetId: "projects/ee-resilience/assets/wetlands_density_ALLWETLANDS",
-  scale: 92.76624,
-  region: brazil_raster,
-  maxPixels: 5072319225
-});
-
-Export.image.toAsset({
-  image:  wetlands_density_1000,
-  description: 'wetlands_density_1000',
-  assetId: "projects/ee-resilience/assets/wetlands_density_1000_ALLWETLANDS",
-  scale: 92.76624,
-  region: brazil_raster,
-  maxPixels: 5072319225
-});
-
-
+Map.addLayer(wetlands_density_1000 ,{palette:palette},  'Densidade regional Sem mascarar os rios');
 
 
