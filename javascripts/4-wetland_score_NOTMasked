@@ -97,7 +97,7 @@ Map.addLayer(wetlands_density      ,{palette:palette},  'Densidade local EXCLUIN
 Map.addLayer(wetlands_density_1000 ,{palette:palette},  'Densidade regional EXCLUINDO os rios');
 
 
-var wetlands = ee.Image("projects/ee-lucasljardim9/assets/Cifor_wetlands")
+var wetlands = ee.Image("projects/ee-resilience/assets/Cifor_wetlands")
                .reproject({crs: "EPSG:4326",
                            scale: 92.76624}).updateMask(brazil_raster);
                            
