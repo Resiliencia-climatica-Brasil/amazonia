@@ -163,12 +163,6 @@ var wetlands_density_1000 = wetlands_count.divide(ee.Number(neighbors_amount));
 Map.setCenter(-50, -15, 11);
 */
 
-// Load the palettes package.
-var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
-
-
-var palette = palettes.colorbrewer.Spectral[7].reverse();
-
 
 Map.addLayer(wetlands_count.updateMask(brazil_raster)        ,{min:0, max: 306,palette:palette},  'Contagem Sem mascarar os rios');
 
