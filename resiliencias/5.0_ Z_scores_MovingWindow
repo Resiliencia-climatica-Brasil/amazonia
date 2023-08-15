@@ -48,6 +48,8 @@ var img_soil_diversity = ee.Image('projects/ee-resilience/assets/New_window_size
 
 var scale = img_elevation.projection().nominalScale();
 
+var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel")
+                          .multiply(-1);
 
 
 //************************************ Z-Scores with a Moving Window ***************************************** 
@@ -100,7 +102,7 @@ if (isNaN(windows) || windows <= 0) {
   windows = 1;}
 */
 
-// Landforms, Elevation Range and Soil Diversity Z scores --------------------------
+// Landforms, Elevation Range and Soil Diversity and Local Connectedness Z scores --------------------------
 print(windows);
 
 var Z_elevation = calculate_Z_scores(img_elevation, windows);
@@ -109,6 +111,7 @@ var Z_landform = calculate_Z_scores(img_landform, windows);
 
 var Z_soil_diversity = calculate_Z_scores(img_soil_diversity, windows);
 
+var Z_connectedness = calculate_Z_scores(connectedness, windows);
 
 // Wetlands Diversity -------------------------------------------------------------
 
@@ -197,4 +200,11 @@ Export.image.toAsset({image: Z_wetlands_score,
 
 
 
+Export.image.toAsset({image: Z_connectedness, 
+                      description: "Z_connectedness"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/Z_connectedness_movingwindow_" + windows.toString(), 
+                      pyramidingPolicy:"median",
+                      region:Biome,
+                      scale: scale,
+                      maxPixels: 1e13});
 
