@@ -43,8 +43,11 @@ var img_wetlands_density = ee.Image("projects/ee-lucasljardim9/assets/wetlands_d
 var img_wetlands_density1000 = ee.Image("projects/ee-lucasljardim9/assets/wetlands_density_1000")
                    .updateMask(brasil_raster);
 
-var img_soil_diversity = ee.Image('projects/ee-resilience/assets/New_window_size/soil_diversity')
-                         .updateMask(brasil_raster);
+var solo_vector = ee.FeatureCollection("projects/ee-lucasljardim9/assets/IBGE_solo")
+
+var img_soil_diversity = solo_vector.select("soil_rich")
+                     .reduceToImage({properties:["soil_rich"], 
+                                     reducer:ee.Reducer.first()})
 
 var scale = img_elevation.projection().nominalScale();
 
@@ -162,7 +165,7 @@ Map.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands_scor
 
 // Exporting Z Scores
 
-
+/*
 Export.image.toAsset({image: Z_elevation, 
                       description: "Z_elevation"+ windows.toString(), 
                       assetId: "Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_" + windows.toString(), 
@@ -179,7 +182,7 @@ Export.image.toAsset({image: Z_landform,
                      region:Biome,
                      scale: scale,
                      maxPixels: 1e13});
-
+*/
 
 Export.image.toAsset({image: Z_soil_diversity, 
                       description: "Z_soil_diversity"+ windows.toString(), 
@@ -188,7 +191,7 @@ Export.image.toAsset({image: Z_soil_diversity,
                       region:Biome,
                       scale: scale,
                       maxPixels: 1e13});
-
+/*
 
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score"+ windows.toString(), 
@@ -208,3 +211,4 @@ Export.image.toAsset({image: Z_connectedness,
                       scale: scale,
                       maxPixels: 1e13});
 
+*/
