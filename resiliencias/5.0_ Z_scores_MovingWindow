@@ -34,13 +34,13 @@ var img_elevation = ee.Image('projects/ee-lucasljardim9/assets/elevation_range_r
 var img_landform = ee.Image('projects/ee-lucasljardim9/assets/landform_variety')
                    .updateMask(brasil_raster);
 
-var img_wetlands_count = ee.Image("projects/ee-lucasljardim9/assets/wetlands_count")
+var img_wetlands_count = ee.Image("projects/ee-resilience/assets/wetlands_count_ALLWETLANDS")
                    .updateMask(brasil_raster);
 
-var img_wetlands_density = ee.Image("projects/ee-lucasljardim9/assets/wetlands_density")
+var img_wetlands_density = ee.Image("projects/ee-resilience/assets/wetlands_density_ALLWETLANDS")
                    .updateMask(brasil_raster);
 
-var img_wetlands_density1000 = ee.Image("projects/ee-lucasljardim9/assets/wetlands_density_1000")
+var img_wetlands_density1000 = ee.Image("projects/ee-resilience/assets/wetlands_density_1000_ALLWETLANDS")
                    .updateMask(brasil_raster);
 
 var solo_vector = ee.FeatureCollection("projects/ee-lucasljardim9/assets/IBGE_solo")
