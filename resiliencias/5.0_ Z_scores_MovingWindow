@@ -119,7 +119,7 @@ return scaled_z;
 
 //Defing the window size in pixels for the moving window
 
-var windows = 200; 
+var windows = 10; 
 
 // If you need to test window size the formula bellow will ask you the size you want and change the exporting names for all further assets
 
@@ -131,32 +131,37 @@ if (isNaN(windows) || windows <= 0) {
   windows = 1;}
 */
 
-// Landforms, Elevation Range and Soil Diversity and Local Connectedness Z scores --------------------------
-
 print("Confirm your window size",windows); // To check if you choose the right window size
 
+// Landforms, Elevation Range and Soil Diversity and Local Connectedness Z scores --------------------------
 
+//Calculate the Z for Elevation Range
 var Z_elevation = calculate_Z_scores(img_elevation, windows);
 
+//Landform Variety
 var Z_landform = calculate_Z_scores(img_landform, windows);
 
+//Soil Diversity
 var Z_soil_diversity = calculate_Z_scores(img_soil_diversity, windows);
 
+// Local Connectedness
 var Z_connectedness = calculate_Z_scores(connectedness, windows);
 
 
 // Wetlands Diversity -------------------------------------------------------------
 
+//Wetlands Z-score will be determinated by the regional pixel count of wetlands, local density and regional density
+
 // For wetlands we first need to calculate the Z Score for wetlands density in 100 acres
 
-var Z_wetlands_density = calculate_Z_scores (img_wetlands_density, windows);
+var Z_wetlands_density = calculate_Z_scores (img_wetlands_density.unmask(), windows);
 
 // Z score for wetlands density in 1000 acres
 
-var Z_wetlands_density1000 = calculate_Z_scores (img_wetlands_density1000, windows);
+var Z_wetlands_density1000 = calculate_Z_scores (img_wetlands_density1000.unmask(), windows);
 
 // Z Score for the wetlands patchness
-var Z_wetlands_count  = calculate_Z_scores (img_wetlands_count, windows);
+var Z_wetlands_count  = calculate_Z_scores (img_wetlands_count.unmask(), windows);
 
 // Now we can calculate the wetland density as the average of the density for 100 and 1000 acres
 
@@ -176,25 +181,26 @@ var wet_average = wetlands_density
 
 var Z_wetlands_score = Z_wetlands_density.where(wet_test, wet_average);
 
+var Z_wetlands_score = Z_wetlands_score.updateMask(brasil_raster)
 
+// Load the palettes package.
 /*
-var paleta = [
-  '9d5a29','b1652f','CE7E45', 'DF923D', 'F1B555', 'FCD163', 'FFFF00',
-  'FFFFFF', '529400', '3E8601', '207401', '056201',
-  '004C00', '023B01'];
-*/
+var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
+var paleta = palettes.colorbrewer.Spectral[7].reverse();
 
   
-/*
-Map.addLayer(Z_elevation, {palette:paleta, min:-3, max:3}, 'Z_elevation');
-Map.addLayer(Z_landform, {palette:paleta, min:-3, max:3}, 'Z_landform');
-Map.addLayer(Z_soil_diversity, {palette:paleta, min:-3, max:3}, 'Z_soil_diversity');
-Map.addLayer(Z_wetlands_score, {palette:paleta, min:-3, max:3}, 'Z_wetlands_score');
+Map.addLayer(img_soil_diversity, {palette:paleta, min:0, max:8})
+Map.addLayer(Z_elevation, {palette:paleta, min:0, max:1}, 'Z_elevation');
+Map.addLayer(Z_landform, {palette:paleta, min:0, max:1}, 'Z_landform');
+Map.addLayer(Z_soil_diversity, {palette:paleta, min:0, max:1}, 'Z_soil_diversity');
+Map.addLayer(Z_wetlands_score, {palette:paleta, min:0, max:1}, 'Z_wetlands_score');
+Map.addLayer(Z_connectedness, {palette:paleta, min:0, max:1}, 'Z_connectedness');
 */
+
 
 // Exporting Z Scores
 
-
+/*
 Export.image.toAsset({image: Z_elevation, 
                       description: "Z_elevation"+ windows.toString(), 
                       assetId: "Moving_window_NEWSCALE/Z-Scores_elevation_range_movingwindow_" + windows.toString(), 
@@ -239,3 +245,4 @@ Export.image.toAsset({image: Z_connectedness,
                       scale: scale,
                       maxPixels: 1e13});
 
+*/
