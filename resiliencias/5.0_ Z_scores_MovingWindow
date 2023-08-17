@@ -119,7 +119,7 @@ return scaled_z;
 
 //Defing the window size in pixels for the moving window
 
-var windows = 10; 
+var windows = 200; 
 
 // If you need to test window size the formula bellow will ask you the size you want and change the exporting names for all further assets
 
@@ -226,7 +226,7 @@ Export.image.toAsset({image: Z_soil_diversity,
                       region:brasil_raster,
                       scale: scale,
                       maxPixels: 1e13});
-
+*/
 
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score"+ windows.toString(), 
@@ -236,7 +236,7 @@ Export.image.toAsset({image: Z_wetlands_score,
                       scale: scale,
                       maxPixels: 1e13});
 
-
+/*
 Export.image.toAsset({image: Z_connectedness, 
                       description: "Z_connectedness"+ windows.toString(), 
                       assetId: "Moving_window_NEWSCALE/Z_connectedness_movingwindow_" + windows.toString(), 
