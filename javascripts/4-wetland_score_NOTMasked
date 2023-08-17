@@ -22,15 +22,15 @@ var wetlands = ee.Image("projects/ee-resilience/assets/Cifor_wetlands")
                .updateMask(brazil_raster);
                            
  
- //var rivers = wetlands.mask(wetlands.neq(10));  
+var rivers = wetlands.mask(wetlands.neq(10));  
 
 // // Filtering riverine and lacustrine out
 
- //var wetlands = wetlands.mask(rivers)
+var wetlands = wetlands.mask(rivers)
 
 /* Transform wetland raster into a binary raster of wetland presence */
 
-var wetlands_binary = wetlands.where(wetlands.gt(0), 1).unmask().updateMask(brazil_raster);
+var wetlands_binary = wetlands.where(wetlands.gt(0), 1)//.unmask().updateMask(brazil_raster);
 
 
 //Wetland density 100 acres
@@ -109,7 +109,7 @@ var wetlands = ee.Image("projects/ee-resilience/assets/Cifor_wetlands")
 
 /* Transform wetland raster into a binary raster of wetland presence */
 
-var wetlands_binary = wetlands.where(wetlands.gt(0), 1)//.unmask();
+var wetlands_binary = wetlands.where(wetlands.gt(0), 1).unmask().updateMask(brazil_raster);
 
 
 //Wetland density 100 acres
