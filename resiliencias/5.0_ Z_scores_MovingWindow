@@ -47,7 +47,8 @@ var solo_vector = ee.FeatureCollection("projects/ee-lucasljardim9/assets/IBGE_so
 
 var img_soil_diversity = solo_vector.select("soil_rich")
                      .reduceToImage({properties:["soil_rich"], 
-                                     reducer:ee.Reducer.first()});
+                                     reducer:ee.Reducer.first()})
+                      .reproject('EPSG:4326', 92.76624);
 
 var scale = img_elevation.projection().nominalScale();
 
