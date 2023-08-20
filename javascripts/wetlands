@@ -28,7 +28,7 @@ var wetlands = wetlands.mask(rivers)
 
 /* Transform wetland raster into a binary raster of wetland presence */
 
-var wetlands_binary = wetlands.where(wetlands.gt(0), 1)//.unmask();
+var wetlands_binary = wetlands.where(wetlands.gt(0), 1).unmask();
 
 
 //Wetland density 100 acres
@@ -101,7 +101,7 @@ Map.addLayer(wetlands_density_1000 ,{palette:palette} );
 Export.image.toAsset({
   image: wetlands_count,
   description: 'wetlands_count',
-  assetId: "projects/ee-resilience/assets/wetlands_count_ALLWETLANDS",
+  assetId: "projects/ee-resilience/assets/wetlands_count_ALLWETLANDS2",
   scale: 92.76624,
   region: brazil_raster,
   maxPixels: 5072319225
@@ -112,7 +112,7 @@ Export.image.toAsset({
 Export.image.toAsset({
   image: wetlands_density,
   description: 'wetlands_density',
-  assetId: "projects/ee-resilience/assets/wetlands_density_ALLWETLANDS",
+  assetId: "projects/ee-resilience/assets/wetlands_density_ALLWETLANDS2",
   scale: 92.76624,
   region: brazil_raster,
   maxPixels: 5072319225
@@ -121,7 +121,7 @@ Export.image.toAsset({
 Export.image.toAsset({
   image:  wetlands_density_1000,
   description: 'wetlands_density_1000',
-  assetId: "projects/ee-resilience/assets/wetlands_density_1000_ALLWETLANDS",
+  assetId: "projects/ee-resilience/assets/wetlands_density_1000_ALLWETLANDS2",
   scale: 92.76624,
   region: brazil_raster,
   maxPixels: 5072319225
