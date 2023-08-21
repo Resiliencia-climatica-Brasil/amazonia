@@ -1,9 +1,9 @@
 //************************************ Landscape Diversity******************************************************
-/*
-var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+
+var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
-                       .filter(ee.Filter.eq("Bioma", "Amazônia"))
-*/
+                       .filter(ee.Filter.eq("Bioma", "Cerrado"))
+
 
 var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 
@@ -373,6 +373,8 @@ var paleta_res = [
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
 Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
 Map.addLayer(resilience_classes,{min: 1, max:16, palette:paleta_res}, 'Landscape Resilience');
+Map.addLayer(resilience_omn_classes,{min: 1, max:16, palette:paleta_res}, 'Landscape Resilience with Omniscape');
+
 //Map.addLayer (resilience_classes.clip(UC_Ti),{min:1, max:16, palette:paleta_res}, 'Terras Indígenas');
 //Map.addLayer(resilience_classes.clip(UC_FedEstMun), {min:1, max:16, palette:paleta_res}, 'Ucs Federais, Estaduais e Municipais');
 
