@@ -1,0 +1,62 @@
+var omniscape = ee.Image("projects/ee-lucasljardim9/assets/Cerrado_cum_currmap")
+
+var resistencia = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia")
+
+var mapbiomas = ee.Image('projects/mapbiomas-workspace/public/collection7_1/mapbiomas_collection71_integration_v1');print(mapbiomas);
+var ano = '2021'
+
+var palettes = [
+'129912',        
+'006400',        
+'00ff00',        
+'687537',        
+'935132',        
+'bbfcac',        
+'45c2a5',        
+'b8af4f',        
+'bdb76b',        
+'ffffb2',        
+'ffd966',        
+'e974ed',        
+'d5a6bd',        
+'c27ba0',        
+'fff3bf',        
+'ea9999',        
+'dd7e6b',        
+'af2a2a',        
+'ff99ff',        
+'0000ff',        
+'D5D5E5',        
+'ff8C00',        
+'8a2be2',        
+'29eee4',        
+'968c46',        
+'0000ff',        
+'f3b4f1',        
+'c59ff4',        
+'982c9e',        
+'e787f8',        
+'cca0d4',        
+'d082de',        
+'cd49e4',        
+'6b9932',        
+'66ffcc',        
+'660066'        
+]
+var vis = {
+    'min': 1,
+    'max': 62,
+    'palette': palettes
+};
+
+
+
+Map.addLayer(mapbiomas.select('classification_'+ano), vis, 'Colecao 7 - '+ano, true);
+var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
+
+var palette = palettes.colorbrewer.Spectral[10];
+
+
+Map.addLayer(omniscape, {min:19, max:183, palette:palette})
+
+Map.addLayer(resistencia, {min:1, max:20}, "resistencia") 
