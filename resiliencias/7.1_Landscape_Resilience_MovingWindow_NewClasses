@@ -131,14 +131,10 @@ var diversity = landscape_diversity;
 
 // ------------------------------------- PLOTING MAPS -----------------------------
 
-
-
-
-
-//var connectedness =ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/') //precisamos mudar para o raster atualizado
 var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel")
-                          .multiply(-1);
-
+                          .multiply(-1); 
+                          
+var omniscape = ee.Image("projects/ee-lucasljardim9/assets/Cerrado_cum_currmap"); 
 
 // The classes are calculated as the sum of the classified values of the original rasters 
 /*
@@ -164,8 +160,6 @@ var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistenci
 
 */
 
-
-
 // Compute the quantiles for each raster, the value of the quantiles will be stored as a band
 
 var quartiles_Div = diversity.reduceRegion({
@@ -181,7 +175,14 @@ var quartiles_Con = connectedness.reduceRegion({
     maxPixels:1e13,
     bestEffort: false
   });
-print(quartiles_Div)
+
+var quartiles_Omn = omniscape.reduceRegion({
+    reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
+    scale: omniscape.projection().nominalScale(),
+    maxPixels:1e13,
+    bestEffort: false
+  });
+  
 //creating the classes for Diversity based on the valeus.
 var div_25 = quartiles_Div.getNumber('scaled__p25');
 var div_50 = quartiles_Div.getNumber('scaled__p50');
@@ -204,10 +205,24 @@ var class_con = connectedness
 .where(connectedness.gte(con_50).and(connectedness.lt(con_75)),30)
 .where(connectedness.gte(con_75).and(connectedness), 40);
 
+//creating the classes for Connectedness by omniscape
+var omn_25 = quartiles_Omn.getNumber('b1_p25');
+var omn_50 = quartiles_Omn.getNumber('b1_p50');
+var omn_75 = quartiles_Omn.getNumber('b1_p75');
+
+var class_omn = omniscape
+.where(omniscape.lt(omn_25),10)
+.where(omniscape.gte(omn_25).and(omniscape.lt(omn_50)), 20)
+.where(omniscape.gte(omn_50).and(omniscape.lt(omn_75)),30)
+.where(omniscape.gte(omn_75).and(omniscape), 40);
+
+
+
 //// Sum the classified rasters to create the landscape_resilience image
 
 var resilience = class_div.add(class_con);
 
+var resilience_omn = class_div.clip(biome).add(class_omn)
 /*
 var resilience_classes = resilience
                           .where(resilience.eq(12), 1) 
@@ -250,6 +265,23 @@ var resilience_classes = resilience
                           .where(resilience.eq(44), 15) 
                           .where(resilience.eq(45), 16);
 
+var resilience_omn_classes = resilience_omn
+                          .where(resilience_omn.eq(12), 1) 
+                          .where(resilience_omn.eq(13), 2) 
+                          .where(resilience_omn.eq(22), 3)
+                          .where(resilience_omn.eq(14), 4)
+                          .where(resilience_omn.eq(32), 5)
+                          .where(resilience_omn.eq(23), 6)                           
+                          .where(resilience_omn.eq(15), 7) 
+                          .where(resilience_omn.eq(42), 8)
+                          .where(resilience_omn.eq(24), 9) 
+                          .where(resilience_omn.eq(33), 10)                           
+                          .where(resilience_omn.eq(25), 11) 
+                          .where(resilience_omn.eq(43), 12)
+                          .where(resilience_omn.eq(34), 13)
+                          .where(resilience_omn.eq(35), 14) 
+                          .where(resilience_omn.eq(44), 15) 
+                          .where(resilience_omn.eq(45), 16);
 
 var histogram = ui.Chart.image.histogram(({
   image: class_con,
@@ -341,8 +373,8 @@ var paleta_res = [
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
 Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
 Map.addLayer(resilience_classes,{min: 1, max:16, palette:paleta_res}, 'Landscape Resilience');
-Map.addLayer (resilience_classes.clip(UC_Ti),{min:1, max:16, palette:paleta_res}, 'Terras Indígenas');
-Map.addLayer(resilience_classes.clip(UC_FedEstMun), {min:1, max:16, palette:paleta_res}, 'Ucs Federais, Estaduais e Municipais');
+//Map.addLayer (resilience_classes.clip(UC_Ti),{min:1, max:16, palette:paleta_res}, 'Terras Indígenas');
+//Map.addLayer(resilience_classes.clip(UC_FedEstMun), {min:1, max:16, palette:paleta_res}, 'Ucs Federais, Estaduais e Municipais');
 
 Map.centerObject(brasil_raster);
 
