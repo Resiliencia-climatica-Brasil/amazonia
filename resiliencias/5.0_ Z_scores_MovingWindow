@@ -34,13 +34,13 @@ var img_elevation = ee.Image('projects/ee-lucasljardim9/assets/elevation_range_r
 var img_landform = ee.Image('projects/ee-lucasljardim9/assets/landform_variety')
                    .updateMask(brasil_raster);
 
-var img_wetlands_count = ee.Image("projects/ee-resilience/assets/wetlands_count_ALLWETLANDS")
+var img_wetlands_count = ee.Image("projects/ee-resilience/assets/wetlands_count_ALLWETLANDS2")
                    .updateMask(brasil_raster);
 
-var img_wetlands_density = ee.Image("projects/ee-resilience/assets/wetlands_density_ALLWETLANDS")
+var img_wetlands_density = ee.Image("projects/ee-resilience/assets/wetlands_density_ALLWETLANDS2")
                    .updateMask(brasil_raster);
 
-var img_wetlands_density1000 = ee.Image("projects/ee-resilience/assets/wetlands_density_1000_ALLWETLANDS")
+var img_wetlands_density1000 = ee.Image("projects/ee-resilience/assets/wetlands_density_1000_ALLWETLANDS2")
                    .updateMask(brasil_raster);
 
 var solo_vector = ee.FeatureCollection("projects/ee-lucasljardim9/assets/IBGE_solo");
@@ -48,7 +48,7 @@ var solo_vector = ee.FeatureCollection("projects/ee-lucasljardim9/assets/IBGE_so
 var img_soil_diversity = solo_vector.select("soil_rich")
                      .reduceToImage({properties:["soil_rich"], 
                                      reducer:ee.Reducer.first()})
-                      .reproject('EPSG:4326', 92.76624);
+                      .reproject('EPSG:4326',null, 92.76624);
 
 var scale = img_elevation.projection().nominalScale();
 
@@ -231,7 +231,7 @@ Export.image.toAsset({image: Z_soil_diversity,
 
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score"+ windows.toString(), 
-                      assetId: "Moving_window_NEWSCALE/Z-Scores_wetlands_movingwindow_"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/Z-Scores_wetlands_movingwindow_UNMASKED2_"+ windows.toString(), 
                       pyramidingPolicy:"median",
                       region:brasil_raster,
                       scale: scale,
