@@ -388,6 +388,7 @@ var legend = ui.Panel({
              }
 });
 
+
 var makeRow = function(color, name) {
  
       // Create the label that is actually the colored box.
