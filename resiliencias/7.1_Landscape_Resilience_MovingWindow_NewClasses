@@ -373,6 +373,11 @@ var paleta_res = [
 ];
 */
 
+// Load the palettes package.
+var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
+var palette = palettes.colorbrewer.Spectral[11];
+Map.addLayer(connectedness, {min: -66, max:-4, palette:palette}, 'connectedness');
+
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
 Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
 Map.addLayer(class_omn, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness by Omniscape class');
