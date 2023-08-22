@@ -166,21 +166,21 @@ var omniscape = ee.Image("projects/ee-lucasljardim9/assets/Cerrado_cum_currmap")
 // Compute the quantiles for each raster, the value of the quantiles will be stored as a band
 
 var quartiles_Div = diversity.reduceRegion({
-    reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
+    reducer: ee.Reducer.percentile([25, 50, 75]), 
     scale: diversity.projection().nominalScale(),
     maxPixels:1e13,
     bestEffort: false
   }); 
 
 var quartiles_Con = connectedness.reduceRegion({
-    reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
+    reducer: ee.Reducer.percentile([25, 50, 75]), 
     scale: connectedness.projection().nominalScale(),
     maxPixels:1e13,
     bestEffort: false
   });
 
 var quartiles_Omn = omniscape.reduceRegion({
-    reducer: ee.Reducer.percentile([0,25, 50, 75,100]), 
+    reducer: ee.Reducer.percentile([25, 50, 75]), 
     scale: omniscape.projection().nominalScale(),
     maxPixels:1e13,
     bestEffort: false
@@ -446,5 +446,5 @@ for (var i = 0; i < 16; i++) {
   legend.add(makeRow(paleta_res[i], res[i]));
   }  
  
-Map.add(legend);
+//Map.add(legend);
 
