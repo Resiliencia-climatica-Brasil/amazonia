@@ -131,9 +131,12 @@ var diversity = landscape_diversity;
 
 // ------------------------------------- PLOTING MAPS -----------------------------
 
-var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel")
+//var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel")
+//                          .multiply(-1); 
+
+var connectedness = ee.Image("projects/ee-resilience/assets/C2_Resistencia") //New Local connectedness layer with rivers
                           .multiply(-1); 
-                          
+
 var omniscape = ee.Image("projects/ee-lucasljardim9/assets/Cerrado_cum_currmap"); 
 
 // The classes are calculated as the sum of the classified values of the original rasters 
