@@ -1,28 +1,39 @@
 //************************************ Landscape Diversity******************************************************
 
+var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                       .select("Bioma")
+                       .filter(ee.Filter.eq("Bioma", "Cerrado"))
+
 
 var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
+
 var scale = brasil_raster.projection().nominalScale();
 
-/*
+var UC_FedEstMun = ee.FeatureCollection("projects/ee-resilience/assets/UC_FedEstMun");
+
+var UC_Ti = ee.FeatureCollection("projects/ee-resilience/assets/UC_Ti"); 
+
+
+/* // Vai perguntar o tamanho de janela que você vai usar. se já tivermos decidido usar a formula de baixo
 var windows = prompt('Enter the window size based on the Z image name:', '50');
 windows = parseInt(windows);
 if (isNaN(windows) || windows <= 0) {
    print('Invalid input. Using default value for the window size.');
   windows = 50;}
+print(windows);
 */
-var windows = 200;              
+var windows = 200;
 
-var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALEDJanela_New_'+windows.toString())
+var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_'+windows.toString())
                    .updateMask(brasil_raster);
 
-var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanela_New_'+windows.toString())
+var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_'+windows.toString())
                     .updateMask(brasil_raster);
 
-var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_score_movingwindow_SCALEDJanela_New_'+windows.toString())
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_'+windows.toString())
                    .updateMask(brasil_raster);
 
-var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALEDJanela_New_'+windows.toString())
+var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_'+windows.toString())
                          .updateMask(brasil_raster);
 
 
@@ -32,148 +43,6 @@ var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEM
 // Test if elevation range is greater than landscape diversity
 
 var landscape_diversity = Z_landform;
-
-var test_1 = Z_elevation.gt(landscape_diversity);
-
-
-// Compute the average elevation
-var average_elevation = Z_landform.multiply(2).add(Z_elevation).divide(3);
-
-// Update landscape diversity where test_1 is true
-
-var landscape_diversity = landscape_diversity.where(test_1, average_elevation);
-
-
-// Step 2 ------------------------------------------------------------------
-// Take the average of landform, elevation range, and wetland score only if wetland score is higher than Step 1
-
-var test_2 = Z_wetlands_score.gt(landscape_diversity);
-
-
-// Calculate average -------------------------------------------------------
-// Elevation range higher than landform ------------------------------------
-
-var average_wetland_1 = Z_landform.multiply(2).add(Z_elevation).add(Z_wetlands_score).divide(4);
-
-var average_wetland_2 = Z_landform.multiply(2).add(Z_wetlands_score).divide(3);
-
-
-// Assigning new landform diversity values ---------------------------------
-
-
-
-//IF values of landscape_diversity are < elevation Z Score AND Wetland Z score we will calculate the diversity as landforms*2 + elevation + wetland / 4  
-
-var landscape_diversity = landscape_diversity.where(test_1.and(test_2), average_wetland_1); 
-
-//var landscape_diversity = landscape_diversity.where(test_2, wetland_score); // I don´t know why we were not calculting the mean, but if we need to go back we just remove the averages on lines 79 and 81 an run this code 
-
-
-//IF the values of diversity are < elevation but > wetland; then the diversity will be calculated by landforms*2 + wetlands / 3 
-
-var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2), average_wetland_2); 
-
-
-// Step 3 ------------------------------------------------------------------
-// Take the average of soil diversity only if it is higher than Step 2
-
-var test_3 = Z_soil_diversity.gt(landscape_diversity);
-
-
-// Averages ----------------------------------------------------------------
-
-var average_soil_1 = Z_landform.multiply(2).add(Z_elevation).add(Z_wetlands_score).add(Z_soil_diversity).divide(5);
-
-var average_soil_2 = Z_landform.multiply(2).add(Z_elevation).add(Z_soil_diversity).divide(4);
-
-var average_soil_3 = Z_landform.multiply(2).add(Z_wetlands_score).add(Z_soil_diversity).divide(4);
-
-var average_soil_4 = Z_landform.multiply(2).add(Z_soil_diversity).divide(3);
-
-
-// Assigning new landscape diversity values  -------------------------------
-
-//1) IF values of Diversity are SMALLER than elevation AND Wetlands AND Soil Diversity:
-// Landscape diversity = landforms*2 + elevation + wetland + soil /5
-
-//2) IF diversity is SMALER then elevation AND Soil but BIGGER then Wetlands:
-// Landscape diversity = landforms*2 + elevation + soil /4
-
-//3) IF diversity is SMALLER than Wetlands AND soil but bigger than Elevation:
-// Landscape diversity = landforms*2 + wetland + soil /4
-
-//4) IF diversity is SMALLER than soil but bigger than Elevation AND Wetlands:
-// Landscape diversity = landforms*2 + soil /3
-
-
-var landscape_diversity = landscape_diversity.where(test_1.and(test_2).and(test_3), average_soil_1); // 1)
-
-var landscape_diversity = landscape_diversity.where(test_1.and(test_2.not()).and(test_3), average_soil_2); // 2)
-
-var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and(test_3), average_soil_3); // 3)
-
-var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
-
-
-// ------------------------------------- PLOTING MAPS -----------------------------
-
-// Load the palettes package.
-var palettes=require('users/gena/packages:palettes'); // https://github.com/gee-community/ee-palettes
-
-// var palette =   palettes.kovesi.diverging_linear_bjr_30_55_c53[7];
-//var palette =  palettes.crameri.tofino[25];
-// var palette =  palettes.niccoli.linearlhot[7];
-// var palette =  palettes.colorbrewer.YlGnBu[3];
-var palette = palettes.colorbrewer.Spectral[11]
-
-
-
-// Set a center and zoom level.
-
-var center={lon: -56.361, lat: -18.695, zoom:7};
-
-// Create two maps.
-var leftMap = ui.Map(center);
-var rightMap = ui.Map(center);
-
-// Create a split panel with the two maps.
-var splitPanel = ui.SplitPanel({
-  firstPanel: leftMap,
-  secondPanel: rightMap,
-  orientation: 'horizontal',
-  wipe: true
-});
-
-// Remove the default map from the root panel.
-ui.root.clear();
-
-// Add our split panel to the root panel.
-ui.root.add(splitPanel);
-
-// Add the layers to the maps
-rightMap.addLayer(landscape_diversity, {min:0 , max:1, palette:palette}, 'Landscape Diversity SCALED WITHIN WINDOWS');
-
-
-var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALEDJanela_'+windows.toString())
-                   .updateMask(brasil_raster);
-
-var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanela_'+windows.toString())
-                    .updateMask(brasil_raster);
-
-var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALEDJanela_'+windows.toString())
-                   .updateMask(brasil_raster);
-
-var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALEDJanela_'+windows.toString())
-                         .updateMask(brasil_raster);
-
-
-// Step 1 ------------------------------------------------------------------
-// Take the average of landform and elevation range only if elevantion range is higher than landform--------
-
-// Test if elevation range is greater than landscape diversity
-
-var landscape_diversity = Z_landform;
-
 
 var test_1 = Z_elevation.gt(landscape_diversity);
 
@@ -224,11 +93,11 @@ var test_3 = Z_soil_diversity.gt(landscape_diversity);
 
 // Averages ----------------------------------------------------------------
 
-var average_soil_1 = Z_landform.multiply(2).add(Z_elevation).add(Z_wetlands_score).add(Z_soil_diversity).divide(5);
+var average_soil_1 = Z_landform.add(Z_elevation).add(Z_wetlands_score.multiply(2)).add(Z_soil_diversity).divide(5);
 
 var average_soil_2 = Z_landform.multiply(2).add(Z_elevation).add(Z_soil_diversity).divide(4);
 
-var average_soil_3 = Z_landform.multiply(2).add(Z_wetlands_score).add(Z_soil_diversity).divide(4);
+var average_soil_3 = Z_landform.add(Z_wetlands_score.multiply(2)).add(Z_soil_diversity).divide(4);
 
 var average_soil_4 = Z_landform.multiply(2).add(Z_soil_diversity).divide(3);
 
@@ -256,4 +125,29 @@ var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2).and
 
 var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not()).and(test_3), average_soil_4); // 4)
 
-leftMap.addLayer(landscape_diversity, {/*min:-2 , max:2,*/ palette:palette}, 'Landscape Diversity scaleD');
+// create the histogram to explore the distribution of pixel value
+
+/*
+var histogram = ui.Chart.image.histogram(({
+  image: landscape_diversity,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('Landscape div',histogram);
+*/
+
+//Exporting to Asset
+
+
+Export.image.toAsset({image: Z_wetlands_score, 
+                      description: "Landscape_diversity"+ windows.toString(), 
+                      assetId: "Moving_window_TEMP/Landscape_diversity_movingwindow_"+ windows.toString(), 
+                      pyramidingPolicy:"median",
+                      region:brasil_raster,
+                      scale: scale,
+                      maxPixels: 1e13});
+
