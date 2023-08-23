@@ -52,7 +52,7 @@ var img_soil_diversity = solo_vector.select("soil_rich")
 
 var scale = img_elevation.projection().nominalScale();
 
-var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistencia_kernel")
+var connectedness = ee.Image("projects/ee-resilience/assets/C2_resistencia")
                           .multiply(-1);
 
 
