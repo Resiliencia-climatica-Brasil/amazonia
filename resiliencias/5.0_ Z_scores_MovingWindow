@@ -52,7 +52,7 @@ var img_soil_diversity = solo_vector.select("soil_rich")
 
 var scale = img_elevation.projection().nominalScale();
 
-var connectedness = ee.Image("projects/ee-resilience/assets/C2_resistencia")
+var connectedness = ee.Image("projects/ee-resilience/assets/C2_Resistencia")
                           .multiply(-1);
 
 
@@ -204,7 +204,7 @@ Export.image.toAsset({image: Z_soil_diversity,
                       region:brasil_raster,
                       scale: scale,
                       maxPixels: 1e13});
-*/
+
 
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score"+ windows.toString(), 
@@ -214,7 +214,7 @@ Export.image.toAsset({image: Z_wetlands_score,
                       scale: scale,
                       maxPixels: 1e13});
 
-/*
+
 Export.image.toAsset({image: Z_connectedness, 
                       description: "Z_connectedness"+ windows.toString(), 
                       assetId: "Moving_window_NEWSCALE/Z_connectedness_movingwindow_" + windows.toString(), 
