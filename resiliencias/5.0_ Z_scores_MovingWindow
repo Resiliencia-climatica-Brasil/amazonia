@@ -65,58 +65,35 @@ var connectedness = ee.Image("projects/ee-lucasljardim9/assets/Biomas_resistenci
 
 var calculate_Z_scores = function(image, windows) {
   
-var neighborhood = image.neighborhoodToBands(ee.Kernel.circle(windows));
+  // Calculating the mean
+  var mean = image.reduceNeighborhood({
+    reducer: ee.Reducer.mean(),
+    kernel: ee.Kernel.circle({
+                                radius:windows,
+                                units:'pixels', 
+                                normalize:false
+                              }),
+  });
 
-var average = neighborhood.reduce(ee.Reducer.mean());
+  // Calculating the standard deviation
+  var sd = image.reduceNeighborhood({
+    reducer: ee.Reducer.stdDev(),
+    kernel: ee.Kernel.circle({
+                                radius:windows,
+                                units:'pixels', 
+                                normalize:false
+                              }),
+  });
 
-var std = neighborhood.reduce(ee.Reducer.stdDev());
+  // Values as a raster
+  var meanValue = mean.rename('mean');
+  var sdValue = sd.rename('sd');
 
-var z = neighborhood.subtract(average).divide(std);
+  // Calculating the z scores
+  var z = image.subtract(meanValue).divide(sdValue).rename('z');
 
-var min = z.reduce(ee.Reducer.min());
-
-var max = z.reduce(ee.Reducer.max());
-
-var bandname = ee.String(image.bandNames().get(0)).cat("_0_0")
-
-var scaled_z = z.select(bandname).subtract(min).divide(max.subtract(min));
-
-return scaled_z;
-}
-
-
-//OLD FUNCTION EXCLUDE FROM FURTHER CODES
-// var calculate_Z_scores = function(image, windows) {
-  
-//   // Calculating the mean
-//   var mean = image.reduceNeighborhood({
-//     reducer: ee.Reducer.mean(),
-//     kernel: ee.Kernel.circle({
-//                                 radius:windows,
-//                                 units:'pixels', 
-//                                 normalize:false
-//                               }),
-//   });
-
-//   // Calculating the standard deviation
-//   var sd = image.reduceNeighborhood({
-//     reducer: ee.Reducer.stdDev(),
-//     kernel: ee.Kernel.circle({
-//                                 radius:windows,
-//                                 units:'pixels', 
-//                                 normalize:false
-//                               }),
-//   });
-
-//   // Values as a raster
-//   var meanValue = mean.rename('mean');
-//   var sdValue = sd.rename('sd');
-
-//   // Calculating the z scores
-//   var z = image.subtract(meanValue).divide(sdValue).rename('z');
-
-//   return z;
-// };
+  return z;
+};
 
 //Defing the window size in pixels for the moving window
 
@@ -155,14 +132,14 @@ var Z_connectedness = calculate_Z_scores(connectedness, windows);
 
 // For wetlands we first need to calculate the Z Score for wetlands density in 100 acres
 
-var Z_wetlands_density = calculate_Z_scores (img_wetlands_density.unmask(), windows);
+var Z_wetlands_density = calculate_Z_scores (img_wetlands_density, windows);
 
 // Z score for wetlands density in 1000 acres
 
-var Z_wetlands_density1000 = calculate_Z_scores (img_wetlands_density1000.unmask(), windows);
+var Z_wetlands_density1000 = calculate_Z_scores (img_wetlands_density1000, windows);
 
 // Z Score for the wetlands patchness
-var Z_wetlands_count  = calculate_Z_scores (img_wetlands_count.unmask(), windows);
+var Z_wetlands_count  = calculate_Z_scores (img_wetlands_count, windows);
 
 // Now we can calculate the wetland density as the average of the density for 100 and 1000 acres
 
@@ -182,7 +159,7 @@ var wet_average = wetlands_density
 
 var Z_wetlands_score = Z_wetlands_density.where(wet_test, wet_average);
 
-var Z_wetlands_score = Z_wetlands_score.updateMask(brasil_raster)
+var Z_wetlands_score = Z_wetlands_score.updateMask(brasil_raster);
 
 // Load the palettes package.
 /*
@@ -231,7 +208,7 @@ Export.image.toAsset({image: Z_soil_diversity,
 
 Export.image.toAsset({image: Z_wetlands_score, 
                       description: "Z_wetlands_score"+ windows.toString(), 
-                      assetId: "Moving_window_TEMP/Z-Scores_wetlands_movingwindow_UNMASKED2_"+ windows.toString(), 
+                      assetId: "Moving_window_NEWSCALE/Z-Scores_wetlands_movingwindow_UNMASKED2_"+ windows.toString(), 
                       pyramidingPolicy:"median",
                       region:brasil_raster,
                       scale: scale,
