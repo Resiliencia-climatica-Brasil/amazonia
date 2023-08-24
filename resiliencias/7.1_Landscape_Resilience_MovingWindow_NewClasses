@@ -220,35 +220,11 @@ var class_omn = omniscape
 .where(omniscape.gte(omn_75).and(omniscape), 40);
 
 
-
 //// Sum the classified rasters to create the landscape_resilience image
 
 var resilience = class_div.add(class_con);
 
-var resilience_omn = class_div.clip(biome).add(class_omn)
-/*
-var resilience_classes = resilience
-                          .where(resilience.eq(12), 1) 
-                          .where(resilience.eq(13), 1) 
-                          .where(resilience.eq(22), 1)
-                          
-                          .where(resilience.eq(14), 2)                         
-                          .where(resilience.eq(15), 2) 
-                          .where(resilience.eq(32), 2) 
-                          .where(resilience.eq(42), 2)
-                           
-                          .where(resilience.eq(25), 3) 
-                          .where(resilience.eq(43), 3)
-                          
-                          .where(resilience.eq(23), 4)                         
-                          .where(resilience.eq(24), 4) 
-                          .where(resilience.eq(33), 4) 
-                          .where(resilience.eq(34), 4)
-                          
-                          .where(resilience.eq(35), 5) 
-                          .where(resilience.eq(45), 5) 
-                          .where(resilience.eq(44), 5);
-*/
+var resilience_omn = class_div.clip(biome).add(class_omn);
 
 var resilience_classes = resilience
                           .where(resilience.eq(12), 1) 
@@ -352,32 +328,12 @@ var paleta_res = [
 "#440154",       //45 -> 16
 ];
 
-/*
-var paleta_res = [
-"#DF0015",       //12 -> 1
-"#A5400F",       //13 -> 2
-"#DF7F09",       //22 -> 3
-"#4F9F06",       //14 -> 4
-"#DFBF03",       //32 -> 5
-"#A2200F",       //23 -> 6
-"#15DF00",       //15 -> 7
-"#DFDF00",       //42 -> 8
-"#616A08",       //24 -> 9
-"#B16A08",       //33 -> 10
-"#12C300",       //25 -> 11
-"#C3C300",       //43 -> 12
-"#663F09",       //34 -> 13
-"#10A700",       //35 -> 14
-"#8B8B00",       //44 -> 15
-"#0B6F00"         //45 -> 16
-];
-*/
 
 //Ploting Raw local connectedness
 var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
 var palette = palettes.colorbrewer.Spectral[11];
 Map.addLayer(connectedness, {min: -66, max:-4, palette:palette}, 'connectedness');
-Map.addLayer(diversity, {palette:palette.reverse()}, 'diversidade');
+
 
 //ploting classification of pixels for landscape diversity
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
