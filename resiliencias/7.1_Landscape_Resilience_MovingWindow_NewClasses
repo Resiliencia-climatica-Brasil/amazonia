@@ -30,7 +30,7 @@ var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-S
 var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_'+windows.toString())
                     .updateMask(brasil_raster);
 
-var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_'+windows.toString())
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Z-Scores_wetlands_movingwindow_UNMASKED2_200')
                    .updateMask(brasil_raster);
 
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_'+windows.toString())
@@ -372,10 +372,12 @@ var paleta_res = [
 "#0B6F00"         //45 -> 16
 ];
 */
+
 //Ploting Raw local connectedness
 var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
 var palette = palettes.colorbrewer.Spectral[11];
 Map.addLayer(connectedness, {min: -66, max:-4, palette:palette}, 'connectedness');
+Map.addLayer(diversity, {palette:palette.reverse()}, 'diversidade');
 
 //ploting classification of pixels for landscape diversity
 Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
@@ -396,6 +398,7 @@ Map.addLayer(resilience_omn_classes,{min: 1, max:16, palette:paleta_res}, 'Lands
 //Map.addLayer(resilience_classes.clip(UC_FedEstMun), {min:1, max:16, palette:paleta_res}, 'Ucs Federais, Estaduais e Municipais');
 
 Map.centerObject(brasil_raster);
+
 
 var legend = ui.Panel({
              style: {
