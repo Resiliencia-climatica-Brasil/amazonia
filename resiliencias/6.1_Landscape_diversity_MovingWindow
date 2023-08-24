@@ -143,7 +143,7 @@ var histogram = ui.Chart.image.histogram(({
 //Exporting to Asset
 
 
-Export.image.toAsset({image: Z_wetlands_score, 
+Export.image.toAsset({image: landscape_diversity, 
                       description: "Landscape_diversity"+ windows.toString(), 
                       assetId: "Moving_window_TEMP/Landscape_diversity_movingwindow_"+ windows.toString(), 
                       pyramidingPolicy:"median",
