@@ -111,17 +111,17 @@ var palette = palettes.colorbrewer.Spectral[7].reverse();
 
 
 
-// Map.addLayer(Z_landform_scaled_janela, {min:0, max:1, palette:palette}, 'Z-landfomrs SCALED WITHIN WINDOW');
-Map.addLayer(Z_landform_scaled, {min:0, max:1, palette:palette}, 'Z-landforms');
+// Map.addLayer(Z_landform_scaled, {min:0, max:1, palette:palette}, 'Z-landfomrs SCALED WITHIN WINDOW');
+Map.addLayer(Z_landform, {min:0, max:1, palette:palette}, 'Z-landforms');
 
-// Map.addLayer(Z_elevation_scaled_janela, {min:0, max:1, palette:palette}, 'Z-elevation SCALED WITHIN WINDOW');
-Map.addLayer(Z_elevation_scaled, {min:0, max:1, palette:palette}, 'Z-elevation');
+// Map.addLayer(Z_elevation_scaled, {min:0, max:1, palette:palette}, 'Z-elevation SCALED WITHIN WINDOW');
+Map.addLayer(Z_elevation, {min:0, max:1, palette:palette}, 'Z-elevation');
 
-// Map.addLayer(Z_wetlands_score_scaled_janela, {min:0, max:1, palette:palette}, 'Z-Wetlands SCALED WITHIN WINDOW');
-Map.addLayer(Z_wetlands_score_scaled, {min:0, max:1, palette:palette}, 'Z-Wetlands masked');
+// Map.addLayer(Z_wetlands_score_scaled, {min:0, max:1, palette:palette}, 'Z-Wetlands SCALED WITHIN WINDOW');
+Map.addLayer(Z_wetlands_score, {min:0, max:1, palette:palette}, 'Z-Wetlands masked');
 
-// Map.addLayer(Z_soil_diversity_scaled_janela, {min:0, max:1, palette:palette}, 'Z-soil SCALED WITHIN Window');
-Map.addLayer(Z_soil_diversity_scaled, {min:0, max:1, palette:palette}, 'Z-soil');
+// Map.addLayer(Z_soil_diversity_scaled, {min:0, max:1, palette:palette}, 'Z-soil SCALED WITHIN Window');
+Map.addLayer(Z_soil_diversity, {min:0, max:1, palette:palette}, 'Z-soil');
 
 
 
