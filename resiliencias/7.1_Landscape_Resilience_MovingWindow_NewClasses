@@ -382,7 +382,7 @@ Map.addLayer(resilience
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),{}, 'Landscape Resilience Bivariate color scale');
 
-var mapImage = Map.toImage({region: brazil_raster, format: 'png', dimensions: 10000});
+var mapImage = Map.toImage({region: brasil_raster, format: 'png', dimensions: 10000});
 
 
 
