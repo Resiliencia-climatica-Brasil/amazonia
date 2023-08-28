@@ -383,9 +383,9 @@ Map.addLayer(resilience
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),{}, 'Landscape Resilience');
 
-Map.addLayer(resilience
+Map.addLayer(resilience_omn
              .reproject('EPSG:4326', null, 92.76624)
-             .sldStyle(sld_intervals),{}, 'Landscape Resilience');
+             .sldStyle(sld_intervals),{}, 'Landscape Resilience Omniscape Cerrado');
 
 
 
