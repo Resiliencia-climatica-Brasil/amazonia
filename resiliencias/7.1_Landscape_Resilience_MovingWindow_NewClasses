@@ -261,6 +261,7 @@ var resilience_omn_classes = resilience_omn
                           .where(resilience_omn.eq(44), 15) 
                           .where(resilience_omn.eq(45), 16);
 
+/*
 var histogram = ui.Chart.image.histogram(({
   image: class_con,
   scale: scale,
@@ -293,7 +294,7 @@ var histogram = ui.Chart.image.histogram(({
     vAxis: {title: 'Count'},
     legend: 'none'
   }); print('resilience_classes',histogram);
-
+*/
 
 
 //Visualization
@@ -333,23 +334,23 @@ var paleta_res = [
 //Ploting Raw local connectedness
 var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
 var palette = palettes.colorbrewer.Spectral[11];
-Map.addLayer(connectedness, {min: -66, max:-4, palette:palette}, 'connectedness');
+//Map.addLayer(connectedness, {min: -66, max:-4, palette:palette}, 'connectedness');
 
 
 //ploting classification of pixels for landscape diversity
-Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
+//Map.addLayer(class_div, {min: 2, max:5, palette:paleta_div_con}, 'Landscape Diversity class');
 
 //ploting classification of pixels for local connectivity
-Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
+//Map.addLayer(class_con, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness class');
 
 //ploting classification of pixels for regional connectitivy with Omniscape
-Map.addLayer(class_omn, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness by Omniscape class');
+//Map.addLayer(class_omn, {min: 10, max:40, palette:paleta_div_con}, 'Local Connectedness by Omniscape class');
 
 //ploting Classification for Landscape Resilience based on Landscape Diversity and Local Connectedness
-Map.addLayer(resilience_classes,{min: 1, max:16, palette:paleta_res}, 'Landscape Resilience');
+//Map.addLayer(resilience_classes,{min: 1, max:16, palette:paleta_res}, 'Landscape Resilience');
 
 //ploting classification of Landscape Resilience based on Landscape Diversity and Regional Connectedness
-Map.addLayer(resilience_omn_classes,{min: 1, max:16, palette:paleta_res}, 'Landscape Resilience with Omniscape');
+//Map.addLayer(resilience_omn_classes,{min: 1, max:16, palette:paleta_res}, 'Landscape Resilience with Omniscape');
 
 //Map.addLayer (resilience_classes.clip(UC_Ti),{min:1, max:16, palette:paleta_res}, 'Terras Indígenas');
 //Map.addLayer(resilience_classes.clip(UC_FedEstMun), {min:1, max:16, palette:paleta_res}, 'Ucs Federais, Estaduais e Municipais');
@@ -382,6 +383,9 @@ Map.addLayer(resilience
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),{}, 'Landscape Resilience');
 
+Map.addLayer(resilience
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_intervals),{}, 'Landscape Resilience');
 
 
 
