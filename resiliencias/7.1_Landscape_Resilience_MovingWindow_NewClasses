@@ -23,7 +23,7 @@ print(windows);
 
 var windows = 200;
 
-var diversity  = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_200')
+var diversity  = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_ALLWETLANDS_200')
                    .updateMask(brasil_raster);
 
 
@@ -277,6 +277,7 @@ var sld_intervals =
     '</ColorMap>' +
   '</RasterSymbolizer>';
 
+
 Map.addLayer(resilience
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),{}, 'Landscape Resilience');
@@ -284,7 +285,6 @@ Map.addLayer(resilience
 Map.addLayer(resilience_omn
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),{}, 'Landscape Resilience Omniscape Cerrado');
-
 
 
 Export.image.toDrive({
