@@ -191,10 +191,10 @@ var div_50 = quartiles_Div.getNumber('z_p50');
 var div_75 = quartiles_Div.getNumber('z_p75');
 
 var class_div = diversity 
-.where(diversity.lt(div_25), 2)  
-.where(diversity.gte(div_25).and(diversity.lt(div_50)), 3)
-.where(diversity.gte(div_50).and(diversity.lt(div_75)), 4)
-.where(diversity.gte(div_75).and(diversity), 5);
+.where(diversity.lt(div_25), 1)  
+.where(diversity.gte(div_25).and(diversity.lt(div_50)), 2)
+.where(diversity.gte(div_50).and(diversity.lt(div_75)), 3)
+.where(diversity.gte(div_75).and(diversity), 4);
 
 //creating the classes for Connectedness
 var con_25 = quartiles_Con.getNumber('b1_p25');
