@@ -229,10 +229,10 @@ var paleta_res = [
 //Ploting Raw local connectedness
 var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
 var palette_con = palettes.colorbrewer.Spectral[11];
-var palette_div = palettes.colorbrewer.Spectral[11].reverse();
+var palette_div = palettes.colorbrewer.Spectral[7];
 
 Map.addLayer(connectedness, {min: -66, max:-4, palette:palette_con}, 'connectedness');
-Map.addLayer(diversity, {min: -0.24670152313016386, max:2.6232507855865874, palette:palette_div}, 'connectedness');
+Map.addLayer(diversity, {min: -0.24670152313016386, max:2.6232507855865874, palette:palette_div}, 'diversity');
 
 
 //ploting classification of pixels for landscape diversity
