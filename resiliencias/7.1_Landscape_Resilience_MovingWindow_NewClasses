@@ -389,6 +389,18 @@ Map.addLayer(resilience_omn
 
 
 
+Export.image.toDrive({
+		image:resilience
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_intervals),
+	description:'Resilience_bivariate_col',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
+
+
+
 var legend = ui.Panel({
              style: {
                position:'bottom-right',
