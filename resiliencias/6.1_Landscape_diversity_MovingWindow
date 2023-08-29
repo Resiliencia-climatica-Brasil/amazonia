@@ -22,19 +22,30 @@ if (isNaN(windows) || windows <= 0) {
   windows = 50;}
 print(windows);
 */
+
 var windows = 200;
 
 var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_200')
-                   .updateMask(brasil_raster);
+                   .updateMask(brasil_raster)
+                   .unitScale(-2.5, 3);
 
 var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_200')
-                    .updateMask(brasil_raster);
+                    .updateMask(brasil_raster)
+                    .unitScale(-2.7, 2);
 
-var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_200')
-                   .updateMask(brasil_raster);
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Z-Scores_wetlands_movingwindow_UNMASKED2_200')
+.updateMask(brasil_raster);
+
+var mask = Z_wetlands_score.mask(Z_wetlands_score.neq(0)); 
+
+var wetlands = Z_wetlands_score.mask(mask)
+                   .unitScale(-0.75,2.6);
+                   
+var Z_wetlands_score = wetlands.unmask().updateMask()
 
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_200')
-                         .updateMask(brasil_raster);
+                         .updateMask(brasil_raster)
+                         .unitScale(-1.5,2.1);
 
 
 // Step 1 ------------------------------------------------------------------
@@ -93,11 +104,11 @@ var test_3 = Z_soil_diversity.gt(landscape_diversity);
 
 // Averages ----------------------------------------------------------------
 
-var average_soil_1 = Z_landform.add(Z_elevation).add(Z_wetlands_score.multiply(2)).add(Z_soil_diversity).divide(5);
+var average_soil_1 = Z_landform.multiply(2).add(Z_elevation).add(Z_wetlands_score).add(Z_soil_diversity).divide(5);
 
 var average_soil_2 = Z_landform.multiply(2).add(Z_elevation).add(Z_soil_diversity).divide(4);
 
-var average_soil_3 = Z_landform.add(Z_wetlands_score.multiply(2)).add(Z_soil_diversity).divide(4);
+var average_soil_3 = Z_landform.multiply(2).add(Z_wetlands_score).add(Z_soil_diversity).divide(4);
 
 var average_soil_4 = Z_landform.multiply(2).add(Z_soil_diversity).divide(3);
 
@@ -127,7 +138,7 @@ var landscape_diversity = landscape_diversity.where(test_1.not().and(test_2.not(
 
 // create the histogram to explore the distribution of pixel value
 
-/*
+
 var histogram = ui.Chart.image.histogram(({
   image: landscape_diversity,
   scale: scale,
@@ -138,10 +149,78 @@ var histogram = ui.Chart.image.histogram(({
     vAxis: {title: 'Count'},
     legend: 'none'
   }); print('Landscape div',histogram);
-*/
+  
+  var histogram = ui.Chart.image.histogram(({
+  image: Z_landform,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('Z_landform',histogram);
+  
+  var histogram = ui.Chart.image.histogram(({
+  image: Z_elevation,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('Z_elevation',histogram);
+  
+    var histogram = ui.Chart.image.histogram(({
+  image: wetlands,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('Z_wetlands_score MASK',histogram);
+  
+  var histogram = ui.Chart.image.histogram(({
+  image: Z_wetlands_score,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('Z_wetlands_score',histogram);
+  
+  var histogram = ui.Chart.image.histogram(({
+  image: Z_soil_diversity,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('Z_soil_diversity',histogram);
+  
+  
+
+
+// Load the palettes package.
+var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
+var palette = palettes.colorbrewer.Spectral[7].reverse();
+
+Map.addLayer(landscape_diversity, {palette:palette, min:0, max:1}, 'diversity');
+Map.addLayer( Z_landform, {palette:palette, min:0, max:1} ,'Z_landform')
+Map.addLayer( Z_elevation, {palette:palette, min:0, max:1} ,'Z_elevation')
+Map.addLayer( Z_wetlands_score, {palette:palette, min:0, max:1} ,'Z_wetlands_score')
+Map.addLayer( Z_soil_diversity, {palette:palette, min:0, max:1} ,'Z_soil_diversity')
+
+
 
 //Exporting to Asset
-
 
 Export.image.toAsset({image: landscape_diversity, 
                       description: "Landscape_diversity"+ windows.toString(), 
