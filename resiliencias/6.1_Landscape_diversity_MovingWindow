@@ -41,12 +41,12 @@ var wetlands = ee.Image('projects/ee-lucasljardim9/assets/Cifor_wetlands')
                            scale: 92.76624})
                .updateMask(brasil_raster);
 
-var mask = wetlands.mask(wetlands.where(wetlands.gt(0), 1).fastDistanceTransform(200).lte(200));
+var mask = wetlands.mask(wetlands.where(wetlands.gt(0), 1).fastDistanceTransform(200, 'pixels').lte(200));
 Map.addLayer(mask)
 var wetlands = Z_wetlands_score.mask(mask)
                    .unitScale(-2.25, 7);
                    
-var Z_wetlands_score = wetlands.unmask().updateMask(brasil_raster)
+var Z_wetlands_score = wetlands//.unmask().updateMask(brasil_raster)
 
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_200')
                          .updateMask(brasil_raster)
