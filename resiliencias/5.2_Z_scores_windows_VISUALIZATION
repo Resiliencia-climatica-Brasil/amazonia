@@ -27,36 +27,36 @@ var scale = brasil_raster.projection().nominalScale();
 
 
 
-// ------------------------------------- IMPORTING THE SCALED TO 0-1 Z-SCORES -----------------------------
+// // ------------------------------------- IMPORTING THE SCALED TO 0-1 Z-SCORES -----------------------------
 
 
-var Z_landform_scaled  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALED_'+windows.toString())
-                   .updateMask(brasil_raster);
+// var Z_landform_scaled  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALED_'+windows.toString())
+//                   .updateMask(brasil_raster);
 
-var Z_elevation_scaled = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALED_'+windows.toString())
-                    .updateMask(brasil_raster);
+// var Z_elevation_scaled = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALED_'+windows.toString())
+//                     .updateMask(brasil_raster);
 
-var Z_wetlands_score_scaled = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALED_'+windows.toString())
-                   .updateMask(brasil_raster);
+// var Z_wetlands_score_scaled = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_SCALED_'+windows.toString())
+//                   .updateMask(brasil_raster);
 
-var Z_soil_diversity_scaled = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALED_'+windows.toString())
-                         .updateMask(brasil_raster);
+// var Z_soil_diversity_scaled = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALED_'+windows.toString())
+//                         .updateMask(brasil_raster);
                          
 
-// ------------------------------------- IMPORTING THE SCALED TO 0-1 Z-SCORES WITHIN THE MOVING WINDOW -----------------------------
+// // ------------------------------------- IMPORTING THE SCALED TO 0-1 Z-SCORES WITHIN THE MOVING WINDOW -----------------------------
 
 
-var Z_landform_scaled_janela  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALEDJanela_New_200')
-                   .updateMask(brasil_raster);
+// var Z_landform_scaled_janela  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_SCALEDJanela_New_200')
+//                   .updateMask(brasil_raster);
 
-var Z_elevation_scaled_janela = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanela_New_200')
-                    .updateMask(brasil_raster);
+// var Z_elevation_scaled_janela = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_SCALEDJanela_New_200')
+//                     .updateMask(brasil_raster);
 
-var Z_wetlands_score_scaled_janela = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_score_movingwindow_SCALEDJanela_New_200')
-                   .updateMask(brasil_raster);
+// var Z_wetlands_score_scaled_janela = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_score_movingwindow_SCALEDJanela_New_200')
+//                   .updateMask(brasil_raster);
 
-var Z_soil_diversity_scaled_janela = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALEDJanela_New_200')
-                         .updateMask(brasil_raster);
+// var Z_soil_diversity_scaled_janela = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_SCALEDJanela_New_200')
+//                         .updateMask(brasil_raster);
                          
 
 
@@ -112,16 +112,16 @@ var palette = palettes.colorbrewer.Spectral[7].reverse();
 
 
 // Map.addLayer(Z_landform_scaled, {min:0, max:1, palette:palette}, 'Z-landfomrs SCALED WITHIN WINDOW');
-Map.addLayer(Z_landform, {min:0, max:1, palette:palette}, 'Z-landforms');
+Map.addLayer(Z_landform, {palette:palette}, 'Z-landforms');
 
 // Map.addLayer(Z_elevation_scaled, {min:0, max:1, palette:palette}, 'Z-elevation SCALED WITHIN WINDOW');
-Map.addLayer(Z_elevation, {min:0, max:1, palette:palette}, 'Z-elevation');
+Map.addLayer(Z_elevation, {palette:palette}, 'Z-elevation');
 
 // Map.addLayer(Z_wetlands_score_scaled, {min:0, max:1, palette:palette}, 'Z-Wetlands SCALED WITHIN WINDOW');
-Map.addLayer(Z_wetlands_score, {min:0, max:1, palette:palette}, 'Z-Wetlands masked');
+Map.addLayer(Z_wetlands_score, {palette:palette}, 'Z-Wetlands');
 
 // Map.addLayer(Z_soil_diversity_scaled, {min:0, max:1, palette:palette}, 'Z-soil SCALED WITHIN Window');
-Map.addLayer(Z_soil_diversity, {min:0, max:1, palette:palette}, 'Z-soil');
+Map.addLayer(Z_soil_diversity, {palette:palette}, 'Z-soil');
 
 
 
