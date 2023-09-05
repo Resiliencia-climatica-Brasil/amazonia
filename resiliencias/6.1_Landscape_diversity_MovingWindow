@@ -27,30 +27,19 @@ var windows = 200;
 
 var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_200')
                    .updateMask(brasil_raster)
-                   .unitScale(-2.5, 3);
+                   .unitScale(-2.875, 3.25);
 
 var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_200')
                     .updateMask(brasil_raster)
-                    .unitScale(-2.8, 4);
+                  .unitScale(-3.25, 4.5);
 
-var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Z-Scores_wetlands_movingwindow_UNMASKED2_200')
-.updateMask(brasil_raster);
-
-var wetlands = ee.Image('projects/ee-lucasljardim9/assets/Cifor_wetlands')
-               .reproject({crs: "EPSG:4326",
-                           scale: 92.76624})
-               .updateMask(brasil_raster);
-
-var mask = wetlands.mask(wetlands.where(wetlands.gt(0), 1).fastDistanceTransform(200, 'pixels').lte(200));
-Map.addLayer(mask)
-var wetlands = Z_wetlands_score.mask(mask)
-                   .unitScale(-2.25, 7);
-                   
-var Z_wetlands_score = wetlands//.unmask().updateMask(brasil_raster)
+var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Z-Scores_wetlands_movingwindow_200')
+.updateMask(brasil_raster)
+.unitScale(-2, 4);
 
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_200')
                          .updateMask(brasil_raster)
-                         .unitScale(-1.5,2.1);
+                         .unitScale(-5,4.1);
 
 
 // Step 1 ------------------------------------------------------------------
@@ -80,7 +69,7 @@ var test_2 = Z_wetlands_score.gt(landscape_diversity);
 // Calculate average -------------------------------------------------------
 // Elevation range higher than landform ------------------------------------
 
-var average_wetland_1 = Z_landform.add(Z_elevation).add(Z_wetlands_score.multiply(2)).divide(4);
+var average_wetland_1 = Z_landform.multiply(2).add(Z_elevation).add(Z_wetlands_score).divide(4);
 
 var average_wetland_2 = Z_landform.add(Z_wetlands_score.multiply(2)).divide(3);
 
@@ -176,7 +165,7 @@ var histogram = ui.Chart.image.histogram(({
     vAxis: {title: 'Count'},
     legend: 'none'
   }); print('Z_elevation',histogram);
-  
+  /*
     var histogram = ui.Chart.image.histogram(({
   image: wetlands,
   scale: scale,
@@ -187,7 +176,7 @@ var histogram = ui.Chart.image.histogram(({
     vAxis: {title: 'Count'},
     legend: 'none'
   }); print('Z_wetlands_score MASK',histogram);
-  
+  */
   var histogram = ui.Chart.image.histogram(({
   image: Z_wetlands_score,
   scale: scale,
@@ -209,22 +198,26 @@ var histogram = ui.Chart.image.histogram(({
     vAxis: {title: 'Count'},
     legend: 'none'
   }); print('Z_soil_diversity',histogram);
-  
-  
+
 
 
 // Load the palettes package.
 var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
-var palette = palettes.colorbrewer.Spectral[7].reverse();
+var palette = palettes.colorbrewer.Spectral[11].reverse();
 
-Map.addLayer(landscape_diversity, {palette:palette, min:0, max:1}, 'diversity');
+Map.addLayer(landscape_diversity, {palette:palette, min:0.2, max:0.9}, 'diversity scaled');
 Map.addLayer( Z_landform, {palette:palette, min:0, max:1} ,'Z_landform')
 Map.addLayer( Z_elevation, {palette:palette, min:0, max:1} ,'Z_elevation')
 Map.addLayer( Z_wetlands_score, {palette:palette, min:0, max:1} ,'Z_wetlands_score')
 Map.addLayer( Z_soil_diversity, {palette:palette, min:0, max:1} ,'Z_soil_diversity')
 
 
+var diversity  = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_ALLWETLANDS_200')
+                   .updateMask(brasil_raster);
 
+
+Map.addLayer(diversity, {min: -0.24670152313016386, max:2.6232507855865874, palette:palette}, 'diversity sem escala');
+  
 //Exporting to Asset
 
 Export.image.toAsset({image: landscape_diversity, 
