@@ -123,6 +123,11 @@ Map.addLayer(Z_wetlands_score, {palette:palette}, 'Z-Wetlands');
 // Map.addLayer(Z_soil_diversity_scaled, {min:0, max:1, palette:palette}, 'Z-soil SCALED WITHIN Window');
 Map.addLayer(Z_soil_diversity, {palette:palette}, 'Z-soil');
 
+var diversity  = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_ALLWETLANDS_200')
+                   .updateMask(brasil_raster);
 
+
+Map.addLayer(diversity, {min: -0.24670152313016386, max:2.6232507855865874, palette:palette}, 'diversity');
+  
 
 
