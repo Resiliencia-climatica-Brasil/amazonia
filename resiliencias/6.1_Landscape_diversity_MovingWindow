@@ -26,19 +26,24 @@ print(windows);
 var windows = 200;
 
 var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_200')
-                   .unitScale(-2.875, 3.25)
+
+var Z_landform = Z_landform.gte(0)
+                   //.unitScale(-2.875, 3.25)
                    .updateMask(brasil_raster);
 
 var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_200')
-                  .unitScale(-3.25, 4.5)
+var Z_elevation = Z_elevation.gte(0)
+                  //.unitScale(-3.25, 4.5)
                   .updateMask(brasil_raster);
 
 var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_200')
-                          .unitScale(-8.75, 16.75)
+var Z_wetlands_score= Z_wetlands_score.gte(0)
+                          //.unitScale(-8.75, 16.75)
                           .updateMask(brasil_raster);
 
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_200')
-                         .unitScale(-19.25, 5.5)
+var Z_soil_diversity = Z_soil_diversity.gte(0)
+                         //.unitScale(-19.25, 5.5)
                          .updateMask(brasil_raster);
 
 
