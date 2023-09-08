@@ -57,11 +57,11 @@ var Z_elevation = Z_elevation_pos.add(Z_elevation_neg);
 var Z_wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_200');
 
 var Z_wetlands_score_pos= Z_wetlands_score.mask(Z_wetlands_score.gte(0))
-                          .unitScale(0, 16.75)
+                          .unitScale(0, 41.75)
                           .mask(brasil_raster);
 var Z_wetlands_score_neg= Z_wetlands_score.mask(Z_wetlands_score.lte(0))
                           .multiply(-1)
-                          .unitScale(0,8.75)
+                          .unitScale(0,12)
                           .multiply(-1)
                           .mask(brasil_raster);
 var Z_wetlands_score = Z_wetlands_score_pos.add(Z_wetlands_score_neg);
@@ -70,15 +70,15 @@ var Z_wetlands_score = Z_wetlands_score_pos.add(Z_wetlands_score_neg);
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_200')
                          //.unitScale(-19.25, 5.5)
 
-var Z_soil_diversity_pos= Z_soil_diversity.mask(Z_soil_diversity.gte(0))
-                          .unitScale(0, 5.5)
-                          .mask(brasil_raster);
-var Z_soil_diversity_neg= Z_soil_diversity.mask(Z_soil_diversity.lte(0))
-                          .multiply(-1)
-                          .unitScale(0,19.25)
-                          .multiply(-1)
-                          .mask(brasil_raster);
-var Z_soil_diversity = Z_soil_diversity_pos.add(Z_soil_diversity_neg);
+// var Z_soil_diversity_pos= Z_soil_diversity.mask(Z_soil_diversity.gte(0))
+//                           .unitScale(0, 5.5)
+//                           .mask(brasil_raster);
+// var Z_soil_diversity_neg= Z_soil_diversity.mask(Z_soil_diversity.lte(0))
+//                           .multiply(-1)
+//                           .unitScale(0,19.25)
+//                           .multiply(-1)
+//                           .mask(brasil_raster);
+// var Z_soil_diversity = Z_soil_diversity_pos.add(Z_soil_diversity_neg);
 
 
 
