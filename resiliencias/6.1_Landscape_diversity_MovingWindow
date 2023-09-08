@@ -29,11 +29,11 @@ var Z_landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-S
                    //.unitScale(-2.875, 3.25)
 
 var Z_landform_pos= Z_landform.mask(Z_landform.gte(0))
-                          .unitScale(0, 3.25)
+                          .unitScale(0, 8.875)
                           .mask(brasil_raster);
 var Z_landform_neg= Z_landform.mask(Z_landform.lte(0))
                           .multiply(-1)
-                          .unitScale(0,2.875)
+                          .unitScale(0,5.375)
                           .multiply(-1)
                           .mask(brasil_raster);
 var Z_landform = Z_landform_pos.add(Z_landform_neg);
@@ -43,14 +43,14 @@ var Z_elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-S
                   //.unitScale(-3.25, 4.5)
 
 var Z_elevation_pos= Z_elevation.mask(Z_elevation.gte(0))
-                          .unitScale(0, 4.5)
+                          .unitScale(0,13.625)
                           .mask(brasil_raster);
 var Z_elevation_neg= Z_elevation.mask(Z_elevation.lte(0))
                           .multiply(-1)
-                          .unitScale(0,3.25)
+                          .unitScale(0,7.375)
                           .multiply(-1)
                           .mask(brasil_raster);
-                          
+ 
 var Z_elevation = Z_elevation_pos.add(Z_elevation_neg);
 
 
@@ -70,15 +70,15 @@ var Z_wetlands_score = Z_wetlands_score_pos.add(Z_wetlands_score_neg);
 var Z_soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_200')
                          //.unitScale(-19.25, 5.5)
 
-// var Z_soil_diversity_pos= Z_soil_diversity.mask(Z_soil_diversity.gte(0))
-//                           .unitScale(0, 5.5)
-//                           .mask(brasil_raster);
-// var Z_soil_diversity_neg= Z_soil_diversity.mask(Z_soil_diversity.lte(0))
-//                           .multiply(-1)
-//                           .unitScale(0,19.25)
-//                           .multiply(-1)
-//                           .mask(brasil_raster);
-// var Z_soil_diversity = Z_soil_diversity_pos.add(Z_soil_diversity_neg);
+var Z_soil_diversity_pos= Z_soil_diversity.mask(Z_soil_diversity.gte(0))
+                          .unitScale(0, 10.25)
+                          .mask(brasil_raster);
+var Z_soil_diversity_neg= Z_soil_diversity.mask(Z_soil_diversity.lte(0))
+                          .multiply(-1)
+                          .unitScale(0,29.75)
+                          .multiply(-1)
+                          .mask(brasil_raster);
+var Z_soil_diversity = Z_soil_diversity_pos.add(Z_soil_diversity_neg);
 
 
 
@@ -247,7 +247,7 @@ var histogram = ui.Chart.image.histogram(({
 var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
 var palette = palettes.colorbrewer.Spectral[11].reverse();
 
-Map.addLayer(landscape_diversity.updateMask(brasil_raster), {palette:palette, min:0.2, max:0.9}, 'diversity scaled');
+Map.addLayer(landscape_diversity, {palette:palette, min:-0.5, max:0.5}, 'diversity scaled');
 Map.addLayer( Z_landform, {palette:palette, min:-1, max:1} ,'Z_landform')
 Map.addLayer( Z_elevation, {palette:palette, min:-1, max:1} ,'Z_elevation')
 Map.addLayer( Z_wetlands_score, {palette:palette, min:-1, max:1} ,'Z_wetlands_score')
@@ -258,13 +258,13 @@ var diversity  = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/
                    .updateMask(brasil_raster);
 
 
-Map.addLayer(diversity, {min: -0.24670152313016386, max:2.6232507855865874, palette:palette}, 'diversity sem escala');
+Map.addLayer(diversity, {min: -0.7, max:0.7, palette:palette}, 'diversity sem escala');
   
 //Exporting to Asset
 
 Export.image.toAsset({image: landscape_diversity, 
                       description: "Landscape_diversity"+ windows.toString(), 
-                      assetId: "Moving_window_NEWSCALE/Landscape_diversity_movingwindow_-1+1"+ windows.toString(), 
+                      assetId: "Moving_window_NEWSCALE/Landscape_diversity_movingwindow_SCALED"+ windows.toString(), 
                       pyramidingPolicy:"median",
                       region:brasil_raster,
                       scale: scale,
