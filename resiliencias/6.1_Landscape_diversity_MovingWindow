@@ -61,7 +61,7 @@ var Z_wetlands_score_pos= Z_wetlands_score.mask(Z_wetlands_score.gte(0))
                           .mask(brasil_raster);
 var Z_wetlands_score_neg= Z_wetlands_score.mask(Z_wetlands_score.lte(0))
                           .multiply(-1)
-                          .unitScale(0,12)
+                          .unitScale(0, 12)
                           .multiply(-1)
                           .mask(brasil_raster);
 var Z_wetlands_score = Z_wetlands_score_pos.add(Z_wetlands_score_neg);
@@ -264,7 +264,7 @@ Map.addLayer(diversity, {min: -0.24670152313016386, max:2.6232507855865874, pale
 
 Export.image.toAsset({image: landscape_diversity, 
                       description: "Landscape_diversity"+ windows.toString(), 
-                      assetId: "Moving_window_TEMP/Landscape_diversity_movingwindow_"+ windows.toString(), 
+                      assetId: "Moving_window_NEWSCALE/Landscape_diversity_movingwindow_-1+1"+ windows.toString(), 
                       pyramidingPolicy:"median",
                       region:brasil_raster,
                       scale: scale,
