@@ -167,47 +167,47 @@ var Z_soil_diversity = soil_diversity_pos.add(soil_diversity_neg);
 
 // 1) Landscape Diversity usando os valores originais de Z, com wetlands sem rios
 
-var diversity =ee.Image()
+var diversity = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_ORIGINAL_200')
 
-// Export.image.toDrive({image: diversity, 
-//                       description: "Landscape_Diversity_originais_200", 
-//                       folder:'GEE',
-//                       region:brasil_raster,
-//                       scale: brasil_raster.projection().nominalScale(),
-//                       maxPixels: 1e13});
+Export.image.toDrive({image: diversity, 
+                      description: "Landscape_Diversity_originais_200", 
+                      folder:'GEE',
+                      region:brasil_raster,
+                      scale: brasil_raster.projection().nominalScale(),
+                      maxPixels: 1e13});
 
 
 // 2) Landscape Diversity usando os valores originais de Z, com wetlands com rios (UNMASKED)
 
-var diversity_unmasked =ee.Image('')
+var diversity_unmasked = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_ORIGINAL_UNMASKED_200')
 
-// Export.image.toDrive({image: diversity_unmasked, 
-//                       description: "Landscape_Diversity_originais_UNMASKED_200", 
-//                       folder:'GEE',
-//                       region:brasil_raster,
-//                       scale: brasil_raster.projection().nominalScale(),
-//                       maxPixels: 1e13});
+Export.image.toDrive({image: diversity_unmasked, 
+                      description: "Landscape_Diversity_originais_UNMASKED_200", 
+                      folder:'GEE',
+                      region:brasil_raster,
+                      scale: brasil_raster.projection().nominalScale(),
+                      maxPixels: 1e13});
 
 
 // 3) Landscape Diversity usando os valores escalonados (-1, 1) de Z, com wetlands sem rios
 
-var diversity_scaled =ee.Image('')
+var diversity_scaled = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_SCALED_200')
 
-// Export.image.toDrive({image: diversity_scaled, 
-//                       description: "Landscape_Diversity_scaled_200", 
-//                       folder:'GEE',
-//                       region:brasil_raster,
-//                       scale: brasil_raster.projection().nominalScale(),
-//                       maxPixels: 1e13});
+Export.image.toDrive({image: diversity_scaled, 
+                      description: "Landscape_Diversity_scaled_200", 
+                      folder:'GEE',
+                      region:brasil_raster,
+                      scale: brasil_raster.projection().nominalScale(),
+                      maxPixels: 1e13});
 
 
 // 4) Landscape Diversity usando os valores escalonados (-1, 1) de Z, com wetlands com rios (UNMASKED)
 
-var diversity_scaled_unmasked =ee.Image('')
+var diversity_scaled_unmasked = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_SCALED_UNMASKED_200')
 
-// Export.image.toDrive({image: diversity_scaled_unmasked, 
-//                       description: "Landscape_Diversity_scaled_UNMASKED_200", 
-//                       folder:'GEE',
-//                       region:brasil_raster,
-//                       scale: brasil_raster.projection().nominalScale(),
-//                       maxPixels: 1e13});
+Export.image.toDrive({image: diversity_scaled_unmasked, 
+                      description: "Landscape_Diversity_scaled_UNMASKED_200", 
+                      folder:'GEE',
+                      region:brasil_raster,
+                      scale: brasil_raster.projection().nominalScale(),
+                      maxPixels: 1e13});
