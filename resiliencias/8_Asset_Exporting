@@ -49,6 +49,7 @@ var elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Sco
 var elevation_pos= elevation.mask(elevation.gte(0))
                           .unitScale(0,13.625)
                           .mask(brasil_raster);
+                          
 var elevation_neg= elevation.mask(elevation.lte(0))
                           .multiply(-1)
                           .unitScale(0,7.375)
@@ -78,11 +79,13 @@ var wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/
 var wetlands_score_pos= wetlands_score.mask(wetlands_score.gte(0))
                           .unitScale(0, 41.75)
                           .mask(brasil_raster);
+                          
 var wetlands_score_neg= wetlands_score.mask(wetlands_score.lte(0))
                           .multiply(-1)
                           .unitScale(0, 12)
                           .multiply(-1)
                           .mask(brasil_raster);
+                          
 var Z_wetlands_score = wetlands_score_pos.add(wetlands_score_neg);
 
 // Export.image.toDrive({image: wetlands_score, 
@@ -106,11 +109,13 @@ var wetlands_score_unmasked = ee.Image('projects/ee-resilience/assets/Moving_win
 var wetlands_score_pos_unmasked= wetlands_score_unmasked.mask(wetlands_score_unmasked.gte(0))
                           .unitScale(0, 41.75)
                           .mask(brasil_raster);
+                          
 var wetlands_score_neg_unmasked= wetlands_score_unmasked.mask(wetlands_score_unmasked.lte(0))
                           .multiply(-1)
                           .unitScale(0, 12)
                           .multiply(-1)
                           .mask(brasil_raster);
+                          
 var Z_wetlands_score_unmasked = wetlands_score_pos_unmasked.add(wetlands_score_neg_unmasked);
 
 // Export.image.toDrive({image: wetlands_score_unmasked, 
@@ -133,11 +138,13 @@ var soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/
 var soil_diversity_pos= soil_diversity.mask(soil_diversity.gte(0))
                           .unitScale(0, 10.25)
                           .mask(brasil_raster);
+                          
 var soil_diversity_neg= soil_diversity.mask(soil_diversity.lte(0))
                           .multiply(-1)
                           .unitScale(0,29.75)
                           .multiply(-1)
                           .mask(brasil_raster);
+                          
 var Z_soil_diversity = soil_diversity_pos.add(soil_diversity_neg);
 
 // Export.image.toDrive({image: Z_soil_diversity, 
