@@ -1,16 +1,28 @@
+// Este scritp carrega as imagens originais de Z
+// escalona os valores negativos e positivos em uma escala variando de 0 até 1
+// então soma as imagens positivas e negativas para criar uma imagem escalonada
+
+
+//limites do brasil
 var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 
+////////////////////////////// LANDFORMS ////////////////////////////////////////
+// carregando imagem da variedade de landforms
 var landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_200');
 
+//escalonando os valores maiores que 0 pelo valor maximo
 var landform_pos= landform.mask(landform.gte(0))
                           .unitScale(0, 8.875)
                           .mask(brasil_raster);
+
+//escalonando os valores negativos
 var landform_neg= landform.mask(landform.lte(0))
                           .multiply(-1)
                           .unitScale(0,5.375)
                           .multiply(-1)
                           .mask(brasil_raster);
 
+//criando a camada final onde a variação fica limitada entre -1 e 1
 var Z_landform = landform_pos.add(landform_neg);
 
 // Export.image.toDrive({image: Z_landform, 
@@ -29,6 +41,8 @@ var Z_landform = landform_pos.add(landform_neg);
 //                       scale: brasil_raster.projection().nominalScale(),
 //                       maxPixels: 1e13});
 
+
+//////////////////////////////////////// ELEVATION ////////////////////////////////////////
 var elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_200');
 
 var elevation_pos= elevation.mask(elevation.gte(0))
@@ -58,6 +72,8 @@ var Z_elevation = elevation_pos.add(elevation_neg);
 //                       scale: brasil_raster.projection().nominalScale(),
 //                       maxPixels: 1e13});
 
+
+//////////////////////////////////////// WETLANDS WITH RIVER MASKED ////////////////////////////////////////
 var wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_200');
 
 var wetlands_score_pos= wetlands_score.mask(wetlands_score.gte(0))
@@ -86,6 +102,8 @@ var Z_wetlands_score = wetlands_score_pos.add(wetlands_score_neg);
 //                       scale: brasil_raster.projection().nominalScale(),
 //                       maxPixels: 1e13});
 
+
+//////////////////////////////////////// WETLANDS WITH RIVERS UNMASKED ////////////////////////////////////////
 var wetlands_score_unmasked = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Z-Scores_wetlands_movingwindow_UNMASKED2_200');
 
 var wetlands_score_pos_unmasked= wetlands_score_unmasked.mask(wetlands_score_unmasked.gte(0))
@@ -114,7 +132,7 @@ Export.image.toDrive({image: Z_wetlands_scorewetlands_score_unmasked,
                       scale: brasil_raster.projection().nominalScale(),
                       maxPixels: 1e13});
 
-
+//////////////////////////////////////// SOIL DIVERSITY ////////////////////////////////////////
 var soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_200');
 
 var soil_diversity_pos= soil_diversity.mask(soil_diversity.gte(0))
@@ -141,5 +159,5 @@ var Z_soil_diversity = soil_diversity_pos.add(soil_diversity_neg);
 //                       scale: brasil_raster.projection().nominalScale(),
 //                       maxPixels: 1e13});
 
-
+//////////////////////////////////////// LANDSCAPE DIVERSITY ////////////////////////////////////////
 
