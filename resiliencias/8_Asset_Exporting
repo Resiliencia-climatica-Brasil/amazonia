@@ -28,7 +28,6 @@ var Z_landform = landform_pos.add(landform_neg);
 // Export.image.toDrive({image: Z_landform, 
 //                       description: "Z_landform_scaled_200", 
 //                       folder:'GEE',
-                       
 //                       region:brasil_raster,
 //                       scale: brasil_raster.projection().nominalScale(),
 //                       maxPixels: 1e13});
@@ -36,7 +35,6 @@ var Z_landform = landform_pos.add(landform_neg);
 // Export.image.toDrive({image: landform, 
 //                       description: "Z_landform_original_200", 
 //                       folder:'GEE',
-                       
 //                       region:brasil_raster,
 //                       scale: brasil_raster.projection().nominalScale(),
 //                       maxPixels: 1e13});
@@ -59,7 +57,6 @@ var Z_elevation = elevation_pos.add(elevation_neg);
 // Export.image.toDrive({image: Z_elevation, 
 //                       description: "Z_elevation_scaled_200", 
 //                       folder:'GEE',
-                       
 //                       region:brasil_raster,
 //                       scale: brasil_raster.projection().nominalScale(),
 //                       maxPixels: 1e13});
@@ -67,7 +64,6 @@ var Z_elevation = elevation_pos.add(elevation_neg);
 // Export.image.toDrive({image: elevation, 
 //                       description: "Z_elevation_original_200", 
 //                       folder:'GEE',
-                       
 //                       region:brasil_raster,
 //                       scale: brasil_raster.projection().nominalScale(),
 //                       maxPixels: 1e13});
@@ -89,7 +85,6 @@ var Z_wetlands_score = wetlands_score_pos.add(wetlands_score_neg);
 // Export.image.toDrive({image: wetlands_score, 
 //                       description: "Z_wetlands_score_original_200", 
 //                       folder:'GEE',
-                       
 //                       region:brasil_raster,
 //                       scale: brasil_raster.projection().nominalScale(),
 //                       maxPixels: 1e13});
@@ -97,7 +92,6 @@ var Z_wetlands_score = wetlands_score_pos.add(wetlands_score_neg);
 // Export.image.toDrive({image: Z_wetlands_score, 
 //                       description: "Z_wetlands_score_scaled_200", 
 //                       folder:'GEE',
-                       
 //                       region:brasil_raster,
 //                       scale: brasil_raster.projection().nominalScale(),
 //                       maxPixels: 1e13});
@@ -116,21 +110,19 @@ var wetlands_score_neg_unmasked= wetlands_score_unmasked.mask(wetlands_score_unm
                           .mask(brasil_raster);
 var Z_wetlands_score_unmasked = wetlands_score_pos_unmasked.add(wetlands_score_neg_unmasked);
 
-Export.image.toDrive({image: wetlands_score_unmasked, 
-                      description: "Z_wetlands_score_original_200_unmasked", 
-                      folder:'GEE',
-                       
-                      region:brasil_raster,
-                      scale: brasil_raster.projection().nominalScale(),
-                      maxPixels: 1e13});
+// Export.image.toDrive({image: wetlands_score_unmasked, 
+//                       description: "Z_wetlands_score_original_200_unmasked", 
+//                       folder:'GEE',
+//                       region:brasil_raster,
+//                       scale: brasil_raster.projection().nominalScale(),
+//                       maxPixels: 1e13});
 
-Export.image.toDrive({image: Z_wetlands_scorewetlands_score_unmasked, 
-                      description: "Z_wetlands_score_scaled_200_unmasked", 
-                      folder:'GEE',
-                       
-                      region:brasil_raster,
-                      scale: brasil_raster.projection().nominalScale(),
-                      maxPixels: 1e13});
+// Export.image.toDrive({image: Z_wetlands_score_unmasked, 
+//                       description: "Z_wetlands_score_scaled_200_unmasked", 
+//                       folder:'GEE',
+//                       region:brasil_raster,
+//                       scale: brasil_raster.projection().nominalScale(),
+//                       maxPixels: 1e13});
 
 //////////////////////////////////////// SOIL DIVERSITY ////////////////////////////////////////
 var soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_200');
