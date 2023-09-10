@@ -25,6 +25,9 @@ var landform_neg= landform.mask(landform.lte(0))
 //criando a camada final onde a variação fica limitada entre -1 e 1
 var Z_landform = landform_pos.add(landform_neg);
 
+
+//Exportando para o Drive
+
 // Export.image.toDrive({image: Z_landform, 
 //                       description: "Z_landform_scaled_200", 
 //                       folder:'GEE',
