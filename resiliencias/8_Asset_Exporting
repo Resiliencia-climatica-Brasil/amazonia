@@ -13,21 +13,21 @@ var landform_neg= landform.mask(landform.lte(0))
 
 var Z_landform = landform_pos.add(landform_neg);
 
-Export.image.toDrive({image: Z_landform, 
-                      description: "Z_landform_scaled_200", 
-                      folder:'GEE',
+// Export.image.toDrive({image: Z_landform, 
+//                       description: "Z_landform_scaled_200", 
+//                       folder:'GEE',
                        
-                      region:brasil_raster,
-                      scale: brasil_raster.projection().nominalScale(),
-                      maxPixels: 1e13});
+//                       region:brasil_raster,
+//                       scale: brasil_raster.projection().nominalScale(),
+//                       maxPixels: 1e13});
 
-Export.image.toDrive({image: landform, 
-                      description: "Z_landform_original_200", 
-                      folder:'GEE',
+// Export.image.toDrive({image: landform, 
+//                       description: "Z_landform_original_200", 
+//                       folder:'GEE',
                        
-                      region:brasil_raster,
-                      scale: brasil_raster.projection().nominalScale(),
-                      maxPixels: 1e13});
+//                       region:brasil_raster,
+//                       scale: brasil_raster.projection().nominalScale(),
+//                       maxPixels: 1e13});
 
 var elevation = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_elevation_range_movingwindow_200');
 
@@ -42,21 +42,21 @@ var elevation_neg= elevation.mask(elevation.lte(0))
  
 var Z_elevation = elevation_pos.add(elevation_neg);
 
-Export.image.toDrive({image: Z_elevation, 
-                      description: "Z_elevation_scaled_200", 
-                      folder:'GEE',
+// Export.image.toDrive({image: Z_elevation, 
+//                       description: "Z_elevation_scaled_200", 
+//                       folder:'GEE',
                        
-                      region:brasil_raster,
-                      scale: brasil_raster.projection().nominalScale(),
-                      maxPixels: 1e13});
+//                       region:brasil_raster,
+//                       scale: brasil_raster.projection().nominalScale(),
+//                       maxPixels: 1e13});
 
-Export.image.toDrive({image: elevation, 
-                      description: "Z_elevation_original_200", 
-                      folder:'GEE',
+// Export.image.toDrive({image: elevation, 
+//                       description: "Z_elevation_original_200", 
+//                       folder:'GEE',
                        
-                      region:brasil_raster,
-                      scale: brasil_raster.projection().nominalScale(),
-                      maxPixels: 1e13});
+//                       region:brasil_raster,
+//                       scale: brasil_raster.projection().nominalScale(),
+//                       maxPixels: 1e13});
 
 var wetlands_score = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_wetlands_movingwindow_200');
 
@@ -70,21 +70,21 @@ var wetlands_score_neg= wetlands_score.mask(wetlands_score.lte(0))
                           .mask(brasil_raster);
 var Z_wetlands_score = wetlands_score_pos.add(wetlands_score_neg);
 
-Export.image.toDrive({image: wetlands_score, 
-                      description: "Z_wetlands_score_original_200", 
-                      folder:'GEE',
+// Export.image.toDrive({image: wetlands_score, 
+//                       description: "Z_wetlands_score_original_200", 
+//                       folder:'GEE',
                        
-                      region:brasil_raster,
-                      scale: brasil_raster.projection().nominalScale(),
-                      maxPixels: 1e13});
+//                       region:brasil_raster,
+//                       scale: brasil_raster.projection().nominalScale(),
+//                       maxPixels: 1e13});
 
-Export.image.toDrive({image: Z_wetlands_score, 
-                      description: "Z_wetlands_score_scaled_200", 
-                      folder:'GEE',
+// Export.image.toDrive({image: Z_wetlands_score, 
+//                       description: "Z_wetlands_score_scaled_200", 
+//                       folder:'GEE',
                        
-                      region:brasil_raster,
-                      scale: brasil_raster.projection().nominalScale(),
-                      maxPixels: 1e13});
+//                       region:brasil_raster,
+//                       scale: brasil_raster.projection().nominalScale(),
+//                       maxPixels: 1e13});
 
 var wetlands_score_unmasked = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Z-Scores_wetlands_movingwindow_UNMASKED2_200');
 
@@ -126,7 +126,6 @@ var soil_diversity_neg= soil_diversity.mask(soil_diversity.lte(0))
                           .multiply(-1)
                           .mask(brasil_raster);
 var Z_soil_diversity = soil_diversity_pos.add(soil_diversity_neg);
-
 
 // Export.image.toDrive({image: Z_soil_diversity, 
 //                       description: "Z_soil_diversity_scaled_200", 
