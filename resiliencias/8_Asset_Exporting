@@ -163,3 +163,13 @@ var Z_soil_diversity = soil_diversity_pos.add(soil_diversity_neg);
 
 //////////////////////////////////////// LANDSCAPE DIVERSITY ////////////////////////////////////////
 
+// As imagens da Landscape diversity vão ter 4 variações dependendo das imagens usadas no cálculo
+
+// Landscape Diversity usando os valores originais de Z, com wetlands sem rios
+
+
+// Landscape Diversity usando os valores originais de Z, com wetlands com rios (UNMASKED)
+
+// Landscape Diversity usando os valores escalonados (-1, 1) de Z, com wetlands sem rios
+
+// Landscape Diversity usando os valores escalonados (-1, 1) de Z, com wetlands com rios (UNMASKED)
