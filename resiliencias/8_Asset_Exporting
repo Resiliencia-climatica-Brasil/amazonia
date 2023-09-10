@@ -1,4 +1,6 @@
-var landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_200')
+var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
+
+var landform  = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_landforms_movingwindow_200');
                    //.unitScale(-2.875, 3.25)
 
 var landform_pos= landform.mask(landform.gte(0))
@@ -40,7 +42,7 @@ var wetlands_score_neg= wetlands_score.mask(wetlands_score.lte(0))
 var Z_wetlands_score = wetlands_score_pos.add(wetlands_score_neg);
 
 
-var soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_200')
+var soil_diversity = ee.Image('projects/ee-resilience/assets/Moving_window_TEMP/Z-Scores_soil_diversity_movingwindow_200');
                          //.unitScale(-19.25, 5.5)
 
 var soil_diversity_pos= soil_diversity.mask(soil_diversity.gte(0))
