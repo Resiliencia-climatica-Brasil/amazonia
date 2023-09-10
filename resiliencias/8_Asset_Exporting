@@ -130,7 +130,6 @@ var Z_soil_diversity = soil_diversity_pos.add(soil_diversity_neg);
 // Export.image.toDrive({image: Z_soil_diversity, 
 //                       description: "Z_soil_diversity_scaled_200", 
 //                       folder:'GEE',
-                       
 //                       region:brasil_raster,
 //                       scale: brasil_raster.projection().nominalScale(),
 //                       maxPixels: 1e13});
@@ -138,7 +137,6 @@ var Z_soil_diversity = soil_diversity_pos.add(soil_diversity_neg);
 // Export.image.toDrive({image: soil_diversity, 
 //                       description: "Z_soil_diversity_original_200", 
 //                       folder:'GEE',
-                       
 //                       region:brasil_raster,
 //                       scale: brasil_raster.projection().nominalScale(),
 //                       maxPixels: 1e13});
