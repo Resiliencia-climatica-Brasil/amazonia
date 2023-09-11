@@ -1,0 +1,292 @@
+//************************************ Landscape Diversity******************************************************
+
+var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                       .select("Bioma")
+                       .filter(ee.Filter.eq("Bioma", "Cerrado"));
+
+var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
+
+var scale = brasil_raster.projection().nominalScale();
+
+
+var diversity  = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_ORIGINAL_200')
+                   .updateMask(brasil_raster);
+
+var diversity_unmasked = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_ORIGINAL_UNMASKED_200')
+                   .updateMask(brasil_raster);
+                   
+var diversity_scaled = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_SCALED_200')
+                   .updateMask(brasil_raster);
+                   
+var diversity_scaled_unmasked = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_SCALED_UNMASKED_200')
+                   .updateMask(brasil_raster);
+
+
+var connectedness = ee.Image("projects/ee-resilience/assets/C2_Resistencia") //New Local connectedness layer with rivers
+                          .updateMask(brasil_raster)
+                          .multiply(-1); 
+
+var omniscape = ee.Image("projects/ee-lucasljardim9/assets/Cerrado_cum_currmap"); 
+
+// The classes are calculated as the sum of the classified values of the original rasters 
+/*
+
+|Group      | Diversity   |Connectedness   | Values in Gee |
+
+|Group 1    |    <25%     |     <25%       |       11      |
+|Group 2    |    <25%     |     25-50%     |       21      |
+|Group 3    |    <25%     |     50-75%     |       31      |
+|Group 4    |    <25%     |     >75%       |       41      |
+|Group 5    |    25-50%   |     <25%       |       12      |
+|Group 6    |    25-50%   |     25-50%     |       22      |
+|Group 7    |    25-50%   |     50-75%     |       32      |
+|Group 8    |    25-50%   |     >75%       |       42      |
+|Group 9    |    50-75%   |     <25%       |       13      |
+|Group 10   |    50-75%   |     25-50%     |       23      |
+|Group 11   |    50-75%   |     50-75%     |       33      |
+|Group 12   |    50-75%   |     >75%       |       43      |
+|Group 13   |    >75%     |     <25%       |       14      |
+|Group 14   |    >75%     |     25-50%     |       24      |
+|Group 15   |    >75%     |     50-75%     |       34      |
+|Group 16   |    >75%     |     >75%       |       44      |
+
+*/
+
+// Compute the quantiles for each raster, the value of the quantiles will be stored as a band
+
+var quartiles_Div = diversity.reduceRegion({
+    reducer: ee.Reducer.percentile([25, 50, 75]), 
+    scale: diversity.projection().nominalScale(),
+    maxPixels:1e13,
+    bestEffort: false
+  }); 
+
+var quartiles_Div_unmasked = diversity_unmasked.reduceRegion({
+    reducer: ee.Reducer.percentile([25, 50, 75]), 
+    scale: diversity.projection().nominalScale(),
+    maxPixels:1e13,
+    bestEffort: false
+  });
+  
+var quartiles_Div_scaled = diversity_scaled.reduceRegion({
+    reducer: ee.Reducer.percentile([25, 50, 75]), 
+    scale: diversity.projection().nominalScale(),
+    maxPixels:1e13,
+    bestEffort: false
+  });
+  
+var quartiles_Div_scaled_unmasked = diversity_scaled_unmasked.reduceRegion({
+    reducer: ee.Reducer.percentile([25, 50, 75]), 
+    scale: diversity.projection().nominalScale(),
+    maxPixels:1e13,
+    bestEffort: false
+  });
+  
+var quartiles_Con = connectedness.reduceRegion({
+    reducer: ee.Reducer.percentile([25, 50, 75]), 
+    scale: connectedness.projection().nominalScale(),
+    maxPixels:1e13,
+    bestEffort: false
+  });
+
+var quartiles_Omn = omniscape.reduceRegion({
+    reducer: ee.Reducer.percentile([25, 50, 75]), 
+    scale: omniscape.projection().nominalScale(),
+    maxPixels:1e13,
+    bestEffort: false
+  });
+  
+//creating the classes for Diversity based on the valeus.
+var div_25 = quartiles_Div.getNumber('z_p25');
+var div_50 = quartiles_Div.getNumber('z_p50');
+var div_75 = quartiles_Div.getNumber('z_p75');
+
+var class_div = diversity 
+.where(diversity.lt(div_25), 1)  
+.where(diversity.gte(div_25).and(diversity.lt(div_50)), 2)
+.where(diversity.gte(div_50).and(diversity.lt(div_75)), 3)
+.where(diversity.gte(div_75).and(diversity), 4);
+
+  
+//creating the classes for Div_unmasked based on the valeus.
+var div_25_un = quartiles_Div_unmasked.getNumber('z_p25');
+var div_50_un = quartiles_Div_unmasked.getNumber('z_p50');
+var div_75_un = quartiles_Div_unmasked.getNumber('z_p75');
+
+var class_div_unmasked = diversity_unmasked 
+.where(diversity_unmasked.lt(div_25_un), 1)  
+.where(diversity_unmasked.gte(div_25_un).and(diversity_unmasked.lt(div_50_un)), 2)
+.where(diversity_unmasked.gte(div_50_un).and(diversity_unmasked.lt(div_75_un)), 3)
+.where(diversity_unmasked.gte(div_75_un).and(diversity_unmasked), 4);
+  
+//creating the classes for Diversity Scaled based on the valeus.
+var div_25_sc = quartiles_Div_scaled.getNumber('z_p25');
+var div_50_sc = quartiles_Div_scaled.getNumber('z_p50');
+var div_75_sc = quartiles_Div_scaled.getNumber('z_p75');
+
+var class_div_scaled = diversity_scaled
+.where(diversity_scaled.lt(div_25_sc), 1)  
+.where(diversity_scaled.gte(div_25_sc).and(diversity_scaled.lt(div_50_sc)), 2)
+.where(diversity_scaled.gte(div_50_sc).and(diversity_scaled.lt(div_75_sc)), 3)
+.where(diversity_scaled.gte(div_75_sc).and(diversity_scaled), 4);
+  
+//creating the classes for Diversity Scaled Unmasked based on the valeus.
+var div_25_sc_un = quartiles_Div_scaled_unmasked.getNumber('z_p25');
+var div_50_sc_un = quartiles_Div_scaled_unmasked.getNumber('z_p50');
+var div_75_sc_un = quartiles_Div_scaled_unmasked.getNumber('z_p75');
+
+var class_div_sc_un = diversity 
+.where(diversity_scaled_unmasked.lt(div_25_sc_un), 1)  
+.where(diversity_scaled_unmasked.gte(div_25_sc_un).and(diversity_scaled_unmasked.lt(div_50_sc_un)), 2)
+.where(diversity_scaled_unmasked.gte(div_50_sc_un).and(diversity_scaled_unmasked.lt(div_75_sc_un)), 3)
+.where(diversity_scaled_unmasked.gte(div_75_sc_un).and(diversity_scaled_unmasked), 4);
+
+
+//creating the classes for Connectedness
+var con_25 = quartiles_Con.getNumber('b1_p25');
+var con_50 = quartiles_Con.getNumber('b1_p50');
+var con_75 = quartiles_Con.getNumber('b1_p75');
+
+var class_con = connectedness
+.where(connectedness.lt(con_25),10)
+.where(connectedness.gte(con_25).and(connectedness.lt(con_50)), 20)
+.where(connectedness.gte(con_50).and(connectedness.lt(con_75)),30)
+.where(connectedness.gte(con_75).and(connectedness), 40);
+
+//creating the classes for Connectedness by omniscape
+var omn_25 = quartiles_Omn.getNumber('b1_p25');
+var omn_50 = quartiles_Omn.getNumber('b1_p50');
+var omn_75 = quartiles_Omn.getNumber('b1_p75');
+
+var class_omn = omniscape
+.where(omniscape.lt(omn_25),10)
+.where(omniscape.gte(omn_25).and(omniscape.lt(omn_50)), 20)
+.where(omniscape.gte(omn_50).and(omniscape.lt(omn_75)),30)
+.where(omniscape.gte(omn_75).and(omniscape), 40);
+
+//// Sum the classified rasters to create the landscape_resilience image
+
+var resilience = class_div.add(class_con);
+
+var resilience_unmasked = class_div_unmasked.add(class_con);
+
+var resilience_scaled = class_div_scaled.add(class_con);
+
+var resilience_scaled_unmasked = class_div_sc_un.add(class_con);
+
+
+var resilience_omn = class_div.clip(biome).add(class_omn);
+
+
+Map.centerObject(brasil_raster);
+
+var sld_intervals =
+  '<RasterSymbolizer>' +
+    '<ColorMap type="intervals" extended="false">' +
+      '<ColorMapEntry color="#d3d3d3" quantity="11" label="11"/>' +
+      '<ColorMapEntry color="#95bdd5" quantity="12" label="12"/>' +
+      '<ColorMapEntry color="#52a6d7" quantity="13" label="13"/>' +
+      '<ColorMapEntry color="#0088d9" quantity="14" label="14"/>' +
+      '<ColorMapEntry color="#d5ce9c" quantity="21" label="21"/>' +
+      '<ColorMapEntry color="#96b89e" quantity="22" label="22"/>' +
+      '<ColorMapEntry color="#53a19f" quantity="23" label="23"/>' +
+      '<ColorMapEntry color="#0085a1" quantity="24" label="24"/>' +
+      '<ColorMapEntry color="#d7c759" quantity="31" label="31"/>' +
+      '<ColorMapEntry color="#98b35a" quantity="32" label="32"/>' +
+      '<ColorMapEntry color="#539c5b" quantity="33" label="33"/>' +
+      '<ColorMapEntry color="#00815c" quantity="34" label="34"/>' +
+      '<ColorMapEntry color="#d9be00" quantity="41" label="41"/>' +
+      '<ColorMapEntry color="#9aaa00" quantity="42" label="42"/>' +
+      '<ColorMapEntry color="#549500" quantity="43" label="43"/>' +
+      '<ColorMapEntry color="#007b00" quantity="44" label="44"/>' +
+    '</ColorMap>' +
+  '</RasterSymbolizer>';
+
+
+//////////////////////////////////////// SLD intervals ////////////////////////////////////////
+
+Export.image.toDrive({
+		image:resilience
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_intervals),
+	description:'Resilience_bivariate_col_ORIGINAL',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
+
+Export.image.toDrive({
+		image:resilience_unmasked
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_intervals),
+	description:'Resilience_bivariate_col_ORIGINAL_UNMASKED',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
+
+
+Export.image.toDrive({
+		image:resilience_scaled
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_intervals),
+	description:'Resilience_bivariate_col_SCALED',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
+
+
+Export.image.toDrive({
+		image:resilience_scaled_unmasked
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_intervals),
+	description:'Resilience_bivariate_col_SCALED_UNMASKED',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
+
+//////////////////////////////////////// cores originais ////////////////////////////////////////
+
+Export.image.toDrive({
+		image:resilience
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_intervals),
+	description:'Resilience_ORIGINAL',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
+
+Export.image.toDrive({
+		image:resilience_unmasked
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_intervals),
+	description:'Resilience_ORIGINAL_UNMASKED',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
+
+
+Export.image.toDrive({
+		image:resilience_scaled
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_intervals),
+	description:'Resilience_SCALED',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
+
+
+Export.image.toDrive({
+		image:resilience_scaled_unmasked
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_intervals),
+	description:'Resilience_SCALED_UNMASKED',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
