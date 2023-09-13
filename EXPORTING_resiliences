@@ -249,40 +249,40 @@ var sld_intervals =
 
 //////////////////////////////////////// cores originais ////////////////////////////////////////
 
-Export.image.toDrive({
-		image:resilience
-             .reproject('EPSG:4326', null, 92.76624),
-	description:'Resilience_ORIGINAL',
-	region:brasil_raster,
-	scale:scale,
-	maxPixels:1e13,
-});
+// Export.image.toDrive({
+// 		image:resilience
+//             .reproject('EPSG:4326', null, 92.76624),
+// 	description:'Resilience_ORIGINAL',
+// 	region:brasil_raster,
+// 	scale:scale,
+// 	maxPixels:1e13,
+// });
 
-Export.image.toDrive({
-		image:resilience_unmasked
-             .reproject('EPSG:4326', null, 92.76624),
-	description:'Resilience_ORIGINAL_UNMASKED',
-	region:brasil_raster,
-	scale:scale,
-	maxPixels:1e13,
-});
-
-
-Export.image.toDrive({
-		image:resilience_scaled
-             .reproject('EPSG:4326', null, 92.76624),
-	description:'Resilience_SCALED',
-	region:brasil_raster,
-	scale:scale,
-	maxPixels:1e13,
-});
+// Export.image.toDrive({
+// 		image:resilience_unmasked
+//             .reproject('EPSG:4326', null, 92.76624),
+// 	description:'Resilience_ORIGINAL_UNMASKED',
+// 	region:brasil_raster,
+// 	scale:scale,
+// 	maxPixels:1e13,
+// });
 
 
-Export.image.toDrive({
-		image:resilience_scaled_unmasked
-             .reproject('EPSG:4326', null, 92.76624),
-	description:'Resilience_SCALED_UNMASKED',
-	region:brasil_raster,
-	scale:scale,
-	maxPixels:1e13,
-});
+// Export.image.toDrive({
+// 		image:resilience_scaled
+//             .reproject('EPSG:4326', null, 92.76624),
+// 	description:'Resilience_SCALED',
+// 	region:brasil_raster,
+// 	scale:scale,
+// 	maxPixels:1e13,
+// });
+
+
+// Export.image.toDrive({
+// 		image:resilience_scaled_unmasked
+//             .reproject('EPSG:4326', null, 92.76624),
+// 	description:'Resilience_SCALED_UNMASKED',
+// 	region:brasil_raster,
+// 	scale:scale,
+// 	maxPixels:1e13,
+// });
