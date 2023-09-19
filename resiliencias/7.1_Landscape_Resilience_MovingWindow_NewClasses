@@ -113,14 +113,11 @@ var class_omn = omniscape
 .where(omniscape.gte(omn_50).and(omniscape.lt(omn_75)),30)
 .where(omniscape.gte(omn_75).and(omniscape), 40);
 
-
 //// Sum the classified rasters to create the landscape_resilience image
 
 var resilience = class_div.add(class_con);
 
 var resilience_omn = class_div.clip(biome).add(class_omn);
-
-
 
 //Ploting Raw local connectedness
 var palettes=require('users/gena/packages:palettes');// https://github.com/gee-community/ee-palettes
@@ -129,17 +126,6 @@ var palette_div = palettes.colorbrewer.Spectral[7];
 
 Map.addLayer(connectedness, {min: -66, max:-4, palette:palette_con}, 'connectedness');
 Map.addLayer(diversity, {min: -0.24670152313016386, max:2.6232507855865874, palette:palette_div}, 'diversity');
-
-
-//ploting Classification for Landscape Resilience based on Landscape Diversity and Local Connectedness
-//Map.addLayer(resilience_classes,{min: 1, max:16, palette:paleta_res}, 'Landscape Resilience');
-
-//ploting classification of Landscape Resilience based on Landscape Diversity and Regional Connectedness
-//Map.addLayer(resilience_omn_classes,{min: 1, max:16, palette:paleta_res}, 'Landscape Resilience with Omniscape');
-
-//Map.addLayer (resilience_classes.clip(UC_Ti),{min:1, max:16, palette:paleta_res}, 'Terras Indígenas');
-//Map.addLayer(resilience_classes.clip(UC_FedEstMun), {min:1, max:16, palette:paleta_res}, 'Ucs Federais, Estaduais e Municipais');
-
 
 Map.centerObject(brasil_raster);
 
@@ -184,7 +170,6 @@ Export.image.toDrive({
 	scale:scale,
 	maxPixels:1e13,
 });
-
 
 
 var legend = ui.Panel({
