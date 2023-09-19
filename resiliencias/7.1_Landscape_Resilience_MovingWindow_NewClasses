@@ -23,7 +23,7 @@ print(windows);
 
 var windows = 200;
 
-var diversity  = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_ALLWETLANDS_200')
+var diversity  = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_ORIGINAL_UNMASKED_200')
                    .updateMask(brasil_raster);
 
 
