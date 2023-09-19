@@ -171,6 +171,26 @@ Export.image.toDrive({
 	maxPixels:1e13,
 });
 
+Export.image.toDrive({
+		image:class_div
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_div),
+	description:'Resilience_bivariate_col',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
+
+Export.image.toDrive({
+		image:class_con
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_con),
+	description:'Resilience_bivariate_col',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
+
 
 var legend = ui.Panel({
              style: {
