@@ -151,6 +151,26 @@ var sld_intervals =
     '</ColorMap>' +
   '</RasterSymbolizer>';
 
+var sld_div =
+  '<RasterSymbolizer>' +
+    '<ColorMap type="intervals" extended="false">' +
+      '<ColorMapEntry color="#d3d3d3" quantity="1" label="1"/>' +
+      '<ColorMapEntry color="#95bdd5" quantity="2" label="2"/>' +
+      '<ColorMapEntry color="#52a6d7" quantity="3" label="3"/>' +
+      '<ColorMapEntry color="#0088d9" quantity="4" label="4"/>' +
+      '</ColorMap>' +
+  '</RasterSymbolizer>';
+
+var sld_con=
+  '<RasterSymbolizer>' +
+    '<ColorMap type="intervals" extended="false">' +
+      '<ColorMapEntry color="#d3d3d3" quantity="10" label="10"/>' +
+      '<ColorMapEntry color="#d5ce9c" quantity="20" label="20"/>' +
+      '<ColorMapEntry color="#d7c759" quantity="30" label="30"/>' +
+      '<ColorMapEntry color="#d9be00" quantity="40" label="40"/>' +
+      '</ColorMap>' +
+  '</RasterSymbolizer>';
+  
 
 Map.addLayer(resilience
              .reproject('EPSG:4326', null, 92.76624)
@@ -160,6 +180,14 @@ Map.addLayer(resilience_omn
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),{}, 'Landscape Resilience Omniscape Cerrado');
 
+Map.addLayer(class_div
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_div),{}, 'Landscape Heterogeneity');
+
+
+Map.addLayer(class_con
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_con),{}, 'Local Connectedness');             
 
 Export.image.toDrive({
 		image:resilience
@@ -170,6 +198,8 @@ Export.image.toDrive({
 	scale:scale,
 	maxPixels:1e13,
 });
+
+
 
 Export.image.toDrive({
 		image:class_div
@@ -191,63 +221,4 @@ Export.image.toDrive({
 	maxPixels:1e13,
 });
 
-
-var legend = ui.Panel({
-             style: {
-               position:'bottom-right',
-               padding: '6px 8px'
-             }
-});
-
-
-var makeRow = function(color, name) {
- 
-      // Create the label that is actually the colored box.
-      var colorBox = ui.Label({
-        style: {
-          backgroundColor: color,
-          // Use padding to give the box height and width.
-          padding: '8px',
-          margin: '0 0 4px 0'
-        }
-      });
- 
-      // Create the label filled with the description text.
-      var description = ui.Label({
-        value: name,
-        style: {margin: '0 0 4px 6px'}
-      });
- 
-      // return the panel
-      return ui.Panel({
-        widgets: [colorBox, description],
-        layout: ui.Panel.Layout.Flow('horizontal')
-      });
-};
-
-
-var res =[
-"12 0-25% Diversity, 0-25%  Connectedness",
-"13 25-50% Diversity, 0-25% Connectedness",
-"22 0-25% Diversity, 25-50% Connectedness",
-"14 50-75% Diversity, 0-25% Connectedness",
-"32 0-25% Diversity, 50-75% Connectedness",
-"23 25-50% Diversity, 25-50% Connectedness",
-"15 75-100% Diversity, 0-25% Connectedness",
-"42 0-25% Diversity, 75-100% Connectedness",
-"24 50-75% Diversity, 25-50% Connectedness",
-"33 25-50% Diversity, 50-75% Connectedness",
-"25 75-100% Diversity, 25-50% Connectedness",
-"43 25-50% Diversity, 75-100% Connectedness",
-"34 50-75% Diversity, 50-75% Connectedness",
-"35 75-100% Diversity, 50-75% Connectedness",
-"44 50-75% Diversity, 75-100% Connectedness",
-"45 75-100% Diversity, 75-100% Connectedness"
-];
-
-for (var i = 0; i < 16; i++) {
-  legend.add(makeRow(paleta_res[i], res[i]));
-  }  
- 
-//Map.add(legend);
 
