@@ -26,7 +26,6 @@ var windows = 200;
 var diversity  = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_ORIGINAL_UNMASKED_200')
                    .updateMask(brasil_raster);
 
-
 var connectedness = ee.Image("projects/ee-resilience/assets/C2_Resistencia") //New Local connectedness layer with rivers
                           .updateMask(brasil_raster)
                           .multiply(-1); 
@@ -112,6 +111,38 @@ var class_omn = omniscape
 .where(omniscape.gte(omn_25).and(omniscape.lt(omn_50)), 20)
 .where(omniscape.gte(omn_50).and(omniscape.lt(omn_75)),30)
 .where(omniscape.gte(omn_75).and(omniscape), 40);
+
+print('div_25',div_25);
+print('div_50',div_50);
+print('div_75',div_75);
+
+  var histogram = ui.Chart.image.histogram(({
+  image: diversity,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('diversity',histogram);
+
+
+print('con_25', con_25);
+print('con_50', con_50);
+print('con_75', con_75);
+
+  var histogram = ui.Chart.image.histogram(({
+  image: connectedness,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values Original' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('connectedness',histogram);
+
 
 //// Sum the classified rasters to create the landscape_resilience image
 
