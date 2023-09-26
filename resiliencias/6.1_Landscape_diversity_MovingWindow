@@ -215,11 +215,38 @@ Map.addLayer( Z_soil_diversity, {palette:palette, min:-1, max:1} ,'Z_soil_divers
 
 //Exporting to Asset
 
-Export.image.toAsset({image: landscape_diversity, 
-                      description: "Landscape_diversity"+ windows.toString(), 
-                      assetId: "Moving_window_NEWSCALE/Landscape_diversity_movingwindow_SCALED_UNMASKED"+ windows.toString(), 
-                      pyramidingPolicy:"median",
-                      region:brasil_raster,
-                      scale: scale,
-                      maxPixels: 1e13});
+// Export.image.toAsset({image: landscape_diversity, 
+//                       description: "Landscape_diversity"+ windows.toString(), 
+//                       assetId: "Moving_window_NEWSCALE/Landscape_diversity_movingwindow_SCALED_UNMASKED"+ windows.toString(), 
+//                       pyramidingPolicy:"median",
+//                       region:brasil_raster,
+//                       scale: scale,
+//                       maxPixels: 1e13});
 
+
+Export.image.toDrive({
+                    image: test_1,
+                    description: 'Elevation>diversity_200',
+                    region:brasil_raster,
+                    folder:'GEE',
+                    scale:scale,
+                    maxPixels: 1e13
+});
+
+Export.image.toDrive({
+                    image: test_2,
+                    description: 'Wetlands>diversity_200',
+                    region:brasil_raster,
+                    folder:'GEE',
+                    scale:scale,
+                    maxPixels: 1e13
+});
+
+Export.image.toDrive({
+                    image: test_1,
+                    description: 'Soil>diversity_200',
+                    region:brasil_raster,
+                    folder:'GEE',
+                    scale:scale,
+                    maxPixels: 1e13
+});
