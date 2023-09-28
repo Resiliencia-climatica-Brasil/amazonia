@@ -220,7 +220,7 @@ Map.addLayer(class_con
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_con),{}, 'Local Connectedness');             
 
-
+/*
 Export.image.toDrive({
 		image:resilience
              .reproject('EPSG:4326', null, 92.76624)
@@ -251,5 +251,13 @@ Export.image.toDrive({
 	scale:scale,
 	maxPixels:1e13,
 });
-
-
+*/
+Export.image.toDrive({
+		image:resilience_omn
+             .reproject('EPSG:4326', null, 92.76624)
+             .sldStyle(sld_con),
+	description:'Connectednes_bivariate_col',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
