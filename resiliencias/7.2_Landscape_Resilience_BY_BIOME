@@ -157,15 +157,76 @@ var div_cerrado = diversity.clip(biome);
 var con_cerrado = connectedness.clip(biome);
 
 var res_cerrado = classify_quantis(div_cerrado, con_cerrado);
+/*
+var histogram = ui.Chart.image.histogram(({
+  image: res_amazonia,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values res_amazonia' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('res_amazonia',histogram);
 
-var resilience = res_amazonia
-var resilience = resilience.add(res_atlantica)
-var resilience= resilience.add(res_pampa)
-var resilience= resilience.add(res_pantanal)
-var resilience= resilience.add(res_caatinga)
-var resilience= resilience.add(res_cerrado)
+ histogram = ui.Chart.image.histogram(({
+  image: res_atlantica,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values res_atlantica' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('res_atlantica',histogram);
 
 
+
+ var histogram = ui.Chart.image.histogram(({
+  image: res_pampa,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values res_pampa' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('res_pampa',histogram);
+
+ var histogram = ui.Chart.image.histogram(({
+  image: res_pantanal,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values res_pantanal' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('res_pantanal',histogram);
+
+ var histogram = ui.Chart.image.histogram(({
+  image: res_caatinga,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values res_caatinga' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('res_caatinga',histogram);
+*/
+ var histogram = ui.Chart.image.histogram(({
+  image: res_cerrado,
+  scale: scale,
+  maxPixels: 1e13}))
+  .setOptions({
+    title: 'Histogram of Pixel Values res_cerrado' ,
+    hAxis: {title: 'Pixel Value'},
+    vAxis: {title: 'Count'},
+    legend: 'none'
+  }); print('res_cerrado',histogram);
+ 
+ 
 //// Sum the classified rasters to create the landscape_resilience image
 
 var sld_intervals =
@@ -191,11 +252,12 @@ var sld_intervals =
   '</RasterSymbolizer>';
 
 /*
-Map.addLayer(resilience.reproject('EPSG:4326', null, 92.76624)
+Map.addLayer(res_amazonia
+              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),{}, 'RES_biomes')
 */
 
-
+/*
 Export.image.toDrive({
 		image:res_amazonia
              .reproject('EPSG:4326', null, 92.76624)
@@ -265,7 +327,7 @@ Export.image.toDrive({
 	scale:scale,
 	maxPixels:1e13,
 });
-
+*/
 
 
 
