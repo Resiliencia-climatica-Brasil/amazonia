@@ -53,13 +53,14 @@ var connectedness = ee.Image("projects/ee-resilience/assets/C2_Resistencia") //N
 
 */
 
-// Compute the quantiles for each raster, the value of the quantiles will be stored as a band
+// writing the function to Compute the quantiles for each raster, the value of the quantiles will be stored as a band
 
-function classify_quantis(diversity, connectedness) {
+function classify_quantis(diversity, connectedness, geometry) {
+
   var quartiles_Div = diversity.reduceRegion({
     reducer: ee.Reducer.percentile([25, 50, 75]), 
     scale: diversity.projection().nominalScale(),
-    geometry: biome.geometry(),
+    geometry:geometry,
     maxPixels: 1e13,
     bestEffort: false
   }); 
@@ -67,7 +68,7 @@ function classify_quantis(diversity, connectedness) {
   var quartiles_Con = connectedness.reduceRegion({
     reducer: ee.Reducer.percentile([25, 50, 75]), 
     scale: connectedness.projection().nominalScale(),
-    geometry:biome.geometry(), 
+    geometry:geometry, 
     maxPixels: 1e13,
     bestEffort: false
   });
@@ -97,6 +98,9 @@ var resilience = class_div.add(class_con);
   return   resilience;
 }
 
+// let's start by cliping our variables for each biomes and calculating Resilience with the function
+
+//Amazônia
 
 var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
@@ -104,59 +108,61 @@ var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
 
 var div_amazonia =diversity.clip(biome);
 var con_amazonia = connectedness.clip(biome);
+var geom_amazonia = biome.geometry();
+var res_amazonia = classify_quantis(div_amazonia, con_amazonia, geom_amazonia);
 
-var res_amazonia = classify_quantis(div_amazonia, con_amazonia);
-
-
+//Mata Atlântica
 var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
                        .filter(ee.Filter.eq("Bioma", "Mata Atlântica"));
 
 var div_atlantica = diversity.clip(biome);
 var con_atlantica = connectedness.clip(biome);
+var geom_atlantica = biome.geometry();
+var res_atlantica = classify_quantis(div_atlantica, con_atlantica, geom_atlantica);
 
-var res_atlantica = classify_quantis(div_atlantica, con_atlantica);
-
-
+//Pampa
 var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
                        .filter(ee.Filter.eq("Bioma", "Pampa"));
 
 var div_pampa = diversity.clip(biome);
 var con_pampa = connectedness.clip(biome);
+var geom_pampa = biome.geometry();
+var res_pampa = classify_quantis(div_pampa, con_pampa, geom_pampa);
 
-var res_pampa = classify_quantis(div_pampa, con_pampa);
-
-
+//Pantanal
 var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
                        .filter(ee.Filter.eq("Bioma", "Pantanal"));
 
 var div_pantanal =diversity.clip(biome);
 var con_pantanal = connectedness.clip(biome);
+var geom_pantanal = biome.geometry();
+var res_pantanal = classify_quantis(div_pantanal, con_pantanal, geom_pantanal);
 
-var res_pantanal = classify_quantis(div_pantanal, con_pantanal);
-
-
+//Caatinga
 var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
                        .filter(ee.Filter.eq("Bioma", "Caatinga"));
 
 var div_caatinga =diversity.clip(biome);
 var con_caatinga = connectedness.clip(biome);
+var geom_caatinga = biome.geometry();
+var res_caatinga = classify_quantis(div_caatinga, con_caatinga, geom_caatinga);
 
-var res_caatinga = classify_quantis(div_caatinga, con_caatinga);
-
-
-
+//Cerrado
 var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
                        .filter(ee.Filter.eq("Bioma", "Cerrado"));
 
 var div_cerrado = diversity.clip(biome);
 var con_cerrado = connectedness.clip(biome);
+var geom_cerrado = biome.geometry();
+var res_cerrado = classify_quantis(div_cerrado, con_cerrado, geom_cerrado);
 
-var res_cerrado = classify_quantis(div_cerrado, con_cerrado);
+//We can explore the results for each classes of resilience for each biome
+
 /*
 var histogram = ui.Chart.image.histogram(({
   image: res_amazonia,
@@ -179,8 +185,6 @@ var histogram = ui.Chart.image.histogram(({
     vAxis: {title: 'Count'},
     legend: 'none'
   }); print('res_atlantica',histogram);
-
-
 
  var histogram = ui.Chart.image.histogram(({
   image: res_pampa,
@@ -214,7 +218,7 @@ var histogram = ui.Chart.image.histogram(({
     vAxis: {title: 'Count'},
     legend: 'none'
   }); print('res_caatinga',histogram);
-*/
+
  var histogram = ui.Chart.image.histogram(({
   image: res_cerrado,
   scale: scale,
@@ -226,8 +230,10 @@ var histogram = ui.Chart.image.histogram(({
     legend: 'none'
   }); print('res_cerrado',histogram);
  
- 
-//// Sum the classified rasters to create the landscape_resilience image
+ */
+
+
+//Create the bivariate color grade that will classify our resilience map based on the quantiles for Landscape Heterogeneity and Local Connectedness
 
 var sld_intervals =
   '<RasterSymbolizer>' +
@@ -251,20 +257,20 @@ var sld_intervals =
     '</ColorMap>' +
   '</RasterSymbolizer>';
 
-/*
-Map.addLayer(res_amazonia
-              .reproject('EPSG:4326', null, 92.76624)
-             .sldStyle(sld_intervals),{}, 'RES_biomes')
-*/
 
-/*
+//Exporting
+
+var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
+                       .select("Bioma");
+
+
 Export.image.toDrive({
 		image:res_amazonia
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),
-	description:'Resilience_bivariate_col_AM',
+	description:'Resilience_bivariate_col_AMAZONIA',
 	folder:'GEE',
-	region:brasil_raster,
+	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Amazônia")),
 	scale:scale,
 	maxPixels:1e13,
 });
@@ -274,9 +280,9 @@ Export.image.toDrive({
 		image:res_atlantica
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),
-	description:'Resilience_bivariate_col_AT',
+	description:'Resilience_bivariate_col_ATLANTICA',
 	folder:'GEE',
-	region:brasil_raster,
+	region:biome,
 	scale:scale,
 	maxPixels:1e13,
 });
@@ -286,9 +292,9 @@ Export.image.toDrive({
 		image:res_pampa
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),
-	description:'Resilience_bivariate_col_PM',
+	description:'Resilience_bivariate_col_PAMPA',
 	folder:'GEE',
-	region:brasil_raster,
+	region:biome,
 	scale:scale,
 	maxPixels:1e13,
 });
@@ -298,9 +304,9 @@ Export.image.toDrive({
 		image:res_pantanal
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),
-	description:'Resilience_bivariate_col_PA',
+	description:'Resilience_bivariate_col_PANTANAL',
 	folder:'GEE',
-	region:brasil_raster,
+	region:biome,
 	scale:scale,
 	maxPixels:1e13,
 });
@@ -310,9 +316,9 @@ Export.image.toDrive({
 		image:res_caatinga
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),
-	description:'Resilience_bivariate_col_CA',
+	description:'Resilience_bivariate_col_CAATING',
 	folder:'GEE',
-	region:brasil_raster,
+	region:biome,
 	scale:scale,
 	maxPixels:1e13,
 });
@@ -321,13 +327,13 @@ Export.image.toDrive({
 		image:res_cerrado
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),
-	description:'Resilience_bivariate_col_CE',
+	description:'Resilience_bivariate_col_CERRADO',
 	folder:'GEE',
-	region:brasil_raster,
+	region:biome,
 	scale:scale,
 	maxPixels:1e13,
 });
-*/
+
 
 
 
