@@ -270,7 +270,7 @@ Export.image.toDrive({
              .sldStyle(sld_intervals),
 	description:'Resilience_bivariate_col_AMAZONIA',
 	folder:'GEE',
-	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Amazônia")),
+	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Amazônia")).geometry(),
 	scale:scale,
 	maxPixels:1e13,
 });
@@ -282,46 +282,48 @@ Export.image.toDrive({
              .sldStyle(sld_intervals),
 	description:'Resilience_bivariate_col_ATLANTICA',
 	folder:'GEE',
-	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Mata Atlântica")),
+	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Mata Atlântica")).geometry(),
 	scale:scale,
 	maxPixels:1e13,
 });
 
-
+/*
 Export.image.toDrive({
 		image:res_pampa
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),
 	description:'Resilience_bivariate_col_PAMPA',
 	folder:'GEE',
-	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Pampa")),
+	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Pampa")).geometry(),
 	scale:scale,
-	maxPixels:1e13,
+	maxPixels:2e13,
 });
-
-
+*/
+/*
 Export.image.toDrive({
 		image:res_pantanal
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),
 	description:'Resilience_bivariate_col_PANTANAL',
 	folder:'GEE',
-	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Pantanal")),
+	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Pantanal")).geometry(),
 	scale:scale,
 	maxPixels:1e13,
 });
+*/
 
-
+/*
 Export.image.toDrive({
 		image:res_caatinga
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),
 	description:'Resilience_bivariate_col_CAATINGA',
 	folder:'GEE',
-	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Caatinga")),
+	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Caatinga")).geometry(),
 	scale:scale,
 	maxPixels:1e13,
 });
+*/
 
 Export.image.toDrive({
 		image:res_cerrado
@@ -329,7 +331,7 @@ Export.image.toDrive({
              .sldStyle(sld_intervals),
 	description:'Resilience_bivariate_col_CERRADO',
 	folder:'GEE',
-	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Cerrado")),
+	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Cerrado")).geometry(),
 	scale:scale,
 	maxPixels:1e13,
 });
