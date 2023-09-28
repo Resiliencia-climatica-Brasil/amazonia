@@ -282,7 +282,7 @@ Export.image.toDrive({
              .sldStyle(sld_intervals),
 	description:'Resilience_bivariate_col_ATLANTICA',
 	folder:'GEE',
-	region:biome,
+	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Mata Atlântica")),
 	scale:scale,
 	maxPixels:1e13,
 });
@@ -294,7 +294,7 @@ Export.image.toDrive({
              .sldStyle(sld_intervals),
 	description:'Resilience_bivariate_col_PAMPA',
 	folder:'GEE',
-	region:biome,
+	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Pampa")),
 	scale:scale,
 	maxPixels:1e13,
 });
@@ -306,7 +306,7 @@ Export.image.toDrive({
              .sldStyle(sld_intervals),
 	description:'Resilience_bivariate_col_PANTANAL',
 	folder:'GEE',
-	region:biome,
+	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Pantanal")),
 	scale:scale,
 	maxPixels:1e13,
 });
@@ -316,9 +316,9 @@ Export.image.toDrive({
 		image:res_caatinga
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),
-	description:'Resilience_bivariate_col_CAATING',
+	description:'Resilience_bivariate_col_CAATINGA',
 	folder:'GEE',
-	region:biome,
+	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Caatinga")),
 	scale:scale,
 	maxPixels:1e13,
 });
@@ -329,7 +329,7 @@ Export.image.toDrive({
              .sldStyle(sld_intervals),
 	description:'Resilience_bivariate_col_CERRADO',
 	folder:'GEE',
-	region:biome,
+	region:biome.select("Bioma").filter(ee.Filter.eq("Bioma", "Cerrado")),
 	scale:scale,
 	maxPixels:1e13,
 });
