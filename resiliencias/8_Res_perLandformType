@@ -73,9 +73,9 @@ var frequency = function(classCodes) {
 // fazer a contagem dos pixels presentes e depois voltar pro proxino codugo de landform 
 
    // Calculate the frequency of the extracted values.
-    var count = map1
+    var count = map1.filter()// filter by code of resilience and count them
       .reduceRegion({
-        reducer: ee.Reducer.countDistinct(),
+        reducer: ee.Reducer.count(),
         geometry: geometry,
         scale: scale,
         maxPixels: 1e13
