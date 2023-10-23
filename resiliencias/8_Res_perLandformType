@@ -9,20 +9,18 @@ var brazil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 var scale = brazil_raster.projection().nominalScale();
 var geometry = brazil_raster.geometry();
 
-var resilience = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Resilience_ORIGINAL_UNMASKED_200');
+var resilience = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_resilience_ORIGINAL_UNMASKED_200');
 
 var landform = ee.Image('projects/ee-lucasljardim9/assets/landform_types')
 .updateMask(brazil_raster);
 
-
-
-
+///////// Counting pixel values of Landscape Resilience for each Landform Type ////////
 
 var histogram = landform.reduceRegion({reducer:ee.Reducer.frequencyHistogram(), 
                                   geometry: landform.geometry(), 
                                   scale: 92.76624, 
                                   maxPixels:1e13
-                                  });print(histogram)
+                                  });print(histogram);
                                   
 var image_classes = ee.Dictionary(histogram.get("sum")).keys();
 print(image_classes);
@@ -57,6 +55,8 @@ var frequency = function(classCodes) {
     return frequencies;
 };
 
+// Specify the class codes you're interested in as an array.
+//the same as the codes of landforms
 var image_classes = [
                       '11.0',
                       '13.0',
@@ -72,11 +72,18 @@ var image_classes = [
                       '43.0',
                       '44.0',
                       '5.0'
-                      ]; // Specify the class codes you're interested in as an array.
+                      ]; 
 var frequencies = frequency(image_classes);
 print('Frequencies of each Resilience class for Landform Type Codes:', frequencies);
 
-
-Export.table.toDrive({collection:frequencies, 
-                     description: "frequencies_res_bylandform", 
-                     fileFormat: "CSV"});
+Map.addLayer(resilience)
+// Convert the frequencies dictionary to an ee.FeatureCollection.
+var featureCollection = ee.FeatureCollection(
+  ee.List(image_classes).map(function(code) {
+    return ee.Feature(null, {
+      'ClassCode': code,
+      'Frequency': frequencies.get(ee.String(code))
+    });
+  })
+);
+Map.addLayer(featureCollection)
