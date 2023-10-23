@@ -52,8 +52,8 @@ var sld_intervals =
   '</RasterSymbolizer>';
   
   
-
-
+var image_res =ee.Dictionary(histogram2.get("z")).keys();
+print(image_res);
 
 var frequency = function(classCodes) {
   // Create an empty dictionary to store frequencies for each class code.
