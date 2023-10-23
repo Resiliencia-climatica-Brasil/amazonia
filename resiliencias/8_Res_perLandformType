@@ -29,6 +29,31 @@ var histogram2 = resilience.reduceRegion({reducer:ee.Reducer.frequencyHistogram(
 var image_classes = ee.Dictionary(histogram.get("sum")).keys();
 print(image_classes);
 
+var sld_intervals =
+  '<RasterSymbolizer>' +
+    '<ColorMap type="intervals" extended="false">' +
+      '<ColorMapEntry color="#d3d3d3" quantity="11" label="11"/>' +
+      '<ColorMapEntry color="#95bdd5" quantity="12" label="12"/>' +
+      '<ColorMapEntry color="#52a6d7" quantity="13" label="13"/>' +
+      '<ColorMapEntry color="#0088d9" quantity="14" label="14"/>' +
+      '<ColorMapEntry color="#d5ce9c" quantity="21" label="21"/>' +
+      '<ColorMapEntry color="#96b89e" quantity="22" label="22"/>' +
+      '<ColorMapEntry color="#53a19f" quantity="23" label="23"/>' +
+      '<ColorMapEntry color="#0085a1" quantity="24" label="24"/>' +
+      '<ColorMapEntry color="#d7c759" quantity="31" label="31"/>' +
+      '<ColorMapEntry color="#98b35a" quantity="32" label="32"/>' +
+      '<ColorMapEntry color="#539c5b" quantity="33" label="33"/>' +
+      '<ColorMapEntry color="#00815c" quantity="34" label="34"/>' +
+      '<ColorMapEntry color="#d9be00" quantity="41" label="41"/>' +
+      '<ColorMapEntry color="#9aaa00" quantity="42" label="42"/>' +
+      '<ColorMapEntry color="#549500" quantity="43" label="43"/>' +
+      '<ColorMapEntry color="#007b00" quantity="44" label="44"/>' +
+    '</ColorMap>' +
+  '</RasterSymbolizer>';
+  
+  
+
+
 
 var frequency = function(classCodes) {
   // Create an empty dictionary to store frequencies for each class code.
@@ -43,12 +68,12 @@ var frequency = function(classCodes) {
              .where(landform.eq(ee.Number.parse(code)), 1)
              .where(landform.neq(ee.Number.parse(code)), 0);
 
-  var map1 = resilience.updateMask(mask); Map.addLayer(mask.selfMask(),{col:'red'}, ''+classCodes[i].toString());
+  var map1 = resilience.updateMask(mask); Map.addLayer(map1.sldStyle(sld_intervals),{}, ''+classCodes[i].toString());
     
     // Calculate the frequency of the extracted values.
     var count = map1
       .reduceRegion({
-        reducer: ee.Reducer.frequencyHistogram(),
+        reducer: ee.Reducer.countDistinct(),
         geometry: geometry,
         scale: scale,
         maxPixels: 1e13
