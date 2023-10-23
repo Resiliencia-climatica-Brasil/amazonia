@@ -115,6 +115,8 @@ var table = ee.FeatureCollection(
       'ClassCode': code,
       'Frequency': frequencies.get(ee.String(code))
     });
+  
+  
   })
 );print(table);
 
