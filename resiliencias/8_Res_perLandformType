@@ -17,6 +17,15 @@ var histogram = landform.reduceRegion({reducer:ee.Reducer.frequencyHistogram(),
                                   maxPixels:1e13
                                   });print(histogram);
  
+ 
+ 
+var histogram2 = resilience.reduceRegion({reducer:ee.Reducer.frequencyHistogram(), 
+                                  geometry: resilience.geometry(), 
+                                  scale: 92.76624, 
+                                  maxPixels:1e13
+                                  });print(histogram2); 
+ 
+ 
 var image_classes = ee.Dictionary(histogram.get("sum")).keys();
 print(image_classes);
 
@@ -34,7 +43,7 @@ var frequency = function(classCodes) {
              .where(landform.eq(ee.Number.parse(code)), 1)
              .where(landform.neq(ee.Number.parse(code)), 0);
 
-  var map1 = resilience.mask(mask); 
+  var map1 = resilience.updateMask(mask); Map.addLayer(mask.selfMask(),{col:'red'}, ''+classCodes[i].toString());
     
     // Calculate the frequency of the extracted values.
     var count = map1
