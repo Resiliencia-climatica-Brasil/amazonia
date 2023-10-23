@@ -71,7 +71,8 @@ var frequency = function(classCodes) {
   var map1 = resilience.updateMask(mask); Map.addLayer(map1.sldStyle(sld_intervals),{}, ''+classCodes[i].toString());
 // precisamos fazer a contagem por cada codigo de resilience e jubtar em uma tabela so. filtrar pra cada codigi de resilience,
 // fazer a contagem dos pixels presentes e depois voltar pro proxino codugo de landform 
-    // Calculate the frequency of the extracted values.
+
+   // Calculate the frequency of the extracted values.
     var count = map1
       .reduceRegion({
         reducer: ee.Reducer.countDistinct(),
