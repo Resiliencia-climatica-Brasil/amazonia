@@ -1,8 +1,3 @@
-//************************************ Landscape Diversity******************************************************
-
-var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
-                       .select("Bioma")
-                       .filter(ee.Filter.eq("Bioma", "Cerrado"));
 
 var brazil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 
