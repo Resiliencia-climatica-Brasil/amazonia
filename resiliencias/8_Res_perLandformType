@@ -16,7 +16,7 @@ var histogram = landform.reduceRegion({reducer:ee.Reducer.frequencyHistogram(),
                                   scale: 92.76624, 
                                   maxPixels:1e13
                                   });print(histogram);
-                                  
+ 
 var image_classes = ee.Dictionary(histogram.get("sum")).keys();
 print(image_classes);
 
@@ -80,7 +80,7 @@ var table = ee.FeatureCollection(
       'Frequency': frequencies.get(ee.String(code))
     });
   })
-);
+);print(table);
 
 // Exporting the results
 Export.table.toDrive({
