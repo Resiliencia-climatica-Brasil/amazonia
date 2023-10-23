@@ -4,84 +4,19 @@ var biome = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome")
                        .select("Bioma")
                        .filter(ee.Filter.eq("Bioma", "Cerrado"));
 
-var brasil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
+var brazil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 
-var scale = brasil_raster.projection().nominalScale();
-var geometry = brasil_raster.geometry()
+var scale = brazil_raster.projection().nominalScale();
+var geometry = brazil_raster.geometry();
 
-/* // Vai perguntar o tamanho de janela que você vai usar. se já tivermos decidido usar a formula de baixo
-var windows = prompt('Enter the window size based on the Z image name:', '50');
-windows = parseInt(windows);
-if (isNaN(windows) || windows <= 0) {
-   print('Invalid input. Using default value for the window size.');
-  windows = 50;}
-print(windows);
-*/
-
-var windows = 200;
-
-var diversity  = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_diversity_movingwindow_ORIGINAL_UNMASKED_200')
-                   .updateMask(brasil_raster);
-
-var connectedness = ee.Image("projects/ee-resilience/assets/C2_Resistencia") //New Local connectedness layer with rivers
-                          .updateMask(brasil_raster)
-                          .multiply(-1); 
-
-// The classes are calculated as the sum of the classified values of the original rasters 
-
-
-// Compute the quantiles for each raster, the value of the quantiles will be stored as a band
-
-var quartiles_Div = diversity.reduceRegion({
-    reducer: ee.Reducer.percentile([25, 50, 75]), 
-    scale: diversity.projection().nominalScale(),
-    maxPixels:1e13,
-    bestEffort: false
-  }); 
-
-var quartiles_Con = connectedness.reduceRegion({
-    reducer: ee.Reducer.percentile([25, 50, 75]), 
-    scale: connectedness.projection().nominalScale(),
-    maxPixels:1e13,
-    bestEffort: false
-  });
-
-
-//creating the classes for Diversity based on the valeus.
-var div_25 = quartiles_Div.getNumber('z_p25');
-var div_50 = quartiles_Div.getNumber('z_p50');
-var div_75 = quartiles_Div.getNumber('z_p75');
-
-var class_div = diversity 
-.where(diversity.lt(div_25), 1)  
-.where(diversity.gte(div_25).and(diversity.lt(div_50)), 2)
-.where(diversity.gte(div_50).and(diversity.lt(div_75)), 3)
-.where(diversity.gte(div_75).and(diversity), 4);
-
-//creating the classes for Connectedness
-var con_25 = quartiles_Con.getNumber('b1_p25');
-var con_50 = quartiles_Con.getNumber('b1_p50');
-var con_75 = quartiles_Con.getNumber('b1_p75');
-
-var class_con = connectedness
-.where(connectedness.lt(con_25),10)
-.where(connectedness.gte(con_25).and(connectedness.lt(con_50)), 20)
-.where(connectedness.gte(con_50).and(connectedness.lt(con_75)),30)
-.where(connectedness.gte(con_75).and(connectedness), 40);
-
-
-//// Sum the classified rasters to create the landscape_resilience image
-
-var resilience = class_div.add(class_con);
-
-
-
-//////////////////////////////////////////////////////////////////////////////////////
-var brazil_raster = ee.Image('projects/ee-resilience/assets/brasil_raster')
+var resilience = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Resilience_ORIGINAL_UNMASKED_200');
 
 var landform = ee.Image('projects/ee-lucasljardim9/assets/landform_types')
 .updateMask(brazil_raster);
-Map.addLayer(landform)
+
+
+
+
 
 var histogram = landform.reduceRegion({reducer:ee.Reducer.frequencyHistogram(), 
                                   geometry: landform.geometry(), 
@@ -116,12 +51,10 @@ var frequency = function(classCodes) {
         scale: scale,
         maxPixels: 1e13
       });
-    
-    // Store the frequency in the dictionary using the class code as the key.
+    // Store the frequency in the dictionary using the class code.
     frequencies = frequencies.set(code, ee.Dictionary(count));
   }
-  
-  return frequencies;
+    return frequencies;
 };
 
 var image_classes = [
@@ -141,17 +74,9 @@ var image_classes = [
                       '5.0'
                       ]; // Specify the class codes you're interested in as an array.
 var frequencies = frequency(image_classes);
-print('Frequencies for Class Codes:', frequencies);
+print('Frequencies of each Resilience class for Landform Type Codes:', frequencies);
 
 
-/*
-var confusionMatrix = image1.addBands(image2)
-  .reduceRegion({
-    reducer: ee.Reducer.frequencyHistogram(),
-    geometry: roi,
-    scale: 30,
-  });
-
-// Access the confusion matrix counts.
-var matrixData = confusionMatrix.get('band_name');
-*/
+Export.table.toDrive({collection:frequencies, 
+                     description: "frequencies_res_bylandform", 
+                     fileFormat: "CSV"});
