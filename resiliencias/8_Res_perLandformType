@@ -71,7 +71,7 @@ var image_classes = [
 var frequencies = frequency(image_classes);
 print('Frequencies of each Resilience class for Landform Type Codes:', frequencies);
 
-Map.addLayer(resilience)
+
 // Convert the frequencies dictionary to an ee.FeatureCollection.
 var table = ee.FeatureCollection(
   ee.List(image_classes).map(function(code) {
@@ -82,6 +82,7 @@ var table = ee.FeatureCollection(
   })
 );
 
+// Exporting the results
 Export.table.toDrive({
   collection: table,
   description: 'class_frequencies',
