@@ -202,7 +202,7 @@ var sld_con=
       '</ColorMap>' +
   '</RasterSymbolizer>';
   
-
+/*
 Map.addLayer(resilience
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_intervals),{}, 'Landscape Resilience');
@@ -220,7 +220,7 @@ Map.addLayer(class_con
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_con),{}, 'Local Connectedness');             
 
-/*
+
 Export.image.toDrive({
 		image:resilience
              .reproject('EPSG:4326', null, 92.76624)
@@ -251,12 +251,25 @@ Export.image.toDrive({
 	scale:scale,
 	maxPixels:1e13,
 });
-*/
+
 Export.image.toDrive({
 		image:resilience_omn
              .reproject('EPSG:4326', null, 92.76624)
              .sldStyle(sld_con),
 	description:'Connectednes_bivariate_col',
+	region:brasil_raster,
+	scale:scale,
+	maxPixels:1e13,
+});
+
+*/
+
+Export.image.toAsset({
+		image:resilience
+             .reproject('EPSG:4326', null, 92.76624),
+	description:'Resilience_ORIGINAL_UNMASKED',
+	assetId: "Moving_window_NEWSCALE/Landscape_resilience_ORIGINAL_UNMASKED_200", 
+  pyramidingPolicy:"median",
 	region:brasil_raster,
 	scale:scale,
 	maxPixels:1e13,
