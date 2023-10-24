@@ -89,67 +89,61 @@ print('Codes for the first filter for landscape resilience', resilienceCodes);
 ///////////////////////////////////////// FUNCTION //////////////////////////////////////
 //*************************************************************************************//
 
-var frequency = function(biomeCodes,groupCodes,resilienceCodes) {
+var frequency = function(biomeCode, groupCode, resilienceCode) {
   
   // Create an empty dictionary to store frequencies for each class code.
   var frequencies = ee.Dictionary({});
   
-  //create a loop for each biome  
-  
-for (var j = 0; j < biomeCodes.length; j++) {
-    var bio_code = biomeCodes[j];
+  // Loop through each biome code
+  for (var j = 0; j < biomeCode.length; j++) {
+    var bioCode = biomeCode[j];
 
-  var mask_biome = num_bioma
-             .where(num_bioma.eq(ee.Number.parse(bio_code)), 1)
-             .where(num_bioma.neq(ee.Number.parse(bio_code)), 0);
+    var maskBiome = num_bioma
+      .where(num_bioma.eq(ee.Number.parse(bioCode)), 1)
+      .where(num_bioma.neq(ee.Number.parse(bioCode)), 0);
 
-  var map_biome = landform.mask(mask_biome).rename("b1");    
+    var mapBiome = landform.mask(maskBiome).rename("b1");
 
-  // Loop through the class codes and calculate frequencies for each.
-  
-  for (var i = 0; i < groupCodes.length; i++) {
-    var grp_code = groupCodes[i];
-    
-    // Create a binary mask for the specific class code.
-    
-     var mask_group = map_biome
-             .where(map_biome.eq(ee.Number.parse(grp_code)), 1)
-             .where(map_biome.neq(ee.Number.parse(grp_code)), 0);
+    // Loop through the group codes and calculate frequencies for each.
+    for (var i = 0; i < groupCode.length; i++) {
+      var grpCode = groupCode[i];
 
-    var map_group = resilience.updateMask(mask_group); 
-  
-  //Map.addLayer(map_group.sldStyle(sld_intervals),{}, ''+biomeCodes.toString()+'_'+groupCodes[i].toString());
+      // Create a binary mask for the specific group code.
+      var maskGroup = mapBiome
+        .where(mapBiome.eq(ee.Number.parse(grpCode)), 1)
+        .where(mapBiome.neq(ee.Number.parse(grpCode)), 0);
 
-//Will mask based on the group codes for the resilience image.
-//To count all pixel classified as that code divided by biome and group
+      var mapGroup = resilience.updateMask(maskGroup);
 
-    for (var l = 0; l <resilienceCodes.length; l++) {
-      var res_codes = resilienceCodes[l];
+      // Will mask based on the group code for the resilience image.
+      // To count all pixels classified as that code divided by biome and group.
+      for (var l = 0; l < resilienceCode.length; l++) {
+        var resCode = resilienceCode[l];
 
-         var mask_resilience = map_group
-                .where(map_group.eq(ee.Number.parse(grp_code)), 1)
-                .where(map_group.neq(ee.Number.parse(grp_code)), 0);
-    
-       var map_resilience = resilience.updateMask(mask_resilience);
-  
-  
-    // Calculate the frequency of the extracted values.
-       var count = map_resilience
-      .reduceRegion({
-        reducer: ee.Reducer.count(),
-        geometry: geometry,
-        scale: scale,
-        maxPixels: 1e13
-      });
-    // Store the frequency in the dictionary using the class code.
-    frequencies = frequencies.set([biomeCodes,groupCodes,resilienceCodes], ee.Dictionary(count));
-  
-    return frequencies;
+        var maskResilience = mapGroup
+          .where(mapGroup.eq(ee.Number.parse(resCode)), 1)
+          .where(mapGroup.neq(ee.Number.parse(resCode)), 0);
+
+        var mapResilience = resilience.updateMask(maskResilience);
+
+        // Calculate the frequency of the extracted values.
+        var count = mapResilience
+          .reduceRegion({
+            reducer: ee.Reducer.count(),
+            geometry: geometry,
+            scale: scale,
+            maxPixels: 1e13
+          });
+
+        // Store the frequency in the dictionary using appropriate keys.
+        var key = bioCode + '_' + grpCode + '_' + resCode;
+        frequencies = frequencies.set(key, ee.Dictionary(count));
       }
-      
     }
-  
-}};
+  }
+
+  return frequencies;
+};
 
 // Specify the class codes you're interested in as an array.
 
@@ -204,11 +198,11 @@ var biome_classes =[
 
 // Count the pixels of Resilience classified by the grouping variable inside each biome  
 
-var frequencies = frequency([biome_classes, group_classes, resilience_classes]);
+var frequencies = frequency(biome_classes, group_classes, resilience_classes);
 
 print('Frequencies of each Resilience class for Landform Type Codes:', frequencies);
 
-
+/*
 // Convert the frequencies dictionary to an ee.FeatureCollection.
 var table = ee.FeatureCollection(
   ee.List(image_classes).map(function(code) {
@@ -226,3 +220,4 @@ Export.table.toDrive({
   folder: 'your_drive_folder', // Specify your Google Drive folder path
   fileFormat: 'CSV'
 });
+*/
