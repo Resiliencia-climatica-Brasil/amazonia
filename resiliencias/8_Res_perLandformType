@@ -169,8 +169,10 @@ var biome_classes =[
                         '6'
                           ];
 
-  
-var frequencies = frequency(image_classes);
+// Count the pixels of Resilience classified by the grouping variable inside each biome  
+
+var frequencies = frequency(biome_classes, group_classes, resilience_classes);
+
 print('Frequencies of each Resilience class for Landform Type Codes:', frequencies);
 
 
