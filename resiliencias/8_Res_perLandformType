@@ -13,12 +13,7 @@ var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");print
 
 ///////// Counting pixel values of Landscape Resilience for each Landform Type ////////
 
-var histogram = landform.reduceRegion({reducer:ee.Reducer.frequencyHistogram(), 
-                                  geometry: landform.geometry(), 
-                                  scale: 92.76624, 
-                                  maxPixels:1e13
-                                  });print(histogram);
- 
+
  
  
 var histogram2 = resilience.reduceRegion({reducer:ee.Reducer.frequencyHistogram(), 
@@ -28,8 +23,7 @@ var histogram2 = resilience.reduceRegion({reducer:ee.Reducer.frequencyHistogram(
                                   });print(histogram2); 
  
  
-var image_classes = ee.Dictionary(histogram.get("sum")).keys();
-print(image_classes);
+
 
 var sld_intervals =
   '<RasterSymbolizer>' +
@@ -64,19 +58,30 @@ var Bioma_rast = bioma.reduceToImage({
 var num_bioma = Bioma_rast.reproject({crs: "EPSG:4326",
                                   scale: 92.76624}); 
 
-
+//Creating a histogram to see all classes
 var hist_bioma = num_bioma.reduceRegion({reducer:ee.Reducer.frequencyHistogram(), 
                                   geometry: resilience.geometry(), 
                                   scale: 92.76624, 
                                   maxPixels:1e13
-                                  });print(hist_bioma); 
+                                  });print('hist_bioma',hist_bioma); 
 
 //Creating the code for biome   
 var biomeCodes = ee.Dictionary(hist_bioma.get("first")).keys();
 print('Codes for the first filter for Biomes', biomeCodes);
 
 
+//Creating code for Goup variable
 
+var hist_group = landform.reduceRegion({reducer:ee.Reducer.frequencyHistogram(), 
+                                  geometry: landform.geometry(), 
+                                  scale: 92.76624, 
+                                  maxPixels:1e13
+                                  });print(hist_group);
+ 
+var groupCodes = ee.Dictionary(hist_group.get("sum")).keys();
+print('Codes for the first filter for Group variable', image_classes);
+
+//////////////////////////////////////// FUNCTION //////////////////////////////////////
 var frequency = function(biomeCodes,groupCodes,resilienceCodes) {
   
   // Create an empty dictionary to store frequencies for each class code.
