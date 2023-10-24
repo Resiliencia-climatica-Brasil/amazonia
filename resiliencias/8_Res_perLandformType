@@ -106,9 +106,16 @@ for (var j = 0; j < biomeCodes.length; j++) {
 
     for (var l = 0; l <resilienceCodes.length; l++) {
       var res_codes = resilienceCodes[l];
+
+         var mask_resilience = map_group
+                .where(map_group.eq(ee.Number.parse(grp_code)), 1)
+                .where(map_group.neq(ee.Number.parse(grp_code)), 0);
+    
+       var map_resilience = resilience.updateMask(mask_resilience);
+  
   
     // Calculate the frequency of the extracted values.
-       var count = map1
+       var count = map_resilience
       .reduceRegion({
         reducer: ee.Reducer.count(),
         geometry: geometry,
