@@ -87,19 +87,23 @@ var map_biome = landform.mask(mask_biome).rename("b1");
              .where(landform.neq(ee.Number.parse(code)), 0);
 
   var map_group = resilience.updateMask(mask); Map.addLayer(map1.sldStyle(sld_intervals),{}, ''+classCodes[i].toString());
-    
+for (var l = 0; l <resilienceCodes.length; l++) {
+  var res_codes = resilienceCodes[l];
+  
     // Calculate the frequency of the extracted values.
     var count = map1
       .reduceRegion({
-        reducer: ee.Reducer.countDistinct(),
+        reducer: ee.Reducer.count(),
         geometry: geometry,
         scale: scale,
         maxPixels: 1e13
       });
     // Store the frequency in the dictionary using the class code.
-    frequencies = frequencies.set(code, ee.Dictionary(count));
+    frequencies = frequencies.set([biomeCodes,groupCodes,resilienceCodes], ee.Dictionary(count));
   }
     return frequencies;
+}
+  
 }};
 
 // Specify the class codes you're interested in as an array.
