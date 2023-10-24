@@ -146,7 +146,7 @@ Map.addLayer(maskBiome,{min:1,max:6},''+bioCode.toString(), false)
           'biomeCode': bioCode,
           'groupCode': grpCode,
           'resilienceCode': resCode,
-          'frequency': ee.Dictionary(count).get('count')
+          'frequency': ee.Dictionary(count).get('z')
         });
       }
 
