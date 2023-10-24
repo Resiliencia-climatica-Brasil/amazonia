@@ -53,15 +53,20 @@ var sld_intervals =
     '</ColorMap>' +
   '</RasterSymbolizer>';
 
-var numBioma = bioma.select('CD_Bioma');
+var Bioma_rast = bioma.reduceToImage({
+  properties: ['CD_Bioma'], // Property to use for pixel values
+  reducer: ee.Reducer.first(), // You can use other reducers depending on your use case
+});
 
-var histogram3 = numBioma.reduceRegion({reducer:ee.Reducer.frequencyHistogram(), 
+var num_bioma = Bioma_rast.reproject({crs: "EPSG:4326",
+                                  scale: 92.76624}); 
+
+var histogram3 = num_bioma.reduceRegion({reducer:ee.Reducer.frequencyHistogram(), 
                                   geometry: resilience.geometry(), 
                                   scale: 92.76624, 
                                   maxPixels:1e13
-                                  });print(histogram2); 
- 
- 
+                                  });print(histogram3); 
+   
 var biomeCodes = ee.Dictionary(histogram3.get("sum")).keys();
 print(biomeCodes);
 
@@ -75,11 +80,11 @@ var frequency = function(biomeCodes,groupCodes,resilienceCodes) {
 for (var j = 0; j < biomeCodes.length; j++) {
     var bio_code = biomeCodes[j];
 
-var mask_biome = numBioma
-             .where(numBioma.eq(ee.Number.parse(bio_code)), 1)
-             .where(numBioma.neq(ee.Number.parse(bio_code)), 0);
+  var mask_biome = num_bioma
+             .where(num_bioma.eq(ee.Number.parse(bio_code)), 1)
+             .where(num_bioma.neq(ee.Number.parse(bio_code)), 0);
 
-var map_biome = landform.mask(mask_biome).rename("b1");    
+  var map_biome = landform.mask(mask_biome).rename("b1");    
 
   // Loop through the class codes and calculate frequencies for each.
   
@@ -88,22 +93,22 @@ var map_biome = landform.mask(mask_biome).rename("b1");
     
     // Create a binary mask for the specific class code.
     
-  var mask_group = map_biome
+     var mask_group = map_biome
              .where(map_biome.eq(ee.Number.parse(grp_code)), 1)
              .where(map_biome.neq(ee.Number.parse(grp_code)), 0);
 
-  var map_group = resilience.updateMask(mask); 
+    var map_group = resilience.updateMask(mask_group); 
   
   //Map.addLayer(map_group.sldStyle(sld_intervals),{}, ''+biomeCodes.toString()+'_'+groupCodes[i].toString());
 
 //Will mask based on the group codes for the resilience image.
 //To count all pixel classified as that code divided by biome and group
 
-for (var l = 0; l <resilienceCodes.length; l++) {
-  var res_codes = resilienceCodes[l];
+    for (var l = 0; l <resilienceCodes.length; l++) {
+      var res_codes = resilienceCodes[l];
   
     // Calculate the frequency of the extracted values.
-    var count = map1
+       var count = map1
       .reduceRegion({
         reducer: ee.Reducer.count(),
         geometry: geometry,
@@ -112,9 +117,11 @@ for (var l = 0; l <resilienceCodes.length; l++) {
       });
     // Store the frequency in the dictionary using the class code.
     frequencies = frequencies.set([biomeCodes,groupCodes,resilienceCodes], ee.Dictionary(count));
-  }
+  
     return frequencies;
-}
+      }
+      
+    }
   
 }};
 
