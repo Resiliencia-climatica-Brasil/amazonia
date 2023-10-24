@@ -200,24 +200,18 @@ var biome_classes =[
 
 var frequencies = frequency(biome_classes, group_classes, resilience_classes);
 
-print('Frequencies of each Resilience class for Landform Type Codes:', frequencies);
-
-/*
-// Convert the frequencies dictionary to an ee.FeatureCollection.
-var table = ee.FeatureCollection(
-  ee.List(image_classes).map(function(code) {
+var exportFeatures = ee.FeatureCollection(
+  frequencies.keys().map(function(key) {
     return ee.Feature(null, {
-      'ClassCode': code,
-      'Frequency': frequencies.get(ee.String(code))
+      'Combination': key,
+      'Frequency': frequencies.get(key)
     });
   })
-);print(table);
+);
 
-// Exporting the results
 Export.table.toDrive({
-  collection: table,
-  description: 'class_frequencies',
-  folder: 'your_drive_folder', // Specify your Google Drive folder path
+  collection: exportFeatures,
+  description: 'Frequencies_Export',
+  folder: 'YourFolderName', // Specify the folder in your Google Drive
   fileFormat: 'CSV'
 });
-*/
