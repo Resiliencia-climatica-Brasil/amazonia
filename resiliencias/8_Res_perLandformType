@@ -104,7 +104,7 @@ var frequency = function(biomeCode, groupCode, resilienceCode) {
     var maskBiome = Bioma_rast
       .where(Bioma_rast.eq(ee.Number.parse(bioCode)), 1)
       .where(Bioma_rast.neq(ee.Number.parse(bioCode)), 0);
-Map.addLayer(maskBiome,{min:1,max:6},''+bioCode.toString())
+Map.addLayer(maskBiome,{min:1,max:6},''+bioCode.toString(), false)
     var mapBiome = resilience.updateMask(maskBiome).rename("b1");
 
     // Loop through the group codes and calculate frequencies for each.
@@ -139,7 +139,7 @@ Map.addLayer(maskBiome,{min:1,max:6},''+bioCode.toString())
             geometry: geometry,
             scale: scale,
             maxPixels: 1e13
-          });
+          });print(count)
 
         // Store the frequency in the list for the current group within the biome
         groupResults.push({
