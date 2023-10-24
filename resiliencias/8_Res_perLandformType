@@ -139,7 +139,7 @@ Map.addLayer(maskBiome,{min:1,max:6},''+bioCode.toString(), false)
             geometry: geometry,
             scale: scale,
             maxPixels: 1e13
-          });print(count)
+          });
 
         // Store the frequency in the list for the current group within the biome
         groupResults.push({
