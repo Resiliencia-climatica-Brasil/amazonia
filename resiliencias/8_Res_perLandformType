@@ -83,7 +83,7 @@ var hist_resilience = resilience.reduceRegion({reducer:ee.Reducer.frequencyHisto
                                   });print(hist_group);
  
 var resilienceCodes = ee.Dictionary(hist_resilience.get("sum")).keys();
-print('Codes for the first filter for Group variable', resilienceCodes);
+print('Codes for the first filter for landscape resilience', resilienceCodes);
 
 //*************************************************************************************//
 ///////////////////////////////////////// FUNCTION //////////////////////////////////////
