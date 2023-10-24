@@ -4,12 +4,13 @@ var brazil_raster = ee.Image("projects/ee-resilience/assets/brasil_raster");
 var scale = brazil_raster.projection().nominalScale();
 var geometry = brazil_raster.geometry();
 
-var resilience = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_resilience_ORIGINAL_UNMASKED_200');
+var resilience = ee.Image('projects/ee-resilience/assets/Moving_window_NEWSCALE/Landscape_resilience_ORIGINAL_UNMASKED_200')
+.updateMask(brazil_raster);
 
 var landform = ee.Image('projects/ee-lucasljardim9/assets/landform_types')
 .updateMask(brazil_raster);
 
-var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");print(bioma)
+var bioma = ee.FeatureCollection("projects/ee-lucasljardim9/assets/Biome");
 
 ///////// Counting pixel values of Landscape Resilience for each Landform Type ////////
 
