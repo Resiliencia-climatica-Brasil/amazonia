@@ -55,7 +55,7 @@ var hist_bioma = num_bioma.reduceRegion({reducer:ee.Reducer.frequencyHistogram()
                                   geometry: geometry, 
                                   scale:  92.76624, 
                                   maxPixels:1e13
-                                  }); 
+                                  }); print(num_bioma)
 
 //Creating the code for biome   
 var biomeCodes = ee.Dictionary(hist_bioma.get("first")).keys();
@@ -100,11 +100,11 @@ var frequency = function(biomeCode, groupCode, resilienceCode) {
     // Create an empty list to store results for the current biome
     var biomeResults = [];
 
-    var maskBiome = num_bioma
-      .where(num_bioma.eq(ee.Number.parse(bioCode)), 1)
-      .where(num_bioma.neq(ee.Number.parse(bioCode)), 0);
+    var maskBiome = Bioma_rast
+      .where(Bioma_rast.eq(ee.Number.parse(bioCode)), 1)
+      .where(Bioma_rast.neq(ee.Number.parse(bioCode)), 0);
 
-    var mapBiome = landform.mask(maskBiome).rename("b1");
+    var mapBiome = resilience.mask(maskBiome).rename("b1");
 Map.addLayer(mapBiome, {}, ''+bioCode.toString())
     // Loop through the group codes and calculate frequencies for each.
     for (var i = 0; i < groupCode.length; i++) {
@@ -113,14 +113,11 @@ Map.addLayer(mapBiome, {}, ''+bioCode.toString())
       // Create an empty list to store results for the current group within the biome
       var groupResults = [];
 
-      var maskGroup = mapBiome
-        .where(mapBiome.eq(ee.Number.parse(grpCode)), 1)
-        .where(mapBiome.neq(ee.Number.parse(grpCode)), 0);
+      var maskGroup = landform.updateMask(maskBiome)
+        .where(landform.eq(ee.Number.parse(grpCode)), 1)
+        .where(landform.neq(ee.Number.parse(grpCode)), 0);
 
       var mapGroup = resilience.updateMask(maskGroup);
-        Map.addLayer(mapGroup,{},
-        ''+bioCode.toString()+'_'+grpCode.toString(),
-        false);
 
 
       // Will mask based on the group code for the resilience image.
@@ -128,12 +125,12 @@ Map.addLayer(mapBiome, {}, ''+bioCode.toString())
       for (var l = 0; l < resilienceCode.length; l++) {
         var resCode = resilienceCode[l];
 
-        var maskResilience = mapGroup
-          .where(mapGroup.eq(ee.Number.parse(resCode)), 1)
-          .where(mapGroup.neq(ee.Number.parse(resCode)), 0);
+        var maskResilience = resilience.updateMask(maskGroup)
+          .where(resilience.eq(ee.Number.parse(resCode)), 1)
+          .where(resilience.neq(ee.Number.parse(resCode)), 0);
 
-        var mapResilience = resilience.updateMask(maskResilience);
-
+        var mapResilience = mapGroup.updateMask(maskResilience);
+Map.addLayer(mapResilience,{min:11, max:44}, ''+bioCode.toString()+"_"+grpCode.toString()+"_"+resCode.toString(), false)
         // Calculate the frequency of the extracted values.
         var count = mapResilience
           .reduceRegion({
@@ -230,7 +227,7 @@ var biome_classes =[
 // Count the pixels of Resilience classified by the grouping variable inside each biome  
 
 var frequencies = frequency(biome_classes, group_classes, resilience_classes);
-
+/*
 var exportFeatures = ee.FeatureCollection(
   frequencies.keys().map(function(key) {
     return ee.Feature(null, {
@@ -245,4 +242,4 @@ Export.table.toDrive({
   description: 'Frequencies_Export',
   folder: 'YourFolderName', // Specify the folder in your Google Drive
   fileFormat: 'CSV'
-});
+});*/
