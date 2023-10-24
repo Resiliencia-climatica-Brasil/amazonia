@@ -46,7 +46,7 @@ var Bioma_rast = bioma.reduceToImage({
   properties: ['CD_Bioma'], // Property to use for pixel values
   reducer: ee.Reducer.first()
 });
-
+/*
 var num_bioma = Bioma_rast.reproject({crs: "EPSG:4326",
                                   scale: 92.76624}); 
 
@@ -59,7 +59,7 @@ var hist_bioma = num_bioma.reduceRegion({reducer:ee.Reducer.frequencyHistogram()
 
 //Creating the code for biome   
 var biomeCodes = ee.Dictionary(hist_bioma.get("first")).keys();
-print('Codes for the first filter for Biomes', biomeCodes);
+//print('Codes for the first filter for Biomes', biomeCodes);
 
 //GROUP//
 //Creating code for Goup variable
@@ -71,7 +71,7 @@ var hist_group = landform.reduceRegion({reducer:ee.Reducer.frequencyHistogram(),
                                   });
  
 var groupCodes = ee.Dictionary(hist_group.get("sum")).keys();
-print('Codes for the first filter for Group variable', groupCodes);
+//print('Codes for the first filter for Group variable', groupCodes);
 
 //RESILIENCE//
 //Creating code for Resilience variable
@@ -83,7 +83,8 @@ var hist_resilience = resilience.reduceRegion({reducer:ee.Reducer.frequencyHisto
                                   });
  
 var resilienceCodes = ee.Dictionary(hist_resilience.get("z")).keys();
-print('Codes for the first filter for landscape resilience', resilienceCodes);
+//print('Codes for the first filter for landscape resilience', resilienceCodes);
+*/
 
 //*************************************************************************************//
 ///////////////////////////////////////// FUNCTION //////////////////////////////////////
