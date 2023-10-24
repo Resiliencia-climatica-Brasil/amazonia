@@ -60,8 +60,8 @@ var num_bioma = Bioma_rast.reproject({crs: "EPSG:4326",
 
 //Creating a histogram to see all classes
 var hist_bioma = num_bioma.reduceRegion({reducer:ee.Reducer.frequencyHistogram(), 
-                                  geometry: resilience.geometry(), 
-                                  scale: 92.76624, 
+                                  geometry: geometry, 
+                                  scale: scale, 
                                   maxPixels:1e13
                                   });print('hist_bioma',hist_bioma); 
 
@@ -73,15 +73,30 @@ print('Codes for the first filter for Biomes', biomeCodes);
 //Creating code for Goup variable
 
 var hist_group = landform.reduceRegion({reducer:ee.Reducer.frequencyHistogram(), 
-                                  geometry: landform.geometry(), 
-                                  scale: 92.76624, 
+                                  geometry: geometry, 
+                                  scale: scale, 
                                   maxPixels:1e13
                                   });print(hist_group);
  
 var groupCodes = ee.Dictionary(hist_group.get("sum")).keys();
-print('Codes for the first filter for Group variable', image_classes);
+print('Codes for the first filter for Group variable', groupCodes);
 
-//////////////////////////////////////// FUNCTION //////////////////////////////////////
+
+//Creating code for Resilience variable
+
+var hist_resilience = resilience.reduceRegion({reducer:ee.Reducer.frequencyHistogram(), 
+                                  geometry: geometry, 
+                                  scale: scale, 
+                                  maxPixels:1e13
+                                  });print(hist_group);
+ 
+var resilienceCodes = ee.Dictionary(hist_resilience.get("sum")).keys();
+print('Codes for the first filter for Group variable', resilienceCodes);
+
+//*************************************************************************************//
+///////////////////////////////////////// FUNCTION //////////////////////////////////////
+//*************************************************************************************//
+
 var frequency = function(biomeCodes,groupCodes,resilienceCodes) {
   
   // Create an empty dictionary to store frequencies for each class code.
