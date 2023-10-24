@@ -82,9 +82,9 @@ var map_biome = landform.mask(mask_biome).rename("b1");
     var grp_code = groupCodes[i];
     
     // Create a binary mask for the specific class code.
-  var mask_group = landform
-             .where(landform.eq(ee.Number.parse(code)), 1)
-             .where(landform.neq(ee.Number.parse(code)), 0);
+  var mask_group = map_biome
+             .where(map_biome.eq(ee.Number.parse(grp_code)), 1)
+             .where(map_biome.neq(ee.Number.parse(grp_code)), 0);
 
   var map_group = resilience.updateMask(mask); Map.addLayer(map1.sldStyle(sld_intervals),{}, ''+classCodes[i].toString());
 for (var l = 0; l <resilienceCodes.length; l++) {
