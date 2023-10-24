@@ -90,30 +90,38 @@ print('Codes for the first filter for landscape resilience', resilienceCodes);
 //*************************************************************************************//
 
 var frequency = function(biomeCode, groupCode, resilienceCode) {
-  
   // Create an empty dictionary to store frequencies for each class code.
   var frequencies = ee.Dictionary({});
   
   // Loop through each biome code
   for (var j = 0; j < biomeCode.length; j++) {
     var bioCode = biomeCode[j];
+    
+    // Create an empty list to store results for the current biome
+    var biomeResults = [];
 
     var maskBiome = num_bioma
       .where(num_bioma.eq(ee.Number.parse(bioCode)), 1)
       .where(num_bioma.neq(ee.Number.parse(bioCode)), 0);
 
     var mapBiome = landform.mask(maskBiome).rename("b1");
-
+Map.addLayer(mapBiome, {}, ''+bioCode.toString())
     // Loop through the group codes and calculate frequencies for each.
     for (var i = 0; i < groupCode.length; i++) {
       var grpCode = groupCode[i];
 
-      // Create a binary mask for the specific group code.
+      // Create an empty list to store results for the current group within the biome
+      var groupResults = [];
+
       var maskGroup = mapBiome
         .where(mapBiome.eq(ee.Number.parse(grpCode)), 1)
         .where(mapBiome.neq(ee.Number.parse(grpCode)), 0);
 
       var mapGroup = resilience.updateMask(maskGroup);
+        Map.addLayer(mapGroup,{},
+        ''+bioCode.toString()+'_'+grpCode.toString(),
+        false);
+
 
       // Will mask based on the group code for the resilience image.
       // To count all pixels classified as that code divided by biome and group.
@@ -135,15 +143,38 @@ var frequency = function(biomeCode, groupCode, resilienceCode) {
             maxPixels: 1e13
           });
 
-        // Store the frequency in the dictionary using appropriate keys.
-        var key = bioCode + '_' + grpCode + '_' + resCode;
-        frequencies = frequencies.set(key, ee.Dictionary(count));
+        // Store the frequency in the list for the current group within the biome
+        groupResults.push({
+          'biomeCode': bioCode,
+          'groupCode': grpCode,
+          'resilienceCode': resCode,
+          'frequency': ee.Dictionary(count).get('count')
+        });
       }
+
+      // Store the groupResults list for the current biome
+      biomeResults = biomeResults.concat(groupResults);
     }
+
+    // Export the results for the current biome as a CSV file outside GEE
+    var biomeExportCollection = ee.FeatureCollection(biomeResults.map(function(result) {
+      return ee.Feature(null, result);
+    }));
+    var exportDescription = 'Frequencies_Biome_' + bioCode;
+    Export.table.toDrive({
+      collection: biomeExportCollection,
+      description: exportDescription,
+      folder: 'GEE',
+      fileFormat: 'CSV'
+    });
+
+    // Store the frequencies for the current biome in the dictionary using biome code as the key
+    frequencies = frequencies.set(bioCode, biomeResults);
   }
 
   return frequencies;
 };
+
 
 // Specify the class codes you're interested in as an array.
 
