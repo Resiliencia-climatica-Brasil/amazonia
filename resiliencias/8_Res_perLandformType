@@ -157,7 +157,7 @@ Map.addLayer(maskBiome,{min:1,max:6},''+bioCode.toString(), false)
     // Export the results for the current biome as a CSV file outside GEE
     var biomeExportCollection = ee.FeatureCollection(biomeResults.map(function(result) {
       return ee.Feature(null, result);
-    }));print(biomeExportCollection)
+    }));
     var exportDescription = 'Frequencies_Biome_' + bioCode;
     Export.table.toDrive({
       collection: biomeExportCollection,
